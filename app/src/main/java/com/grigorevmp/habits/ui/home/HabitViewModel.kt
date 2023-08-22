@@ -1,26 +1,24 @@
-package com.grigorevmp.habits.ui.HomeFragment
+package com.grigorevmp.habits.ui.home
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.HabitEntity
-import com.grigorevmp.habits.data.HabitRepository
-import dagger.assisted.Assisted
+import com.grigorevmp.habits.data.repository.DateRepository
+import com.grigorevmp.habits.data.repository.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class HabitViewModel @Inject constructor(
     private var repository: HabitRepository,
+    private var dateRepository: DateRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -36,6 +34,14 @@ class HabitViewModel @Inject constructor(
             repository.insert(habit)
         }
     }
+
+    fun getDate(date: LocalDate) = flow {
+        emit(dateRepository.getDateId(date))
+    }.flowOn(Dispatchers.IO)
+
+    fun getHabitWithDate(dateId: Long, habitId: Long) = flow {
+        emit(repository.getHabitForDate(dateId, habitId))
+    }.flowOn(Dispatchers.IO)
 
     fun updateHabit(habit: HabitEntity) {
         viewModelScope.launch {

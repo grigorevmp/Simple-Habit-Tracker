@@ -2,8 +2,10 @@ package com.grigorevmp.habits.di
 
 import android.app.Application
 import androidx.room.Room
-import com.grigorevmp.habits.data.HabitDao
 import com.grigorevmp.habits.data.HabitDatabase
+import com.grigorevmp.habits.data.HabitWithDateDao
+import com.grigorevmp.habits.data.data.DateDao
+import com.grigorevmp.habits.data.habit.HabitRefDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +26,17 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideArticleDao(db: HabitDatabase): HabitDao {
+    fun provideHabitDao(db: HabitDatabase): HabitWithDateDao {
         return db.getHabitDao()
+    }
+
+    @Provides
+    fun provideDateDao(db: HabitDatabase): DateDao {
+        return db.getDateDao()
+    }
+
+    @Provides
+    fun provideHabitRefDao(db: HabitDatabase): HabitRefDao {
+        return db.getHabitRefDao()
     }
 }

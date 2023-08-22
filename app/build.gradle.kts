@@ -5,7 +5,7 @@ plugins {
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
-
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -67,6 +67,7 @@ dependencies {
 
     // Room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.compose.material)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
@@ -89,4 +90,6 @@ dependencies {
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.kotlinx.serialization.json)
 }

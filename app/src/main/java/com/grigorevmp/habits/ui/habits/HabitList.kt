@@ -1,4 +1,4 @@
-package com.grigorevmp.habits.ui.HomeFragment
+package com.grigorevmp.habits.ui.habits
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.grigorevmp.habits.data.HabitEntity
+import com.grigorevmp.habits.data.HabitWithDates
+import com.grigorevmp.habits.ui.home.HabitViewModel
 
 @Composable
 fun HabitList(habitViewModel: HabitViewModel?) {
@@ -27,7 +28,7 @@ fun HabitList(habitViewModel: HabitViewModel?) {
 
     val habits by vm.allHabits.collectAsState(initial = emptyList())
     var showingDialog by remember { mutableStateOf(false) }
-    var selectedHabit by remember { mutableStateOf<HabitEntity?>(null) }
+    var selectedHabit by remember { mutableStateOf<HabitWithDates?>(null) }
 
     LazyColumn(
         Modifier.fillMaxHeight()
@@ -37,12 +38,12 @@ fun HabitList(habitViewModel: HabitViewModel?) {
                 selectedHabit = habit
                 showingDialog = true
             }) {
-                Checkbox(checked = habit.completed, onCheckedChange = { isChecked ->
-                    vm.updateHabit(habit.copy(completed = isChecked))
+                Checkbox(checked = habit.habit.completed, onCheckedChange = { isChecked ->
+                    vm.updateHabit(habit.habit.copy(completed = isChecked))
                 })
                 Column {
-                    Text(text = habit.title)
-                    Text(text = habit.description)
+                    Text(text = habit.habit.title)
+                    Text(text = habit.habit.description)
                 }
             }
         }
@@ -73,18 +74,18 @@ fun PreviewHabit() {
 
 @Composable
 fun EditHabitDialog(
-    habit: HabitEntity,
+    habit: HabitWithDates,
     habitViewModel: HabitViewModel,
     onDismissRequest: () -> Unit
 ) {
-    var title by remember { mutableStateOf(habit.title) }
-    var description by remember { mutableStateOf(habit.description) }
+    var title by remember { mutableStateOf(habit.habit.title) }
+    var description by remember { mutableStateOf(habit.habit.description) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Button(onClick = {
-                habitViewModel.updateHabit(habit.copy(title = title, description = description))
+                habitViewModel.updateHabit(habit.habit.copy(title = title, description = description))
                 onDismissRequest.invoke()
             }) {
                 Text("Save")
