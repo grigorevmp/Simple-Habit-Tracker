@@ -1,4 +1,4 @@
-package com.grigorevmp.habits.ui.theme
+package com.grigorevmp.habits.presentation.theme
 
 import android.app.Activity
 import android.os.Build
@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -44,21 +45,31 @@ fun HabitTrackerTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }
         }
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            systemUiController.setSystemBarsColor(
+                color = colorScheme.background,
+                darkIcons = !darkTheme
+            )
         }
     }
 

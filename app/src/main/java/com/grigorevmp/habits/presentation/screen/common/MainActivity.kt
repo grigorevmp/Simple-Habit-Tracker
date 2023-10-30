@@ -1,9 +1,13 @@
-package com.grigorevmp.habits.ui.main
+package com.grigorevmp.habits.presentation.screen.common
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -17,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -24,9 +29,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.grigorevmp.habits.domain.usecase.date.UpdateSyncPointUseCase
-import com.grigorevmp.habits.ui.home.HabitViewModel
-import com.grigorevmp.habits.ui.theme.HabitTrackerTheme
+import com.grigorevmp.habits.domain.usecase.date_synchronizer.UpdateSyncPointUseCase
+import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
+import com.grigorevmp.habits.core.alarm.createChannel
+import com.grigorevmp.habits.presentation.theme.HabitTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,11 +46,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         updateSyncPointUseCase.invoke()
-
-        setContent {
-            val viewModel: HabitViewModel = viewModel()
-            MainScreenView(viewModel)
-        }
+        createChannel(this)
+        checkPermission()
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -65,12 +68,15 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun NavigationGraph(navController: NavHostController, habitViewModel: HabitViewModel? = null) {
-        NavHost(navController, startDestination = BottomNavItem.Home.screenRoute) {
-            composable(BottomNavItem.Home.screenRoute) {
-                HomeScreen(habitViewModel)
+        NavHost(navController, startDestination = BottomNavItem.Today.screenRoute) {
+            composable(BottomNavItem.Today.screenRoute) {
+                TodayScreen(habitViewModel)
             }
             composable(BottomNavItem.Habits.screenRoute) {
                 HabitListScreen(habitViewModel)
+            }
+            composable(BottomNavItem.Settings.screenRoute) {
+                SettingsScreen()
             }
         }
     }
@@ -78,8 +84,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun BottomNavigation(navController: NavController) {
         val items = listOf(
-            BottomNavItem.Home,
+            BottomNavItem.Today,
             BottomNavItem.Habits,
+            BottomNavItem.Settings,
         )
         NavigationBar {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -108,6 +115,34 @@ class MainActivity : ComponentActivity() {
                         }
                     })
             }
+        }
+    }
+
+    private fun checkPermission() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+
+            } else {
+
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        setContent {
+            val viewModel: HabitViewModel = viewModel()
+            MainScreenView(viewModel)
         }
     }
 

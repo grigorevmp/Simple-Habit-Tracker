@@ -1,4 +1,5 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
@@ -23,6 +24,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        signingConfig = signingConfigs.getByName("debug")
     }
 
     buildTypes {
@@ -68,6 +70,7 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.paging.compose)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
@@ -92,4 +95,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 }

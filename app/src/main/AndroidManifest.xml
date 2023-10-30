@@ -11,14 +11,16 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat"
-        tools:targetApi="31">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="tiramisu">
+
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".presentation.screen.common.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
@@ -27,6 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".core.alarm.AlarmReceiver" android:exported="true" />
     </application>
 
 </manifest>

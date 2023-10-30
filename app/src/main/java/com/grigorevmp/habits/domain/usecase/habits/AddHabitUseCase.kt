@@ -1,0 +1,39 @@
+package com.grigorevmp.habits.domain.usecase.habits
+
+import android.util.Log
+import com.grigorevmp.habits.data.HabitEntity
+import com.grigorevmp.habits.data.SerializableTimePickerState
+import com.grigorevmp.habits.data.repository.HabitRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.DayOfWeek
+import javax.inject.Inject
+
+class AddHabitUseCase @Inject constructor(
+    private var repository: HabitRepository,
+) {
+
+    suspend fun invoke(
+        title: String,
+        description: String,
+        selectedDays: Array<DayOfWeek>,
+        useAlert: Boolean,
+        timePickerState: SerializableTimePickerState,
+    ): HabitEntity {
+        val habit = HabitEntity(
+            title = title,
+            description = description,
+            days = selectedDays,
+            time = timePickerState,
+            alertEnabled = useAlert,
+            completed = false
+        )
+
+        Log.d("Habit added", habit.toString())
+
+        habit.id = repository.insert(habit)
+
+        return habit
+    }
+}

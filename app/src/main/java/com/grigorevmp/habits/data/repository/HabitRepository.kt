@@ -2,16 +2,15 @@ package com.grigorevmp.habits.data.repository
 
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.HabitWithDateDao
-import com.grigorevmp.habits.data.HabitWithDates
-import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 import javax.inject.Inject
 
 class HabitRepository @Inject constructor(private val habitWithDateDao: HabitWithDateDao) {
-    val allHabits: Flow<List<HabitWithDates>> = habitWithDateDao.getAllHabits()
+    fun fetchHabits() = habitWithDateDao.getAllHabits()
 
-    suspend fun insert(habit: HabitEntity) {
-        habitWithDateDao.insert(habit)
+    fun fetchOnlyHabits() = habitWithDateDao.getAllOnlyHabits()
+
+    suspend fun insert(habit: HabitEntity): Long {
+        return habitWithDateDao.insert(habit)
     }
 
     suspend fun update(habit: HabitEntity) {
@@ -19,8 +18,11 @@ class HabitRepository @Inject constructor(private val habitWithDateDao: HabitWit
     }
 
     suspend fun delete(habit: HabitEntity) {
-        habitWithDateDao.delete(habit)
+        habitWithDateDao.delete(habit.id)
     }
 
-    fun getHabitForDate(dateId: Long, habitId: Long) = habitWithDateDao.getHabitForDate(dateId, habitId)
+    fun getHabitForDate(dateId: Long, habitId: Long) =
+        habitWithDateDao.getHabitForDate(dateId, habitId)
+
+    fun getHabitById(habitId: Long) = habitWithDateDao.getHabitById(habitId)
 }

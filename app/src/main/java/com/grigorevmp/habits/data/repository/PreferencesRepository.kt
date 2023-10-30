@@ -2,10 +2,8 @@ package com.grigorevmp.habits.data.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ActivityContext
-import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlinx.serialization.encodeToString
 
 
 class PreferencesRepository @Inject constructor(
@@ -16,22 +14,21 @@ class PreferencesRepository @Inject constructor(
 
 
     fun getLastSyncDate(): LocalDate {
-        val lastSyncString = preferences.getString(LAST_SYNC, "")
+        val lastSyncString = preferences.getLong(LAST_SYNC, 0)
 
-        return if (lastSyncString.isNullOrBlank()) {
+        return if (lastSyncString == 0L) {
             LocalDate.now()
         } else {
-            Json.decodeFromString(lastSyncString)
+            LocalDate.ofEpochDay(lastSyncString)
         }
     }
 
 
     fun updateLastSyncDate() {
         val current = LocalDate.now()
-        val dateString = Json.encodeToString(current)
 
         preferences.edit()
-            .putString(LAST_SYNC, dateString)
+            .putLong(LAST_SYNC, current.toEpochDay())
             .apply()
     }
 

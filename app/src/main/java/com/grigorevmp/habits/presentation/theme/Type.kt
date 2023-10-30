@@ -1,4 +1,4 @@
-package com.grigorevmp.habits.ui.theme
+package com.grigorevmp.habits.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
