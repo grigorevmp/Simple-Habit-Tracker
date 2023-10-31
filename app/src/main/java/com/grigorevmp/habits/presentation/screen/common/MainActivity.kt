@@ -52,14 +52,15 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    fun MainScreenView(habitViewModel: HabitViewModel? = null) {
+    fun MainScreenView(habitViewModel: HabitViewModel) {
         val navController = rememberNavController()
 
         HabitTrackerTheme {
             Scaffold(bottomBar = { BottomNavigation(navController = navController) }) {
                 Box(modifier = Modifier.padding(it)) {
                     NavigationGraph(
-                        navController = navController, habitViewModel = habitViewModel
+                        navController = navController,
+                        habitViewModel = habitViewModel
                     )
                 }
             }
@@ -67,16 +68,16 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun NavigationGraph(navController: NavHostController, habitViewModel: HabitViewModel? = null) {
+    fun NavigationGraph(navController: NavHostController, habitViewModel: HabitViewModel) {
         NavHost(navController, startDestination = BottomNavItem.Today.screenRoute) {
             composable(BottomNavItem.Today.screenRoute) {
-                TodayScreen(habitViewModel)
+                TodayNavScreen(habitViewModel)
             }
             composable(BottomNavItem.Habits.screenRoute) {
-                HabitListScreen(habitViewModel)
+                HabitListNavScreen(habitViewModel)
             }
             composable(BottomNavItem.Settings.screenRoute) {
-                SettingsScreen()
+                SettingsNavScreen()
             }
         }
     }
@@ -149,7 +150,8 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MainNavigationPreview() {
-        MainScreenView()
+        val viewModel: HabitViewModel = viewModel()
+        MainScreenView(viewModel)
     }
 }
 

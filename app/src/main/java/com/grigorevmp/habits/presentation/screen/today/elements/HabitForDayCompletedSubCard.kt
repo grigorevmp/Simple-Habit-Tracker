@@ -19,15 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.habit.HabitType
-import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
-import com.grigorevmp.habits.presentation.screen.today.data.HabitWithDatesUI
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun HabitForDayCompletedSubCard(
     habitType: HabitType,
-    habitViewModel: HabitViewModel?,
+    updateHabitRef: (Long, Long, HabitType) -> Unit,
     habit: HabitEntityUI
 ): HabitType {
     var habitType1 = habitType
@@ -43,7 +41,7 @@ fun HabitForDayCompletedSubCard(
                     } else {
                         HabitType.Done
                     }
-                    habitViewModel?.updateHabitRef(habit.dateId, habit.id, habitType1)
+                    updateHabitRef(habit.dateId, habit.id, habitType1)
                 },
                 onLongClick = {
                     habitType1 = if (habitType1 != HabitType.Missed) {
@@ -51,7 +49,7 @@ fun HabitForDayCompletedSubCard(
                     } else {
                         HabitType.Done
                     }
-                    habitViewModel?.updateHabitRef(habit.dateId, habit.id, habitType1)
+                    updateHabitRef(habit.dateId, habit.id, habitType1)
                 },
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -99,8 +97,8 @@ fun HabitForDayCompletedSubCard(
 fun HabitForDayCompletedSubCardPreview() {
     HabitForDayCompletedSubCard(
         habitType = HabitType.Missed,
-        habitViewModel = null,
-        habit = HabitEntityUI (
+        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+        habit = HabitEntityUI(
             id = 0,
             dateId = 0,
             title = "Title",

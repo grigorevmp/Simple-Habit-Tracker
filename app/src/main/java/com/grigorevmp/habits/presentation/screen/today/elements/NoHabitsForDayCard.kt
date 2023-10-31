@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitWithDatesUI
 
 @Composable
@@ -58,6 +59,6 @@ fun HabitsForDateCardEmptyPreview() {
             habits = mutableListOf(),
             date = "2023-10-28",
         ),
-        habitViewModel = null,
+        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
     )
 }

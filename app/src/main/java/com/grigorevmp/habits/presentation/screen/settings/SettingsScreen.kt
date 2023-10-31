@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun SettingsModule() {
+fun SettingsScreen() {
     Surface(Modifier.fillMaxSize()) {
         Column {
             Text(
@@ -27,5 +27,5 @@ fun SettingsModule() {
 @Preview(showBackground = true)
 @Composable
 fun SettingsModulePreview() {
-    SettingsModule()
+    SettingsScreen()
 }

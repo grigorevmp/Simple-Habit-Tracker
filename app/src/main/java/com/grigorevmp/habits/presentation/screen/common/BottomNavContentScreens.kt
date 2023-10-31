@@ -6,38 +6,38 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.grigorevmp.habits.presentation.screen.habits.HabitListModule
-import com.grigorevmp.habits.presentation.screen.settings.SettingsModule
+import com.grigorevmp.habits.presentation.screen.habits.HabitListScreen
+import com.grigorevmp.habits.presentation.screen.settings.SettingsScreen
 import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
-import com.grigorevmp.habits.presentation.screen.today.TodayModule
+import com.grigorevmp.habits.presentation.screen.today.TodayScreen
 
 
 @Composable
-fun TodayScreen(viewModel: HabitViewModel? = null) {
+fun TodayNavScreen(viewModel: HabitViewModel) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        TodayModule(viewModel)
+        TodayScreen(viewModel)
     }
 }
 
 @Composable
-fun HabitListScreen(viewModel: HabitViewModel? = null) {
+fun HabitListNavScreen(viewModel: HabitViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
     ) {
-        HabitListModule(viewModel)
+        HabitListScreen(viewModel)
     }
 }
 
 
 @Composable
-fun SettingsScreen() {
+fun SettingsNavScreen() {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        SettingsModule()
+        SettingsScreen()
     }
 }

@@ -3,7 +3,6 @@ package com.grigorevmp.habits.presentation.screen.today
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.data.HabitWithDatesUI
@@ -25,22 +23,41 @@ import com.grigorevmp.habits.presentation.screen.today.elements.HabitsForDayCard
 
 
 @Composable
-fun TodayModule(habitViewModel: HabitViewModel? = null) {
-    var allHabitsWithDateData by remember { mutableStateOf<List<HabitWithDatesUI>>(mutableListOf()) }
+fun TodayScreen(habitViewModel: HabitViewModel) {
+    TodayScreen(
+        prepareHabitsList = { payload: () -> Unit ->
+            habitViewModel.getPreparedHabitsList(daysCount = 10) {
+                payload()
+            }
+        },
+        allHabitsWithDateData = habitViewModel.uiState.value,
+        updateHabitRef = { dateId: Long, id: Long, habitType: HabitType ->
+            habitViewModel.updateHabitRef(dateId, id, habitType)
+        },
+    )
+}
+
+@Composable
+fun TodayScreen(
+    prepareHabitsList: (() -> Unit) -> Unit,
+    allHabitsWithDateData: List<HabitWithDatesUI>,
+    updateHabitRef: (Long, Long, HabitType) -> Unit,
+) {
+    var allHabitsWithDate by remember { mutableStateOf<List<HabitWithDatesUI>>(mutableListOf()) }
     var dataIsReady by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        habitViewModel?.getPreparedHabitsList(daysCount = 10) {
+        prepareHabitsList {
             dataIsReady = true
         }
     }
 
     if (dataIsReady) {
-        allHabitsWithDateData = habitViewModel!!.uiState.value
+        allHabitsWithDate = allHabitsWithDateData
 
         TodayView(
-            allHabitsWithDateData,
-            habitViewModel
+            allHabitsWithDate,
+            updateHabitRef
         )
     }
 }
@@ -48,7 +65,7 @@ fun TodayModule(habitViewModel: HabitViewModel? = null) {
 @Composable
 fun TodayView(
     allHabits: List<HabitWithDatesUI>,
-    habitViewModel: HabitViewModel?
+    updateHabitRef: (Long, Long, HabitType) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -65,12 +82,36 @@ fun TodayView(
                 itemsIndexed(allHabits) { _, habitsForDate ->
                     HabitsForDayCard(
                         habitsForDate,
-                        habitViewModel
+                        updateHabitRef
                     )
                 }
             }
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun TTodayScreenPreview() {
+    TodayScreen(
+        prepareHabitsList = { },
+        allHabitsWithDateData = listOf(
+            HabitWithDatesUI(
+                habits = mutableListOf(
+                    HabitEntityUI(
+                        id = 0,
+                        dateId = 3,
+                        title = "Title",
+                        description = "Description",
+                        type = HabitType.Missed,
+                    )
+                ),
+                date = "Current date"
+            )
+        ),
+        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+    )
 }
 
 
@@ -92,6 +133,6 @@ fun TodayModulePreview() {
                 date = "Current date"
             )
         ),
-        habitViewModel = null
+        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
     )
 }

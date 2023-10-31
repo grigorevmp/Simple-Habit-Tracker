@@ -32,7 +32,7 @@ import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HabitListModule(habitViewModel: HabitViewModel? = null) {
+fun HabitListScreen(habitViewModel: HabitViewModel? = null) {
     var dialogShown by remember { mutableStateOf(false) }
 
     if (dialogShown) {
@@ -78,6 +78,6 @@ fun HabitListModule(habitViewModel: HabitViewModel? = null) {
 @Preview(showBackground = true)
 @Composable
 fun HabitListModulePreview() {
-    HabitListModule()
+    HabitListScreen()
 }
 
