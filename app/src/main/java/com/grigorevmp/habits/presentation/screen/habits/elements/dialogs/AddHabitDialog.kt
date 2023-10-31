@@ -1,5 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.habits.elements.dialogs
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,13 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.grigorevmp.habits.data.SerializableTimePickerState
-import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 import java.time.DayOfWeek
 
 
 @ExperimentalMaterial3Api
 @Composable
-fun AddHabitDialog(habitViewModel: HabitViewModel?, hideDialog: () -> Unit) {
+fun AddHabitDialog(
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState) -> Unit,
+    hideDialog: () -> Unit
+) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var timePickerState by remember { mutableStateOf(SerializableTimePickerState(0, 0)) }
@@ -125,10 +128,10 @@ fun AddHabitDialog(habitViewModel: HabitViewModel?, hideDialog: () -> Unit) {
                     color = MaterialTheme.colorScheme.surfaceContainerHighest
                 ) {
                     ChooseTimeDialog(
-                        timePickerState,
-                        useAlert,
-                        { enabled -> useAlert = enabled },
-                        { time -> timePickerState = time },
+                        timePickerState = timePickerState,
+                        useAlert = useAlert,
+                        setUpNotificationAlert = { enabled -> useAlert = enabled },
+                        setUpNotification = { time -> timePickerState = time },
                     ) { timeDialogShown = false }
                 }
             }
@@ -140,9 +143,12 @@ fun AddHabitDialog(habitViewModel: HabitViewModel?, hideDialog: () -> Unit) {
                     modifier = Modifier.clip(RoundedCornerShape(12.dp)),
                     color = MaterialTheme.colorScheme.surfaceContainerHighest
                 ) {
-                    ChooseWeekDaysDialog(daysForHabit, { listWithDays ->
-                        daysForHabit = listWithDays.toTypedArray()
-                    }) { habitDaysShown = false }
+                    ChooseWeekDaysDialog(
+                        daysForHabit = daysForHabit,
+                        onDaysSelected = { listWithDays ->
+                            daysForHabit = listWithDays.toTypedArray()
+                        }
+                    ) { habitDaysShown = false }
                 }
             }
         }
@@ -198,7 +204,7 @@ fun AddHabitDialog(habitViewModel: HabitViewModel?, hideDialog: () -> Unit) {
             .padding(vertical = 16.dp), onClick = {
             if (validate(title)) {
                 hideDialog()
-                habitViewModel?.addHabit(
+                addHabitEntity(
                     context,
                     title,
                     description,
@@ -221,7 +227,7 @@ fun AddHabitDialog(habitViewModel: HabitViewModel?, hideDialog: () -> Unit) {
 @Composable
 fun AddHabitDialogPreview() {
     AddHabitDialog(
-        habitViewModel = null,
+        addHabitEntity = { _, _, _, _, _, _ ->},
         hideDialog = { },
     )
 }

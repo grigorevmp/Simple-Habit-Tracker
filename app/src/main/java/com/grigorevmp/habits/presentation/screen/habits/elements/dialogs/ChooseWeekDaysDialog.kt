@@ -42,7 +42,11 @@ fun ChooseWeekDaysDialog(
             modifier = Modifier.padding(top = 0.dp)
         ) {
             DayOfWeek.values().forEach {
-                DateChip(it, daysForHabit, onDaysSelected)
+                DateChip(
+                    day = it,
+                    selectedDays = daysForHabit,
+                    onDaysSelected = onDaysSelected
+                )
             }
         }
 

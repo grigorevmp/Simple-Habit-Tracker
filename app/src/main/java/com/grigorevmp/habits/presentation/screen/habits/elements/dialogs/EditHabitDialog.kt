@@ -1,5 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.habits.elements.dialogs
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,17 +38,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
-import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 import java.time.DayOfWeek
 
 @ExperimentalMaterial3Api
 @Composable
 fun EditHabitDialog(
     habitEntity: HabitEntity,
-    habitViewModel: HabitViewModel?,
-    removeItem: (HabitEntity) -> Unit,
+    updateHabitEntity: (Context, HabitEntity) -> Unit,
+    deleteHabitEntity: (HabitEntity) -> Unit,
     hideDialog: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     var title by remember { mutableStateOf(habitEntity.title) }
     var description by remember { mutableStateOf(habitEntity.description) }
     var selectedDays by remember { mutableStateOf(habitEntity.days) }
@@ -135,10 +137,10 @@ fun EditHabitDialog(
                     color = MaterialTheme.colorScheme.surfaceContainerHighest
                 ) {
                     ChooseTimeDialog(
-                        timePickerState,
-                        useAlert,
-                        { enabled -> useAlert = enabled },
-                        { time -> timePickerState = time },
+                        timePickerState = timePickerState,
+                        useAlert = useAlert,
+                        setUpNotificationAlert = { enabled -> useAlert = enabled },
+                        setUpNotification = { time -> timePickerState = time },
                     ) { timeDialogShown = false }
                 }
             }
@@ -150,9 +152,12 @@ fun EditHabitDialog(
                     modifier = Modifier.clip(RoundedCornerShape(12.dp)),
                     color = MaterialTheme.colorScheme.surfaceContainerHighest
                 ) {
-                    ChooseWeekDaysDialog(selectedDays, { listWithDays ->
-                        selectedDays = listWithDays.toTypedArray()
-                    }) { habitDaysShown = false }
+                    ChooseWeekDaysDialog(
+                        daysForHabit = selectedDays,
+                        onDaysSelected = { listWithDays ->
+                            selectedDays = listWithDays.toTypedArray()
+                        }
+                    ) { habitDaysShown = false }
                 }
             }
         }
@@ -199,15 +204,13 @@ fun EditHabitDialog(
             }
         }
 
-        val context = LocalContext.current
-
 
         Row(
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Button(modifier = Modifier
                 .padding(vertical = 16.dp), onClick = {
-                removeItem(habitEntity)
+                deleteHabitEntity(habitEntity)
                 hideDialog()
             }) {
                 Text("Delete")
@@ -228,7 +231,7 @@ fun EditHabitDialog(
                         minute = timePickerState.minute,
                     )
 
-                    habitViewModel?.updateHabit(context, habitEntity)
+                    updateHabitEntity(context, habitEntity)
                     hideDialog()
                 }
             }) {
@@ -239,13 +242,12 @@ fun EditHabitDialog(
 }
 
 
-
 @ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
 fun EditHabitDialogPreview() {
     EditHabitDialog(
-        habitEntity =  HabitEntity(
+        habitEntity = HabitEntity(
             id = 0,
             description = "bla-bla",
             title = "Test habit",
@@ -255,8 +257,8 @@ fun EditHabitDialogPreview() {
             completed = false,
             deleted = false,
         ),
-        habitViewModel =  null,
-        removeItem = { },
+        updateHabitEntity = { _, _ -> },
+        deleteHabitEntity = { },
         hideDialog = { }
     )
 }

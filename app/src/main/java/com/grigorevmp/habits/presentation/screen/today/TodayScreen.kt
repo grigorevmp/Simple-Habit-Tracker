@@ -110,16 +110,17 @@ fun TTodayScreenPreview() {
                 date = "Current date"
             )
         ),
-        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+        updateHabitRef = { _, _, _ -> },
     )
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun TodayModulePreview() {
-    TodayView(
-        allHabits = listOf(
+fun TodayScreenPreview() {
+    TodayScreen(
+        prepareHabitsList = { _: () -> Unit -> },
+        allHabitsWithDateData = listOf(
             HabitWithDatesUI(
                 habits = mutableListOf(
                     HabitEntityUI(
@@ -133,6 +134,6 @@ fun TodayModulePreview() {
                 date = "Current date"
             )
         ),
-        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+        updateHabitRef = { _, _, _ -> },
     )
 }

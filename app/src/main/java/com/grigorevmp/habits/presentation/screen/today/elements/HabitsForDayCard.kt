@@ -42,11 +42,13 @@ fun HabitsForDayCard(
         for (habit in habitsForDate.habits) {
             var habitType by remember { mutableStateOf(habit.type) }
 
-            habitType = HabitForDayCompletedSubCard(
+            HabitForDayCompletedSubCard(
                 habitType = habitType,
                 updateHabitRef = updateHabitRef,
                 habit = habit,
-            )
+            ) { newHabitType: HabitType ->
+                habitType = newHabitType
+            }
         }
 
         Spacer(modifier = Modifier.padding(4.dp))
@@ -77,7 +79,7 @@ fun HabitsForDateCardPreview() {
             ),
             date = "2023-10-28",
         ),
-        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+        updateHabitRef = { _, _, _ -> },
     )
 }
 
@@ -90,6 +92,6 @@ fun HabitsForDateCardEmpty2Preview() {
             habits = mutableListOf(),
             date = "2023-10-28",
         ),
-        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+        updateHabitRef = { _, _, _ -> },
     )
 }

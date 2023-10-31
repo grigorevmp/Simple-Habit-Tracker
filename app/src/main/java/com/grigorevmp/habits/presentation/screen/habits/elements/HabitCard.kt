@@ -1,5 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.habits.elements
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,13 +32,13 @@ import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.presentation.screen.habits.elements.dialogs.EditHabitDialog
 import com.grigorevmp.habits.presentation.screen.habits.parseToDate
 import com.grigorevmp.habits.presentation.screen.habits.toReadableForms
-import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitCard(
-    vm: HabitViewModel?,
-    habitEntity: HabitEntity
+    habitEntity: HabitEntity,
+    updateHabitEntity: (Context, HabitEntity) -> Unit,
+    deleteHabitEntity: (HabitEntity) -> Unit,
 ) {
     val title = habitEntity.title
     val description = habitEntity.description
@@ -136,9 +137,11 @@ fun HabitCard(
                     modifier = Modifier.clip(RoundedCornerShape(12.dp)),
                     color = MaterialTheme.colorScheme.surfaceContainerHighest
                 ) {
-                    EditHabitDialog(it, vm, { item ->
-                        vm?.deleteHabit(item)
-                    }) {
+                    EditHabitDialog(
+                        habitEntity = it,
+                        updateHabitEntity = updateHabitEntity,
+                        deleteHabitEntity = deleteHabitEntity,
+                     ) {
                         showingDialog = false
                     }
                 }

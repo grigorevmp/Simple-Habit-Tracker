@@ -21,7 +21,9 @@ import java.time.DayOfWeek
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateChip(
-    day: DayOfWeek, selectedDays: Array<DayOfWeek>, onDaysSelected: (List<DayOfWeek>) -> Unit
+    day: DayOfWeek,
+    selectedDays: Array<DayOfWeek>,
+    onDaysSelected: (List<DayOfWeek>) -> Unit
 ) {
     var selected by remember { mutableStateOf(day in selectedDays) }
 

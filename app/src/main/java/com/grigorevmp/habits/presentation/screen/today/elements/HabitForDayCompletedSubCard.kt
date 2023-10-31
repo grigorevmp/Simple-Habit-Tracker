@@ -26,9 +26,11 @@ import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 fun HabitForDayCompletedSubCard(
     habitType: HabitType,
     updateHabitRef: (Long, Long, HabitType) -> Unit,
-    habit: HabitEntityUI
-): HabitType {
-    var habitType1 = habitType
+    habit: HabitEntityUI,
+    setNewHabitType: (HabitType) -> Unit
+) {
+    var habitTypeMutable = habitType
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondary
@@ -36,20 +38,20 @@ fun HabitForDayCompletedSubCard(
         modifier = Modifier
             .combinedClickable(
                 onClick = {
-                    habitType1 = if (habitType1 != HabitType.Unknown) {
+                    habitTypeMutable = if (habitTypeMutable != HabitType.Unknown) {
                         HabitType.Unknown
                     } else {
                         HabitType.Done
                     }
-                    updateHabitRef(habit.dateId, habit.id, habitType1)
+                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable)
                 },
                 onLongClick = {
-                    habitType1 = if (habitType1 != HabitType.Missed) {
+                    habitTypeMutable = if (habitTypeMutable != HabitType.Missed) {
                         HabitType.Missed
                     } else {
                         HabitType.Done
                     }
-                    updateHabitRef(habit.dateId, habit.id, habitType1)
+                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable)
                 },
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -60,7 +62,7 @@ fun HabitForDayCompletedSubCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val iconResource = when (habitType1) {
+            val iconResource = when (habitTypeMutable) {
                 HabitType.Done -> {
                     R.drawable.ic_done
                 }
@@ -88,7 +90,8 @@ fun HabitForDayCompletedSubCard(
             )
         }
     }
-    return habitType1
+
+    setNewHabitType(habitTypeMutable)
 }
 
 
@@ -97,7 +100,7 @@ fun HabitForDayCompletedSubCard(
 fun HabitForDayCompletedSubCardPreview() {
     HabitForDayCompletedSubCard(
         habitType = HabitType.Missed,
-        updateHabitRef = { _: Long, _: Long, _: HabitType -> },
+        updateHabitRef = { _, _, _ -> },
         habit = HabitEntityUI(
             id = 0,
             dateId = 0,
@@ -105,5 +108,6 @@ fun HabitForDayCompletedSubCardPreview() {
             description = "Description",
             type = HabitType.Missed,
         ),
+        setNewHabitType = { _ -> }
     )
 }
