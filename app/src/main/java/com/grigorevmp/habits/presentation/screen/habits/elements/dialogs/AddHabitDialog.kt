@@ -161,7 +161,7 @@ fun AddHabitDialog(
         Card(
             modifier = Modifier
                 .padding(top = 12.dp)
-                .align(Alignment.End),
+                .fillMaxWidth(),
             onClick = {
                 habitDaysShown = true
             }, colors = CardDefaults.cardColors(
@@ -183,7 +183,7 @@ fun AddHabitDialog(
         Card(
             modifier = Modifier
                 .padding(top = 12.dp)
-                .align(Alignment.End),
+                .fillMaxWidth(),
             onClick = {
                 timeDialogShown = true
             }, colors = CardDefaults.cardColors(

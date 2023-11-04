@@ -171,7 +171,8 @@ fun EditHabitDialog(
         Card(
             modifier = Modifier
                 .padding(top = 12.dp)
-                .align(Alignment.End), onClick = {
+                .fillMaxWidth(),
+            onClick = {
                 habitDaysShown = true
             }, colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -195,7 +196,8 @@ fun EditHabitDialog(
         Card(
             modifier = Modifier
                 .padding(top = 12.dp)
-                .align(Alignment.End), onClick = {
+                .fillMaxWidth(),
+            onClick = {
                 timeDialogShown = true
             }, colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
