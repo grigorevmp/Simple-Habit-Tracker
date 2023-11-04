@@ -31,6 +31,8 @@
     <string name="settings_screen_permission_summary">Мы хотим, чтобы вы предоставили доступ к игнорированию оптимизации батареи и отправки уведомлений</string>
     <string name="settings_screen_permissions_required_icon_description">Иконка требований разрешений</string>
 
+    <string name="settings_screen_language">Язык</string>
+
     <string name="settings_screen_up_to_date_title">Всё в порядке</string>
     <string name="settings_screen_up_to_date_summary">Вы предоставили все необходимые разрешения. Скоро появятся новые функции…</string>
     <string name="settings_screen_up_to_date_icon_description">Иконка \"Всё в порядке\"</string>

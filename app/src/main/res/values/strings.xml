@@ -26,6 +26,7 @@
     <string name="settings_screen_permissions_required_icon_description">Permissions required icon</string>
     <string name="settings_screen_permission_summary">We want you to give access to ignoring battery optimisation and notification posting</string>
     <string name="settings_screen_permissions_title">Permissions required</string>
+    <string name="settings_screen_language">Language</string>
     <string name="settings_screen_up_to_date_title">Everything is up to date</string>
     <string name="settings_screen_up_to_date_summary">You gave all required permissions. New features coming soon…</string>
     <string name="settings_screen_up_to_date_icon_description">Everything is up to date icon</string>
