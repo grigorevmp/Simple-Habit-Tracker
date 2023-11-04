@@ -13,7 +13,7 @@ import com.grigorevmp.habits.presentation.screen.common.MainActivity
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsDoneBroadcastReceiver
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsMissedBroadcastReceiver
 
-private const val NOTIFICATION_ID = 33
+const val NOTIFICATION_ID = 33
 const val CHANNEL_ID = "ReminderChannel"
 
 fun createChannel(context: Context) {
@@ -76,5 +76,6 @@ fun NotificationManager.sendReminderNotification(
 
     builder.flags = builder.flags or Notification.FLAG_AUTO_CANCEL
 
-    this.notify(NOTIFICATION_ID, builder)
+    val notificationId = (NOTIFICATION_ID * 1000 + id).toInt()
+    this.notify(notificationId, builder)
 }

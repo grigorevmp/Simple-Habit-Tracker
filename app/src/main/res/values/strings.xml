@@ -1,3 +1,66 @@
 <resources>
     <string name="app_name">Habit tracker</string>
+
+    <!-- Common -->
+    <string name="remove_button">Remove</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="bottom_nav_home">Today</string>
+    <string name="bottom_nav_habits">Habits</string>
+    <string name="bottom_nav_settings">Settings</string>
+
+    <!-- Today screen -->
+    <string name="today_screen_statistics_title">Statistics</string>
+    <string name="today_screen_latest_title">Latest habits</string>
+    <string name="today_screen_habit_state_icon_description">Habit state icon</string>
+    <string name="today_screen_statistics_week">Week №%1$s</string>
+    <string name="today_screen_statistics_totally_completed">Totally: %1$s%%</string>
+    <string name="today_screen_habit_card_no_planned_habits">No planned habits</string>
+    <string name="today_screen_reminder_icon_description">Reminder icon</string>
+
+    <!-- Settings screen -->
+    <string name="settings_screen_settings_title">Settings</string>
+    <string name="settings_screen_version">Version 1.0.0 alpha | Build #23</string>
+    <string name="settings_screen_permissions_required_icon_description">Permissions required icon</string>
+    <string name="settings_screen_permission_summary">We want you to give access to ignoring battery optimisation and notification posting</string>
+    <string name="settings_screen_permissions_title">Permissions required</string>
+    <string name="settings_screen_up_to_date_title">Everything is up to date</string>
+    <string name="settings_screen_up_to_date_summary">You gave all required permissions. New features coming soon…</string>
+    <string name="settings_screen_up_to_date_icon_description">Everything is up to date icon</string>
+
+    <!-- Habit screen -->
+    <string name="habit_screen_your_habits_title">Your habits</string>
+    <string name="habit_screen_remind_in">Remind you in %1$s</string>
+
+    <string name="habit_screen_add_new_habit_dialog_title">Add new habit</string>
+    <string name="habit_screen_add_new_habit_title">Title</string>
+    <string name="habit_screen_add_new_habit_description">Description</string>
+    <string name="habit_screen_add_new_habit_enter_something_error">Enter something</string>
+    <string name="habit_screen_add_new_habit_edit_days_for_habit_button">Edit days for habit</string>
+    <string name="habit_screen_add_new_habit_add_notification_button">Add notification</string>
+    <string name="habit_screen_add_new_habit_change_notification_button">Change notification</string>
+    <string name="habit_screen_add_new_habit_add_habit_button">Add Habit</string>
+    <string name="habit_screen_add_new_habit_reminder_icon_description">Reminder icon</string>
+    <string name="habit_screen_add_new_habit_days_icon_description">Days icon</string>
+    <string name="habit_screen_add_new_habit_error_icon_description">Error icon\n</string>
+
+    <string name="habit_screen_choose_days_title">Set days for habit</string>
+    <string name="habit_screen_choose_time_set_notification_title">Set notification</string>
+    <string name="habit_screen_choose_days_save_button" translatable="false">@string/save_button</string>
+    <string name="habit_screen_choose_time_remove_button" translatable="false">@string/remove_button</string>
+    <string name="habit_screen_choose_time_cancel_button" translatable="false">@string/cancel_button</string>
+    <string name="habit_screen_choose_time_save_button" translatable="false">@string/save_button</string>
+
+    <string name="habit_screen_edit_habit_dialog_title">Edit habit</string>
+    <string name="habit_screen_edit_habit_enter_something_hint" translatable="false">@string/habit_screen_add_new_habit_enter_something_error</string>
+    <string name="habit_screen_edit_habit_title" translatable="false">@string/habit_screen_add_new_habit_title</string>
+    <string name="habit_screen_edit_habit_description" translatable="false">@string/habit_screen_add_new_habit_description</string>
+    <string name="habit_screen_edit_habit_days_icon_description" translatable="false">@string/habit_screen_add_new_habit_days_icon_description</string>
+    <string name="habit_screen_edit_habit_reminder_description" translatable="false">@string/habit_screen_add_new_habit_reminder_icon_description</string>
+    <string name="habit_screen_edit_habit_change_notification_button" translatable="false">@string/habit_screen_add_new_habit_change_notification_button</string>
+    <string name="habit_screen_edit_habit_save_changes_button" translatable="false">@string/save_button</string>
+    <string name="habit_screen_edit_habit_error_icon_description" translatable="false">@string/habit_screen_add_new_habit_error_icon_description</string>
+    <string name="habit_screen_edit_habit_delete_button" translatable="false">@string/delete_button</string>
+    <string name="habit_screen_edit_habit_edit_days_button">Edit days for habit</string>
 </resources>

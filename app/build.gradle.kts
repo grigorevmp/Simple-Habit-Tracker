@@ -101,4 +101,6 @@ dependencies {
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.compose.shimmer)
+
+    implementation(libs.androidx.emoji2.views.helper)
 }

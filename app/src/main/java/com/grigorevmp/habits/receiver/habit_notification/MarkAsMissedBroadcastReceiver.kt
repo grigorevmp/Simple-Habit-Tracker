@@ -1,8 +1,11 @@
 package com.grigorevmp.habits.receiver.habit_notification
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
+import com.grigorevmp.habits.core.alarm.NOTIFICATION_ID
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.di.HiltBroadcastReceiver
 import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
@@ -26,11 +29,13 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        val id = intent.getLongExtra("EXTRA_ID", -1L) ?: return
+        val id = intent.getLongExtra("EXTRA_ID", -1L)
 
         CoroutineScope(Dispatchers.IO).launch {
             getDateUseCase.invoke(LocalDate.now())?.also {
                 it.id?.let { dateId ->
+                    Log.d("MarkAsMissedBroadcastReceiver", "Habit $id on date $dateId changed")
+
                     updateHabitRefUseCase.invoke(
                         dateId,
                         id,
@@ -43,5 +48,8 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
                 Toast.makeText(context, "Marked as missed", Toast.LENGTH_SHORT).show()
             }
         }
+
+        val notificationId = (NOTIFICATION_ID * 1000 + id).toInt()
+        context.getSystemService(NotificationManager::class.java).cancel(notificationId)
     }
 }

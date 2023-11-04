@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,20 +41,20 @@ fun HabitForDayCompletedSubCard(
         modifier = Modifier
             .combinedClickable(
                 onClick = {
-                    habitTypeMutable.value = if (habitTypeMutable.value  != HabitType.Unknown) {
+                    habitTypeMutable.value = if (habitTypeMutable.value != HabitType.Unknown) {
                         HabitType.Unknown
                     } else {
                         HabitType.Done
                     }
-                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value )
+                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value)
                 },
                 onLongClick = {
-                    habitTypeMutable.value  = if (habitTypeMutable.value  != HabitType.Missed) {
+                    habitTypeMutable.value = if (habitTypeMutable.value != HabitType.Missed) {
                         HabitType.Missed
                     } else {
                         HabitType.Done
                     }
-                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value )
+                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value)
                 },
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -80,7 +81,7 @@ fun HabitForDayCompletedSubCard(
 
             Icon(
                 painter = painterResource(id = iconResource),
-                contentDescription = "Reminder",
+                contentDescription = stringResource(R.string.today_screen_habit_state_icon_description),
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
             )

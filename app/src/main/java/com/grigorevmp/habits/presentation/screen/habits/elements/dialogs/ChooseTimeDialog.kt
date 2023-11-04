@@ -13,9 +13,11 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.SerializableTimePickerState
 
 @ExperimentalMaterial3Api
@@ -40,7 +42,7 @@ fun ChooseTimeDialog(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp), text = "Set notification", fontSize = 24.sp
+                .padding(top = 20.dp, bottom = 16.dp), text = stringResource(R.string.habit_screen_choose_time_set_notification_title), fontSize = 24.sp
         )
 
         Column(
@@ -62,13 +64,13 @@ fun ChooseTimeDialog(
                     setUpNotificationAlert(false)
                     hideDialog()
                 }) {
-                    Text("Remove")
+                    Text(stringResource(R.string.habit_screen_choose_time_remove_button))
                 }
             } else {
                 Button(onClick = {
                     hideDialog()
                 }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.habit_screen_choose_time_cancel_button))
                 }
             }
 
@@ -79,7 +81,7 @@ fun ChooseTimeDialog(
                 setUpNotification(SerializableTimePickerState(timeState.hour, timeState.minute))
                 hideDialog()
             }) {
-                Text("Save")
+                Text(stringResource(R.string.habit_screen_choose_time_save_button))
             }
         }
     }

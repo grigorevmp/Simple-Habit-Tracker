@@ -35,12 +35,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import com.grigorevmp.habits.R
 
 
 @Composable
@@ -60,7 +62,7 @@ fun SettingsScreen(
         Column {
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "Settings",
+                text = stringResource(R.string.settings_screen_settings_title),
                 fontSize = 24.sp
             )
 
@@ -78,7 +80,7 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(16.dp),
                 textAlign = TextAlign.Center,
-                text = "Version 1.0.0 alpha | Build #23"
+                text = stringResource(R.string.settings_screen_version)
             )
         }
 
@@ -147,7 +149,7 @@ fun PermissionsCard(
         ) {
             Row {
                 Icon(
-                    Icons.Filled.Warning, contentDescription = "Permissions required icon",
+                    Icons.Filled.Warning, contentDescription = stringResource(R.string.settings_screen_permissions_required_icon_description),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(start = 16.dp),
@@ -157,12 +159,12 @@ fun PermissionsCard(
                     modifier = Modifier.padding(16.dp),
                 ) {
                     Text(
-                        text = "Permissions required",
+                        text = stringResource(R.string.settings_screen_permissions_title),
                         fontSize = 20.sp
                     )
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
-                        text = "We want you to give access to ignoring battery optimisation and notification posting",
+                        text = stringResource(R.string.settings_screen_permission_summary),
                     )
                 }
             }
@@ -179,7 +181,7 @@ fun PermissionsCard(
         ) {
             Row {
                 Icon(
-                    Icons.Filled.Done, contentDescription = "Everything is up to date icon",
+                    Icons.Filled.Done, contentDescription = stringResource(R.string.settings_screen_up_to_date_icon_description),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(start = 16.dp),
@@ -189,12 +191,12 @@ fun PermissionsCard(
                     modifier = Modifier.padding(16.dp),
                 ) {
                     Text(
-                        text = "Everything is up to date",
+                        text = stringResource(R.string.settings_screen_up_to_date_title),
                         fontSize = 20.sp
                     )
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
-                        text = "You give all required permissions. New features coming soon...",
+                        text = stringResource(R.string.settings_screen_up_to_date_summary),
                     )
                 }
             }

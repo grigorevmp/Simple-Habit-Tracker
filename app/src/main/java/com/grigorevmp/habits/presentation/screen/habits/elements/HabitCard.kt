@@ -1,9 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.habits.elements
 
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,15 +27,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.grigorevmp.habits.core.alarm.AlarmReceiver
+import com.grigorevmp.habits.R
+import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
-import com.grigorevmp.habits.presentation.screen.habits.HabitListScreen
 import com.grigorevmp.habits.presentation.screen.habits.elements.dialogs.EditHabitDialog
 import com.grigorevmp.habits.presentation.screen.habits.parseToDate
 import com.grigorevmp.habits.presentation.screen.habits.toReadableForms
@@ -130,7 +128,7 @@ fun HabitCard(
                         )
 
                         Text(
-                            text = "Напомним в $time",
+                            text = stringResource(R.string.habit_screen_remind_in, time),
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(start = 8.dp),
                         )
@@ -138,12 +136,13 @@ fun HabitCard(
                         Spacer(modifier = Modifier.weight(1f))
 
 
-                        val requestCode = (habitEntity.id * 100).toInt() + habitEntity.days[0].ordinal
-                        Log.d("Alarm manager", "Is created: ${checkIfPendingIntentIsRegistered(
-                            LocalContext.current, requestCode)}")
+                        val requestCode =
+                            (habitEntity.id * 100).toInt() + habitEntity.days[0].ordinal
 
-                        if(!checkIfPendingIntentIsRegistered(
-                                LocalContext.current, requestCode)) {
+                        if (!Utils.checkIfPendingIntentIsRegistered(
+                                LocalContext.current, requestCode
+                            )
+                        ) {
                             Icon(
                                 Icons.Filled.Warning,
                                 contentDescription = "Failed",
@@ -170,7 +169,7 @@ fun HabitCard(
                         habitEntity = it,
                         updateHabitEntity = updateHabitEntity,
                         deleteHabitEntity = deleteHabitEntity,
-                     ) {
+                    ) {
                         showingDialog = false
                     }
                 }
@@ -179,26 +178,20 @@ fun HabitCard(
     }
 }
 
-private fun checkIfPendingIntentIsRegistered(context: Context, requestCode: Int): Boolean {
-    val intent = Intent(context, AlarmReceiver::class.java)
-    return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE) != null
-}
-
-
 
 @Preview(showBackground = true)
 @Composable
 fun HabitCardPreview() {
     HabitCard(
         habitEntity = HabitEntity(
-                id = 0,
-                title = "Title",
-                description = "Description",
-                days = arrayOf(DayOfWeek.FRIDAY),
-                alertEnabled = true,
-                time = SerializableTimePickerState(10, 10),
-                completed = false,
-            ),
+            id = 0,
+            title = "Title",
+            description = "Description",
+            days = arrayOf(DayOfWeek.FRIDAY),
+            alertEnabled = true,
+            time = SerializableTimePickerState(10, 10),
+            completed = false,
+        ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
     )

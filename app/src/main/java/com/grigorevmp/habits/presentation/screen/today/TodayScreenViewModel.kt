@@ -98,7 +98,6 @@ class TodayScreenViewModel @Inject constructor(
 
                     uiState.value = minorAllHabitsWithDateData
                     payload()
-                    cancel()
                 }
             }
         }
@@ -139,7 +138,6 @@ class TodayScreenViewModel @Inject constructor(
 
                 statisticUiState.value = minorAllHabitStatisticItemUiData
             }
-            cancel()
         }
     }
 

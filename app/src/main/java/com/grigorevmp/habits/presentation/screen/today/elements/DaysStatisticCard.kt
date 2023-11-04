@@ -1,6 +1,5 @@
 package com.grigorevmp.habits.presentation.screen.today.elements
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Canvas
@@ -20,10 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
 import java.util.Calendar
 
@@ -46,16 +47,20 @@ fun DaysStatisticCard(
             val allHabits = allHabitsStatisticData.sumOf { it.habitsNumber }
             val allHabitsChecked = allHabitsStatisticData.sumOf { it.checkedHabitsNumber }
 
-            val text = if (allHabits > 0) (allHabitsChecked.toFloat() / allHabits * 100).toInt() else 0
+            val text =
+                if (allHabits > 0) (allHabitsChecked.toFloat() / allHabits * 100).toInt() else 0
 
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, top = 16.dp),
-            ){
+            ) {
                 Text(
                     fontSize = 20.sp,
-                    text = "Week №${currentDate.get(Calendar.WEEK_OF_YEAR)}"
+                    text = stringResource(
+                        R.string.today_screen_statistics_week,
+                        currentDate.get(Calendar.WEEK_OF_YEAR)
+                    )
                 )
 
                 Spacer(
@@ -65,7 +70,7 @@ fun DaysStatisticCard(
                 Text(
                     textAlign = TextAlign.End,
                     fontSize = 20.sp,
-                    text = "Totally: $text%"
+                    text = stringResource(R.string.today_screen_statistics_totally_completed, text)
                 )
             }
 

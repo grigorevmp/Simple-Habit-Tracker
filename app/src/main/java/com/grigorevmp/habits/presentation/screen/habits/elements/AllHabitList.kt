@@ -13,9 +13,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.elements.dialogs.EditHabitDialog
@@ -51,7 +53,7 @@ fun HabitList(
         item {
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "Your habits",
+                text = stringResource(R.string.habit_screen_your_habits_title),
                 fontSize = 24.sp
             )
         }
@@ -85,8 +87,8 @@ fun HabitList(
 fun PreviewHabit() {
     HabitCard(
         habitEntity = HabitEntity(
-            title = "Заголовок",
-            description = "Описание",
+            title = "Title",
+            description = "Description",
             alertEnabled = true,
             days = arrayOf(LocalDate.now().dayOfWeek),
             time = SerializableTimePickerState(11, 12),

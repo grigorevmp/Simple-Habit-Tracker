@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Трекер привычек</string>
+
+    <!-- Common -->
+    <string name="delete_button">Удалить</string>
+    <string name="remove_button">Удалить</string>
+    <string name="cancel_button">Закрыть</string>
+    <string name="save_button">Сохранить</string>
+    <string name="bottom_nav_home">Сегодня</string>
+    <string name="bottom_nav_habits">Привычки</string>
+    <string name="bottom_nav_settings">Настройки</string>
+
+    <!-- Today screen -->
+    <string name="today_screen_statistics_title">Статистика</string>
+    <string name="today_screen_statistics_week">Неделя №%1$s</string>
+    <string name="today_screen_statistics_totally_completed">Всего: %1$s%%</string>
+
+    <string name="today_screen_latest_title">Последние привычки</string>
+
+    <string name="today_screen_habit_state_icon_description">Иконка состояния привычки</string>
+    <string name="today_screen_habit_card_no_planned_habits">Не запланировано привычек</string>
+
+    <string name="today_screen_reminder_icon_description">Иконка календаря</string>
+
+    <!-- Settings screen -->
+    <string name="settings_screen_settings_title">Настройки</string>
+
+    <string name="settings_screen_permissions_title">Требуются разрешения</string>
+    <string name="settings_screen_permission_summary">Мы хотим, чтобы вы предоставили доступ к игнорированию оптимизации батареи и отправки уведомлений</string>
+    <string name="settings_screen_permissions_required_icon_description">Иконка требований разрешений</string>
+
+    <string name="settings_screen_up_to_date_title">Всё в порядке</string>
+    <string name="settings_screen_up_to_date_summary">Вы предоставили все необходимые разрешения. Скоро появятся новые функции…</string>
+    <string name="settings_screen_up_to_date_icon_description">Иконка \"Всё в порядке\"</string>
+
+    <string name="settings_screen_version">Версия 1.0.0 alpha | Сборка #25</string>
+
+    <!-- Habit screen -->
+    <string name="habit_screen_your_habits_title">Ваши привычки</string>
+    <string name="habit_screen_remind_in">Напомним в %1$s</string>
+
+    <string name="habit_screen_add_new_habit_dialog_title">Добавить привычку</string>
+    <string name="habit_screen_add_new_habit_title">Заголовок</string>
+    <string name="habit_screen_add_new_habit_description">Описание</string>
+    <string name="habit_screen_add_new_habit_enter_something_error">Введите что-то</string>
+    <string name="habit_screen_add_new_habit_edit_days_for_habit_button">Редактировать дни</string>
+    <string name="habit_screen_add_new_habit_add_notification_button">Добавить уведомление</string>
+    <string name="habit_screen_add_new_habit_change_notification_button">Изменить уведомление</string>
+    <string name="habit_screen_add_new_habit_add_habit_button">Добавить привычку</string>
+    <string name="habit_screen_add_new_habit_reminder_icon_description">Иконка уведомлений</string>
+    <string name="habit_screen_add_new_habit_days_icon_description">Иконка дней</string>
+    <string name="habit_screen_add_new_habit_error_icon_description">Иконка ошибки</string>
+
+    <string name="habit_screen_choose_days_title">Установить дни</string>
+    <string name="habit_screen_choose_time_set_notification_title">Установить уведомление</string>
+
+    <string name="habit_screen_edit_habit_dialog_title">Редактировать</string>
+    <string name="habit_screen_edit_habit_edit_days_button">Изменить дни</string>
+</resources>

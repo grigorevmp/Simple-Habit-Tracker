@@ -9,6 +9,8 @@ class HabitRepository @Inject constructor(private val habitWithDateDao: HabitWit
 
     fun fetchOnlyHabits() = habitWithDateDao.getAllOnlyHabits()
 
+    fun fetchHabitsWithAlerts() = habitWithDateDao.getAllHabitsWithAlerts()
+
     suspend fun insert(habit: HabitEntity): Long {
         return habitWithDateDao.insert(habit)
     }

@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -35,8 +36,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.alarm.createChannel
 import com.grigorevmp.habits.data.repository.PreferencesRepository
+import com.grigorevmp.habits.domain.usecase.synchronizer.UpdateNotificationUseCase
 import com.grigorevmp.habits.domain.usecase.synchronizer.UpdateSyncPointUseCase
 import com.grigorevmp.habits.presentation.screen.habits.HabitsViewModel
 import com.grigorevmp.habits.presentation.screen.settings.SettingsScreenViewModel
@@ -52,19 +55,28 @@ class MainActivity : ComponentActivity() {
     lateinit var updateSyncPointUseCase: UpdateSyncPointUseCase
 
     @Inject
+    lateinit var updateNotificationUseCase: UpdateNotificationUseCase
+
+    @Inject
     lateinit var preferencesRepository: PreferencesRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        updateSyncPointUseCase.invoke()
-        createChannel(this)
+        synchronize()
         checkPermission()
 
         setContent {
             MainScreenView(viewModel(), viewModel(), viewModel())
         }
+    }
+
+    private fun synchronize() {
+        updateSyncPointUseCase.invoke()
+        updateNotificationUseCase.invoke(this)
+
+        createChannel(this)
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -97,14 +109,21 @@ class MainActivity : ComponentActivity() {
         settingsViewModel: SettingsScreenViewModel,
         habitViewModel: HabitsViewModel,
     ) {
-        NavHost(navController, startDestination = BottomNavItem.Today.screenRoute) {
-            composable(BottomNavItem.Today.screenRoute) {
+        val context = LocalContext.current
+
+        NavHost(
+            navController,
+            startDestination = BottomNavItem.Today(context.getString(R.string.bottom_nav_home)).screenRoute
+        ) {
+            composable(BottomNavItem.Today(context.getString(R.string.bottom_nav_home)).screenRoute) {
                 TodayNavScreen(todayScreenViewModel)
             }
-            composable(BottomNavItem.Habits.screenRoute) {
+
+            composable(BottomNavItem.Habits(context.getString(R.string.bottom_nav_habits)).screenRoute) {
                 HabitListNavScreen(habitViewModel)
             }
-            composable(BottomNavItem.Settings.screenRoute) {
+
+            composable(BottomNavItem.Settings(context.getString(R.string.bottom_nav_settings)).screenRoute) {
                 SettingsNavScreen(settingsViewModel)
             }
         }
@@ -112,10 +131,12 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun BottomNavigation(navController: NavController) {
+        val context = LocalContext.current
+
         val items = listOf(
-            BottomNavItem.Today,
-            BottomNavItem.Habits,
-            BottomNavItem.Settings,
+            BottomNavItem.Today(context.getString(R.string.bottom_nav_home)),
+            BottomNavItem.Habits(context.getString(R.string.bottom_nav_habits)),
+            BottomNavItem.Settings(context.getString(R.string.bottom_nav_settings)),
         )
         NavigationBar {
             val navBackStackEntry by navController.currentBackStackEntryAsState()

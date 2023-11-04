@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.data.HabitEntity
 import java.util.Calendar
 
@@ -31,7 +32,7 @@ class AlarmScheduler {
 
             Log.d("Alarm manager", "Registered alarm $requestCode for id=${item.title} on ${dayOfWeek.name} in ${item.time.hour}:${item.time.minute}")
             Log.d("Alarm manager", "Calendar format: ${calendar.time}")
-            Log.d("Alarm manager", "Is alarm created: ${checkIfPendingIntentIsRegistered(context, requestCode)}")
+            Log.d("Alarm manager", "Is alarm created: ${Utils.checkIfPendingIntentIsRegistered(context, requestCode)}")
 
             if (calendar.time < Calendar.getInstance().time) {
                 Log.d("Alarm manager", "Past date. Increasing")
@@ -53,16 +54,9 @@ class AlarmScheduler {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
             )
-
-            Log.d("Alarm manager", "Is alarm created: ${checkIfPendingIntentIsRegistered(context, requestCode)}")
         }
 
         Log.d("Alarm manager", "==== =================== =====")
-    }
-
-    private fun checkIfPendingIntentIsRegistered(context: Context, requestCode: Int): Boolean {
-        val intent = Intent(context, AlarmReceiver::class.java)
-        return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE) != null
     }
 
     fun cancel(context: Context, item: HabitEntity) {

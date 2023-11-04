@@ -17,6 +17,9 @@ interface HabitWithDateDao {
     @Query("SELECT * FROM habit_table")
     fun getAllOnlyHabits(): Flow<MutableList<HabitEntity>>
 
+    @Query("SELECT * FROM habit_table where habit_deleted=0 AND habit_alert=1")
+    fun getAllHabitsWithAlerts(): Flow<MutableList<HabitEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(habit: HabitEntity): Long
 

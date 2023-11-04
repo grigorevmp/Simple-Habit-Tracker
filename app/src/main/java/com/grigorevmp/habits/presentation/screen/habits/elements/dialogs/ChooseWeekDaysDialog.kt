@@ -12,9 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.habits.elements.base.DateChip
 import java.time.DayOfWeek
 
@@ -34,7 +36,7 @@ fun ChooseWeekDaysDialog(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp), text = "Set days for habit", fontSize = 24.sp
+                .padding(top = 20.dp, bottom = 16.dp), text = stringResource(R.string.habit_screen_choose_days_title), fontSize = 24.sp
         )
 
         FlowRow(
@@ -58,7 +60,7 @@ fun ChooseWeekDaysDialog(
                 .align(Alignment.End)
                 .padding(vertical = 16.dp),
         ) {
-            Text("Save")
+            Text(stringResource(R.string.habit_screen_choose_days_save_button))
         }
     }
 }

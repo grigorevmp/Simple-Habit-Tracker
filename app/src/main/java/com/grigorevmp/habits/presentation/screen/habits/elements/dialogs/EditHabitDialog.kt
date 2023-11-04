@@ -32,10 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import java.time.DayOfWeek
@@ -71,7 +73,9 @@ fun EditHabitDialog(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp), text = "Edit habit", fontSize = 24.sp
+                .padding(top = 20.dp, bottom = 16.dp),
+            text = stringResource(R.string.habit_screen_edit_habit_dialog_title),
+            fontSize = 24.sp
         )
 
         var isError by rememberSaveable { mutableStateOf(false) }
@@ -92,18 +96,20 @@ fun EditHabitDialog(
                 if (isError) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Enter something",
+                        text = stringResource(R.string.habit_screen_edit_habit_enter_something_hint),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
             },
             trailingIcon = {
                 if (isError) Icon(
-                    Icons.Filled.Info, "error", tint = MaterialTheme.colorScheme.error
+                    Icons.Filled.Info,
+                    stringResource(R.string.habit_screen_edit_habit_error_icon_description),
+                    tint = MaterialTheme.colorScheme.error
                 )
             },
             onValueChange = { newValue -> title = newValue },
-            label = { Text("Title") },
+            label = { Text(stringResource(R.string.habit_screen_edit_habit_title)) },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -117,7 +123,7 @@ fun EditHabitDialog(
             shape = RoundedCornerShape(8.dp),
             value = description,
             onValueChange = { newValue -> description = newValue },
-            label = { Text("Description") },
+            label = { Text(stringResource(R.string.habit_screen_edit_habit_description)) },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -175,9 +181,12 @@ fun EditHabitDialog(
                 modifier = Modifier.padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Filled.DateRange, contentDescription = "Days")
+                Icon(
+                    Icons.Filled.DateRange,
+                    contentDescription = stringResource(R.string.habit_screen_edit_habit_days_icon_description)
+                )
                 Text(
-                    text = "Edit days for habit",
+                    text = stringResource(R.string.habit_screen_edit_habit_edit_days_button),
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -196,9 +205,12 @@ fun EditHabitDialog(
                 modifier = Modifier.padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Filled.Notifications, contentDescription = "Reminder")
+                Icon(
+                    Icons.Filled.Notifications,
+                    contentDescription = stringResource(R.string.habit_screen_edit_habit_reminder_description)
+                )
                 Text(
-                    text = "Change notification",
+                    text = stringResource(R.string.habit_screen_edit_habit_change_notification_button),
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -213,7 +225,7 @@ fun EditHabitDialog(
                 deleteHabitEntity(habitEntity)
                 hideDialog()
             }) {
-                Text("Delete")
+                Text(stringResource(R.string.habit_screen_edit_habit_delete_button))
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -235,7 +247,7 @@ fun EditHabitDialog(
                     hideDialog()
                 }
             }) {
-                Text("Save changes")
+                Text(stringResource(R.string.habit_screen_edit_habit_save_changes_button))
             }
         }
     }

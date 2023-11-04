@@ -1,20 +1,24 @@
 package com.grigorevmp.habits.presentation.screen.today
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,9 +32,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
@@ -80,13 +86,27 @@ fun TodayScreen(
     if (dataIsReady) {
         allHabitsWithDate = allHabitsWithDateData
         allHabitsStatistic = allHabitsStatisticData
+    }
 
+    AnimatedVisibility(
+        visible = dataIsReady,
+        enter = fadeIn(
+            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
+        )
+    ) {
         TodayView(
             allHabitsWithDate,
             allHabitsStatistic,
             updateHabitRef
         )
-    } else {
+    }
+
+    AnimatedVisibility(
+        visible = !dataIsReady,
+        exit = fadeOut(
+            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
+        )
+    ) {
         TodayShimmedView()
     }
 }
@@ -114,7 +134,7 @@ fun TodayView(
             ) {
                 stickyHeader {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().animateItemPlacement(),
                         shape = RoundedCornerShape(0.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface
@@ -122,7 +142,7 @@ fun TodayView(
                     ) {
                         Text(
                             modifier = Modifier.padding(16.dp),
-                            text = "Statistics",
+                            text = stringResource(R.string.today_screen_statistics_title),
                             fontSize = 24.sp
                         )
                     }
@@ -134,7 +154,7 @@ fun TodayView(
 
                 stickyHeader {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().animateItemPlacement(),
                         shape = RoundedCornerShape(0.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface
@@ -142,7 +162,7 @@ fun TodayView(
                     ) {
                         Text(
                             modifier = Modifier.padding(16.dp),
-                            text = "Latest habits",
+                            text = stringResource(R.string.today_screen_latest_title),
                             fontSize = 24.sp
                         )
                     }
@@ -153,6 +173,7 @@ fun TodayView(
                     HabitsForDayCard(
                         habitsForDate,
                         updateHabitRef
+
                     )
                 }
             }
@@ -184,7 +205,7 @@ fun TodayShimmedView() {
                     ) {
                         Text(
                             modifier = Modifier.padding(16.dp),
-                            text = "Statistics",
+                            text = stringResource(id = R.string.today_screen_statistics_title),
                             fontSize = 24.sp
                         )
                     }
@@ -194,10 +215,15 @@ fun TodayShimmedView() {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(256.dp)
                             .padding(horizontal = 8.dp, vertical = 8.dp)
                             .shimmer(),
-                    ) { }
+                    ) {
+                        LinearProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        )
+                    }
                 }
             }
         }

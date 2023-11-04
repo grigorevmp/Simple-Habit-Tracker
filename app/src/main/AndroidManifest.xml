@@ -34,12 +34,12 @@
         <receiver android:name=".core.alarm.AlarmReceiver" android:exported="true" />
 
         <receiver
-            android:name=".core.alarm.MarkAsDoneBroadcastReceiver"
+            android:name=".receiver.habit_notification.MarkAsDoneBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name=".core.alarm.MarkAsMissedBroadcastReceiver"
+            android:name=".receiver.habit_notification.MarkAsMissedBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
     </application>

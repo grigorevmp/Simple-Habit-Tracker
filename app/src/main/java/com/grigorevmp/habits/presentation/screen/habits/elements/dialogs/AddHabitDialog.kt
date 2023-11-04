@@ -31,10 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import java.time.DayOfWeek
 
@@ -60,7 +62,9 @@ fun AddHabitDialog(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp), text = "Add new habit", fontSize = 24.sp
+                .padding(top = 20.dp, bottom = 16.dp),
+            text = stringResource(R.string.habit_screen_add_new_habit_dialog_title),
+            fontSize = 24.sp
         )
 
         var isError by rememberSaveable { mutableStateOf(false) }
@@ -81,18 +85,19 @@ fun AddHabitDialog(
                 if (isError) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Enter something",
+                        text = stringResource(R.string.habit_screen_add_new_habit_enter_something_error),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
             },
             trailingIcon = {
                 if (isError) Icon(
-                    Icons.Filled.Info, "error", tint = MaterialTheme.colorScheme.error
+                    Icons.Filled.Info,
+                    stringResource(R.string.habit_screen_add_new_habit_error_icon_description), tint = MaterialTheme.colorScheme.error
                 )
             },
             onValueChange = { newValue -> title = newValue },
-            label = { Text("Title") },
+            label = { Text(stringResource(R.string.habit_screen_add_new_habit_title)) },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -108,7 +113,7 @@ fun AddHabitDialog(
             shape = RoundedCornerShape(8.dp),
             value = description,
             onValueChange = { newValue -> description = newValue },
-            label = { Text("Description") },
+            label = { Text(stringResource(R.string.habit_screen_add_new_habit_description)) },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -167,9 +172,9 @@ fun AddHabitDialog(
                 modifier = Modifier.padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Filled.DateRange, contentDescription = "Days")
+                Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.habit_screen_add_new_habit_days_icon_description))
                 Text(
-                    text = "Edit days for habit",
+                    text = stringResource(R.string.habit_screen_add_new_habit_edit_days_for_habit_button),
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -189,9 +194,15 @@ fun AddHabitDialog(
                 modifier = Modifier.padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Filled.Notifications, contentDescription = "Reminder")
+                Icon(Icons.Filled.Notifications, contentDescription = stringResource(R.string.habit_screen_add_new_habit_reminder_icon_description))
                 Text(
-                    text = if (!useAlert) "Add notification" else "Change notification",
+                    text = if (!useAlert) {
+                        stringResource(R.string.habit_screen_add_new_habit_add_notification_button)
+                    } else {
+                        stringResource(
+                            R.string.habit_screen_add_new_habit_change_notification_button
+                        )
+                    },
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -217,7 +228,7 @@ fun AddHabitDialog(
                 )
             }
         }) {
-            Text("Add Habit")
+            Text(stringResource(R.string.habit_screen_add_new_habit_add_habit_button))
         }
     }
 }
@@ -227,7 +238,7 @@ fun AddHabitDialog(
 @Composable
 fun AddHabitDialogPreview() {
     AddHabitDialog(
-        addHabitEntity = { _, _, _, _, _, _ ->},
+        addHabitEntity = { _, _, _, _, _, _ -> },
         hideDialog = { },
     )
 }
