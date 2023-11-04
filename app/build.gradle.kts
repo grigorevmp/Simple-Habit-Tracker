@@ -29,11 +29,31 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
+
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders["appIconRound"] = "@mipmap/ic_launcher_round"
+            manifestPlaceholders["appName"] = "@string/app_name"
+        }
+
+        debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-DEBUG"
+
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_beta"
+            manifestPlaceholders["appIconRound"] = "@mipmap/ic_launcher_beta_round"
+            manifestPlaceholders["appName"] = "@string/app_name_beta"
         }
     }
     compileOptions {

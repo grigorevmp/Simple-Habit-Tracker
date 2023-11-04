@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Трекер привычек</string>
+    <string name="app_name_beta">[B] Трекер привычек</string>
 
     <!-- Common -->
     <string name="delete_button">Удалить</string>
