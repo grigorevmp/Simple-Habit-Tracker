@@ -109,7 +109,7 @@ class TodayScreenViewModel @Inject constructor(
                 val datesData = getWeekDays()
 
                 for ((index, date) in datesData.withIndex()) {
-                    val statisticItem = HabitStatisticItemUi(0, 0, index)
+                    val statisticItem = HabitStatisticItemUi(0, 0, index, date.dayOfMonth.toLong())
 
                     getDateOrNull(date).collect { targetDate ->
                         if (targetDate == null) return@collect

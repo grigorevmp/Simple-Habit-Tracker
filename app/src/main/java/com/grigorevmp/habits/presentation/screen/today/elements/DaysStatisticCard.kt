@@ -1,9 +1,18 @@
 package com.grigorevmp.habits.presentation.screen.today.elements
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +35,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.presentation.screen.common.EmojiView
+import com.grigorevmp.habits.presentation.screen.common.getRandomLikeEmoji
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
 import java.util.Calendar
 
@@ -82,10 +96,14 @@ fun DaysStatisticCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 val percents = allHabitsStatisticData.map {
-                    if (it.habitsNumber > 0) it.checkedHabitsNumber.toFloat() / it.habitsNumber.toFloat() * 100 else -1
+                    if (it.habitsNumber > 0) {
+                        (it.checkedHabitsNumber.toFloat() / it.habitsNumber.toFloat() * 100).toInt() to it.id
+                    } else {
+                        -1 to it.id
+                    }
                 }
                 for (percent in percents) {
-                    Circle(percent.toInt())
+                    Circle(percent)
                 }
             }
         }
@@ -94,9 +112,11 @@ fun DaysStatisticCard(
 
 
 @Composable
-fun Circle(percent: Int, modifier: Modifier = Modifier) {
+fun Circle(percent: Pair<Int, Long>, modifier: Modifier = Modifier) {
+    val emoji by remember(percent.first != 100) { mutableStateOf(getRandomLikeEmoji(percent.second)) }
+
     val color by animateColorAsState(
-        when (percent) {
+        when (percent.first) {
             -1 -> Color(red = 0, green = 0, blue = 0, alpha = 0)
             0 -> Color(red = 0, green = 0, blue = 0, alpha = 25)
             100 -> MaterialTheme.colorScheme.secondary
@@ -106,47 +126,84 @@ fun Circle(percent: Int, modifier: Modifier = Modifier) {
     )
 
     val size by animateDpAsState(
-        when (percent) {
+        when (percent.first) {
             -1 -> 0.dp
             0 -> 24.dp
             100 -> 96.dp
-            in 1..99 -> ((percent / 100f) * 96).dp
+            in 1..99 -> ((percent.first / 100f) * 96).dp
             else -> 24.dp
         }, label = "circleSize"
     )
 
-    Canvas(
-        modifier = modifier
-            .size(48.dp)
-            .then(modifier)
+    Box(
+        contentAlignment = Alignment.Center
     ) {
-        drawCircle(
-            color = Color(red = 0, green = 0, blue = 0, alpha = 25),
-            center = center,
-            radius = 96.dp.value / 2,
-            style = Fill
-        )
-        drawCircle(
-            color = color,
-            center = center,
-            radius = size.value / 2,
-            style = Fill
-        )
+        Canvas(
+            modifier = modifier
+                .size(48.dp)
+                .then(modifier)
+                .zIndex(-1F)
+        ) {
+            drawCircle(
+                color = Color(red = 0, green = 0, blue = 0, alpha = 25),
+                center = center,
+                radius = 96.dp.value / 2,
+                style = Fill
+            )
+        }
+
+        AnimatedVisibility(
+            visible = percent.first != 100,
+            enter = fadeIn(
+                animationSpec = TweenSpec(200, 0, FastOutSlowInEasing)
+            ),
+            exit = fadeOut(
+                animationSpec = TweenSpec(200, 0, FastOutLinearInEasing)
+            ),
+        ) {
+            Canvas(
+                modifier = modifier
+                    .size(48.dp)
+                    .then(modifier)
+                    .zIndex(-1F)
+            ) {
+                drawCircle(
+                    color = color,
+                    center = center,
+                    radius = size.value / 2,
+                    style = Fill
+                )
+            }
+        }
+
+        AnimatedVisibility(
+            visible = percent.first == 100,
+            enter = scaleIn(
+                animationSpec = TweenSpec(400, 0, FastOutLinearInEasing)
+            ),
+            exit = scaleOut(
+                animationSpec = TweenSpec(400, 0, FastOutSlowInEasing)
+            ),
+            modifier = Modifier.zIndex(4F)
+        ) {
+            EmojiView(emoji = emoji, fontSize = 16F)
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun DaysStatisticCardPreview() {
     DaysStatisticCard(
         listOf(
-            HabitStatisticItemUi(4, 5, 1),
-            HabitStatisticItemUi(0, 5, 2),
-            HabitStatisticItemUi(0, 0, 3),
-            HabitStatisticItemUi(3, 5, 4),
-            HabitStatisticItemUi(5, 5, 5),
-            HabitStatisticItemUi(4, 8, 6),
-            HabitStatisticItemUi(5, 0, 7),
+            HabitStatisticItemUi(4, 5, 1, 1L),
+            HabitStatisticItemUi(0, 5, 2, 1L),
+            HabitStatisticItemUi(0, 0, 3, 1L),
+            HabitStatisticItemUi(3, 5, 4, 1L),
+            HabitStatisticItemUi(5, 5, 5, 1L),
+            HabitStatisticItemUi(4, 8, 6, 1L),
+            HabitStatisticItemUi(5, 0, 7, 1L),
         )
     )
 }
