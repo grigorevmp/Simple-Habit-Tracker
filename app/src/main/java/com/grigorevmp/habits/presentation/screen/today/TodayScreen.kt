@@ -50,6 +50,11 @@ import com.valentinilk.shimmer.shimmer
 fun TodayScreen(habitViewModel: TodayScreenViewModel) {
     val context = LocalContext.current
     val allHabitsStatisticData by habitViewModel.statisticUiState.collectAsState()
+    val allHabitsWithDateData by habitViewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        habitViewModel.init(context, daysCount = 10)
+    }
 
     TodayScreen(
         prepareHabitsList = { payload: () -> Unit ->
@@ -58,7 +63,7 @@ fun TodayScreen(habitViewModel: TodayScreenViewModel) {
             }
             habitViewModel.updateWeekStatistic()
         },
-        allHabitsWithDateData = habitViewModel.uiState.value,
+        allHabitsWithDateData = allHabitsWithDateData,
         allHabitsStatisticData = allHabitsStatisticData,
         updateHabitRef = { dateId: Long, id: Long, habitType: HabitType ->
             habitViewModel.updateHabitRef(dateId, id, habitType)
@@ -134,7 +139,9 @@ fun TodayView(
             ) {
                 stickyHeader {
                     Card(
-                        modifier = Modifier.fillMaxWidth().animateItemPlacement(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItemPlacement(),
                         shape = RoundedCornerShape(0.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface
@@ -154,7 +161,9 @@ fun TodayView(
 
                 stickyHeader {
                     Card(
-                        modifier = Modifier.fillMaxWidth().animateItemPlacement(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItemPlacement(),
                         shape = RoundedCornerShape(0.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface

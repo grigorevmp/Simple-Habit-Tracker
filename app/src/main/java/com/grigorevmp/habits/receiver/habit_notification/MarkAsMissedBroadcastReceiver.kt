@@ -6,6 +6,9 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.grigorevmp.habits.core.alarm.NOTIFICATION_ID
+import com.grigorevmp.habits.core.in_app_bus.Event
+import com.grigorevmp.habits.core.in_app_bus.EventType
+import com.grigorevmp.habits.core.in_app_bus.GlobalBus
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.di.HiltBroadcastReceiver
 import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
@@ -51,5 +54,9 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
 
         val notificationId = (NOTIFICATION_ID * 1000 + id).toInt()
         context.getSystemService(NotificationManager::class.java).cancel(notificationId)
+
+        GlobalBus.post(
+            Event(EventType.NotificationChangedEvent, "Missed")
+        )
     }
 }

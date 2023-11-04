@@ -27,12 +27,11 @@ import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun HabitForDayCompletedSubCard(
-    habitType: HabitType,
     updateHabitRef: (Long, Long, HabitType) -> Unit,
     habit: HabitEntityUI,
     setNewHabitType: (HabitType) -> Unit
 ) {
-    val habitTypeMutable = remember { mutableStateOf(habitType) }
+    val habitTypeMutable = remember(habit.type.ordinal) { mutableStateOf(habit.type) }
 
     Card(
         colors = CardDefaults.cardColors(
@@ -65,7 +64,7 @@ fun HabitForDayCompletedSubCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val iconResource = when (habitTypeMutable.value ) {
+            val iconResource = when (habitTypeMutable.value) {
                 HabitType.Done -> {
                     R.drawable.ic_done
                 }
@@ -94,7 +93,7 @@ fun HabitForDayCompletedSubCard(
         }
     }
 
-    setNewHabitType(habitTypeMutable.value )
+    setNewHabitType(habitTypeMutable.value)
 }
 
 
@@ -102,7 +101,6 @@ fun HabitForDayCompletedSubCard(
 @Composable
 fun HabitForDayCompletedSubCardPreview() {
     HabitForDayCompletedSubCard(
-        habitType = HabitType.Missed,
         updateHabitRef = { _, _, _ -> },
         habit = HabitEntityUI(
             id = 0,

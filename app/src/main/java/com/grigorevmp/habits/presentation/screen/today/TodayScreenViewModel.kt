@@ -1,9 +1,9 @@
 package com.grigorevmp.habits.presentation.screen.today
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grigorevmp.habits.core.in_app_bus.GlobalBus
 import com.grigorevmp.habits.data.data.DateEntity
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
@@ -39,7 +39,7 @@ class TodayScreenViewModel @Inject constructor(
     private val todayScreenMapper: TodayScreenMapper,
 ) : ViewModel() {
 
-    var uiState = mutableStateOf<List<HabitWithDatesUI>>(mutableListOf())
+    var uiState = MutableStateFlow(listOf<HabitWithDatesUI>())
         private set
 
     var statisticUiState = MutableStateFlow(listOf<HabitStatisticItemUi>())
@@ -48,59 +48,69 @@ class TodayScreenViewModel @Inject constructor(
     var habits = getHabitsUseCase.invoke()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), emptyList())
 
-    fun getPreparedHabitsList(context: Context, daysCount: Int, payload: () -> Unit) =
-        viewModelScope.launch {
-            CoroutineScope(Dispatchers.IO).launch {
-                getHabitsUseCase.invoke().collect { habitsData ->
-                    val minorAllHabitsWithDateData = mutableListOf<HabitWithDatesUI>()
-                    val datesData = getDatesCut(daysCount)
 
-                    for (date in datesData) {
-                        getDate(date).collect { targetDate ->
-                            val habitWithDate = HabitWithDatesUI(
-                                date = todayScreenMapper.getFancyTodayString(
-                                    context,
-                                    date.dayOfMonth,
-                                    date.month,
-                                    date.dayOfWeek
-                                ),
-                                habits = arrayListOf()
-                            )
-
-                            targetDate.id?.let { targetDateId ->
-                                for (habit in habitsData) {
-                                    if (habit.deleted) continue
-
-                                    val habitRef =
-                                        getHabitRefUseCase.invoke(
-                                            targetDateId,
-                                            habit.id
-                                        )
-
-                                    if (habitRef != null) {
-
-                                        habitWithDate.habits.add(
-                                            HabitEntityUI(
-                                                id = habit.id,
-                                                dateId = targetDateId,
-                                                title = habit.title,
-                                                description = habit.description,
-                                                type = habitRef.habitType
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-
-                            minorAllHabitsWithDateData.add(habitWithDate)
-                        }
-                    }
-
-                    uiState.value = minorAllHabitsWithDateData
-                    payload()
-                }
+    fun init(context: Context, daysCount: Int) = viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            GlobalBus.events().collect {
+                getPreparedHabitsList(context, daysCount) { }
+                updateWeekStatistic()
             }
         }
+    }
+
+    fun getPreparedHabitsList(context: Context, daysCount: Int, payload: () -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            getHabitsUseCase.invoke().collectLatest { habitsData ->
+                val minorAllHabitsWithDateData = mutableListOf<HabitWithDatesUI>()
+                val datesData = getDatesCut(daysCount)
+
+                for (date in datesData) {
+                    getDate(date).collect { targetDate ->
+                        val habitWithDate = HabitWithDatesUI(
+                            date = todayScreenMapper.getFancyTodayString(
+                                context,
+                                date.dayOfMonth,
+                                date.month,
+                                date.dayOfWeek
+                            ),
+                            habits = arrayListOf()
+                        )
+
+                        targetDate.id?.let { targetDateId ->
+                            for (habit in habitsData) {
+                                if (habit.deleted) continue
+
+                                val habitRef =
+                                    getHabitRefUseCase.invoke(
+                                        targetDateId,
+                                        habit.id
+                                    )
+
+                                if (habitRef != null) {
+
+                                    habitWithDate.habits.add(
+                                        HabitEntityUI(
+                                            id = habit.id,
+                                            dateId = targetDateId,
+                                            title = habit.title,
+                                            description = habit.description,
+                                            type = habitRef.habitType
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        minorAllHabitsWithDateData.add(habitWithDate)
+                    }
+                }
+
+                uiState.value = minorAllHabitsWithDateData
+                payload()
+            }
+            cancel()
+        }
+    }
 
     fun updateWeekStatistic() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -138,6 +148,7 @@ class TodayScreenViewModel @Inject constructor(
 
                 statisticUiState.value = minorAllHabitStatisticItemUiData
             }
+            cancel()
         }
     }
 
