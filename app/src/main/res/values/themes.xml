@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.HabitTracker" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_anim</item>
+        <item name="windowSplashScreenBackground">#131313</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.HabitTracker</item>
+    </style>
 </resources>

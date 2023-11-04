@@ -98,4 +98,7 @@ dependencies {
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.compose.shimmer)
 }

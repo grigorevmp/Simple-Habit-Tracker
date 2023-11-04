@@ -32,7 +32,7 @@ fun HabitsForDayCard(
         Text(
             text = habitsForDate.date,
             fontSize = 20.sp,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(16.dp)
         )
 
         if (habitsForDate.habits.isEmpty()) {

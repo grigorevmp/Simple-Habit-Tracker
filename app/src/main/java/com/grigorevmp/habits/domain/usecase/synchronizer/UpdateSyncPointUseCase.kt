@@ -1,4 +1,4 @@
-package com.grigorevmp.habits.domain.usecase.date_synchronizer
+package com.grigorevmp.habits.domain.usecase.synchronizer
 
 import com.grigorevmp.habits.data.data.DateEntity
 import com.grigorevmp.habits.data.habit.HabitRefEntity

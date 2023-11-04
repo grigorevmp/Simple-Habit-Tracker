@@ -14,8 +14,11 @@ class AlarmScheduler {
         val alarmManager = context.getSystemService(AlarmManager::class.java)
 
         val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("EXTRA_ID", item.id)
             putExtra("EXTRA_MESSAGE", item.title)
         }
+
+        Log.d("Alarm manager", "==== Alarm manager block =====")
 
         for (dayOfWeek in item.days) {
             val calendar = Calendar.getInstance()
@@ -28,7 +31,16 @@ class AlarmScheduler {
 
             Log.d("Alarm manager", "Registered alarm $requestCode for id=${item.title} on ${dayOfWeek.name} in ${item.time.hour}:${item.time.minute}")
             Log.d("Alarm manager", "Calendar format: ${calendar.time}")
-            Log.d("Alarm manager", "Is created: ${checkIfPendingIntentIsRegistered(context, requestCode)}")
+            Log.d("Alarm manager", "Is alarm created: ${checkIfPendingIntentIsRegistered(context, requestCode)}")
+
+            if (calendar.time < Calendar.getInstance().time) {
+                Log.d("Alarm manager", "Past date. Increasing")
+
+                calendar.add(Calendar.DATE, 7);
+
+                Log.d("Alarm manager", "New date: Registered alarm $requestCode for id=${item.title} on ${dayOfWeek.name} in ${item.time.hour}:${item.time.minute}")
+                Log.d("Alarm manager", "New date: Calendar format: ${calendar.time}")
+            }
 
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
@@ -42,8 +54,10 @@ class AlarmScheduler {
                 )
             )
 
-            Log.d("Alarm manager", "Is created: ${checkIfPendingIntentIsRegistered(context, requestCode)}")
+            Log.d("Alarm manager", "Is alarm created: ${checkIfPendingIntentIsRegistered(context, requestCode)}")
         }
+
+        Log.d("Alarm manager", "==== =================== =====")
     }
 
     private fun checkIfPendingIntentIsRegistered(context: Context, requestCode: Int): Boolean {

@@ -31,21 +31,20 @@ import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.elements.AllHabitList
 import com.grigorevmp.habits.presentation.screen.habits.elements.dialogs.AddHabitDialog
-import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 import java.time.DayOfWeek
 
 
 @Composable
-fun HabitListScreen(habitViewModel: HabitViewModel) {
-    val allHabits by habitViewModel.habits.collectAsState()
+fun HabitListScreen(habitsViewModel: HabitsViewModel) {
+    val allHabits by habitsViewModel.habits.collectAsState()
 
     HabitListScreen(
         allHabits = allHabits,
         updateHabitEntity = { context: Context, habitEntity: HabitEntity ->
-            habitViewModel.updateHabit(context, habitEntity)
+            habitsViewModel.updateHabit(context, habitEntity)
         },
         deleteHabitEntity = { habitEntity: HabitEntity ->
-            habitViewModel.deleteHabit(habitEntity)
+            habitsViewModel.deleteHabit(habitEntity)
         }
     ) { context: Context,
         title: String,
@@ -53,7 +52,7 @@ fun HabitListScreen(habitViewModel: HabitViewModel) {
         daysForHabit: Array<DayOfWeek>,
         useAlert: Boolean,
         timeState: SerializableTimePickerState ->
-        habitViewModel.addHabit(
+        habitsViewModel.addHabit(
             context,
             title,
             description,
@@ -94,11 +93,6 @@ fun HabitListScreen(
 
     Surface(Modifier.fillMaxSize()) {
         Column {
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "Your habits",
-                fontSize = 24.sp
-            )
             AllHabitList(
                 allHabits = allHabits,
                 updateHabitEntity = updateHabitEntity,
@@ -121,7 +115,6 @@ fun HabitListScreen(
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun HabitListScreenPreview() {
@@ -139,7 +132,7 @@ fun HabitListScreenPreview() {
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
-        addHabitEntity = { _, _, _, _, _, _ ->},
+        addHabitEntity = { _, _, _, _, _, _ -> },
     )
 }
 

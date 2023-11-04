@@ -11,6 +11,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,7 +31,7 @@ fun HabitForDayCompletedSubCard(
     habit: HabitEntityUI,
     setNewHabitType: (HabitType) -> Unit
 ) {
-    var habitTypeMutable = habitType
+    val habitTypeMutable = remember { mutableStateOf(habitType) }
 
     Card(
         colors = CardDefaults.cardColors(
@@ -38,20 +40,20 @@ fun HabitForDayCompletedSubCard(
         modifier = Modifier
             .combinedClickable(
                 onClick = {
-                    habitTypeMutable = if (habitTypeMutable != HabitType.Unknown) {
+                    habitTypeMutable.value = if (habitTypeMutable.value  != HabitType.Unknown) {
                         HabitType.Unknown
                     } else {
                         HabitType.Done
                     }
-                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable)
+                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value )
                 },
                 onLongClick = {
-                    habitTypeMutable = if (habitTypeMutable != HabitType.Missed) {
+                    habitTypeMutable.value  = if (habitTypeMutable.value  != HabitType.Missed) {
                         HabitType.Missed
                     } else {
                         HabitType.Done
                     }
-                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable)
+                    updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value )
                 },
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -62,7 +64,7 @@ fun HabitForDayCompletedSubCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val iconResource = when (habitTypeMutable) {
+            val iconResource = when (habitTypeMutable.value ) {
                 HabitType.Done -> {
                     R.drawable.ic_done
                 }
@@ -91,7 +93,7 @@ fun HabitForDayCompletedSubCard(
         }
     }
 
-    setNewHabitType(habitTypeMutable)
+    setNewHabitType(habitTypeMutable.value )
 }
 
 

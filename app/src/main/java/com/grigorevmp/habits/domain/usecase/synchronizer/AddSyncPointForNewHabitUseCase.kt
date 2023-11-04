@@ -1,4 +1,4 @@
-package com.grigorevmp.habits.domain.usecase.date_synchronizer
+package com.grigorevmp.habits.domain.usecase.synchronizer
 
 import android.util.Log
 import com.grigorevmp.habits.data.data.DateEntity
@@ -7,7 +7,6 @@ import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.data.repository.DateRepository
 import com.grigorevmp.habits.data.repository.HabitRefRepository
 import com.grigorevmp.habits.data.repository.HabitRepository
-import com.grigorevmp.habits.data.repository.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel

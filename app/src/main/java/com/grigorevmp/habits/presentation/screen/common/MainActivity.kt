@@ -2,9 +2,15 @@ package com.grigorevmp.habits.presentation.screen.common
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,9 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -29,9 +35,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.grigorevmp.habits.domain.usecase.date_synchronizer.UpdateSyncPointUseCase
-import com.grigorevmp.habits.presentation.screen.today.HabitViewModel
 import com.grigorevmp.habits.core.alarm.createChannel
+import com.grigorevmp.habits.data.repository.PreferencesRepository
+import com.grigorevmp.habits.domain.usecase.synchronizer.UpdateSyncPointUseCase
+import com.grigorevmp.habits.presentation.screen.habits.HabitsViewModel
+import com.grigorevmp.habits.presentation.screen.settings.SettingsScreenViewModel
+import com.grigorevmp.habits.presentation.screen.today.TodayScreenViewModel
 import com.grigorevmp.habits.presentation.theme.HabitTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -42,17 +51,29 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var updateSyncPointUseCase: UpdateSyncPointUseCase
 
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         updateSyncPointUseCase.invoke()
         createChannel(this)
         checkPermission()
+
+        setContent {
+            MainScreenView(viewModel(), viewModel(), viewModel())
+        }
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    fun MainScreenView(habitViewModel: HabitViewModel) {
+    fun MainScreenView(
+        todayScreenViewModel: TodayScreenViewModel,
+        habitViewModel: HabitsViewModel,
+        settingsViewModel: SettingsScreenViewModel,
+    ) {
         val navController = rememberNavController()
 
         HabitTrackerTheme {
@@ -60,7 +81,9 @@ class MainActivity : ComponentActivity() {
                 Box(modifier = Modifier.padding(it)) {
                     NavigationGraph(
                         navController = navController,
-                        habitViewModel = habitViewModel
+                        todayScreenViewModel = todayScreenViewModel,
+                        habitViewModel = habitViewModel,
+                        settingsViewModel = settingsViewModel,
                     )
                 }
             }
@@ -68,16 +91,21 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun NavigationGraph(navController: NavHostController, habitViewModel: HabitViewModel) {
+    fun NavigationGraph(
+        navController: NavHostController,
+        todayScreenViewModel: TodayScreenViewModel,
+        settingsViewModel: SettingsScreenViewModel,
+        habitViewModel: HabitsViewModel,
+    ) {
         NavHost(navController, startDestination = BottomNavItem.Today.screenRoute) {
             composable(BottomNavItem.Today.screenRoute) {
-                TodayNavScreen(habitViewModel)
+                TodayNavScreen(todayScreenViewModel)
             }
             composable(BottomNavItem.Habits.screenRoute) {
                 HabitListNavScreen(habitViewModel)
             }
             composable(BottomNavItem.Settings.screenRoute) {
-                SettingsNavScreen()
+                SettingsNavScreen(settingsViewModel)
             }
         }
     }
@@ -106,8 +134,8 @@ class MainActivity : ComponentActivity() {
                     onClick = {
                         navController.navigate(item.screenRoute) {
 
-                            navController.graph.startDestinationRoute?.let { screen_route ->
-                                popUpTo(screen_route) {
+                            navController.graph.startDestinationRoute?.let { screenRoute ->
+                                popUpTo(screenRoute) {
                                     saveState = true
                                 }
                             }
@@ -119,39 +147,35 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("BatteryLife")
     private fun checkPermission() {
-        val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission(),
-        ) { isGranted: Boolean ->
-            if (isGranted) {
+        if (!preferencesRepository.getPermissionShown()) {
+            val requestPermissionLauncher = registerForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { _: Boolean -> }
 
-            } else {
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
             }
-        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            val packageName: String = packageName
+            val pm: PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                intent.flags = FLAG_ACTIVITY_NEW_TASK
+                intent.data = Uri.parse("package:$packageName")
+                startActivity(intent)
             }
-        }
 
-        setContent {
-            val viewModel: HabitViewModel = viewModel()
-            MainScreenView(viewModel)
+            preferencesRepository.setPermissionShown()
         }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun MainNavigationPreview() {
-        val viewModel: HabitViewModel = viewModel()
-        MainScreenView(viewModel)
     }
 }
 

@@ -23,7 +23,6 @@ class PreferencesRepository @Inject constructor(
         }
     }
 
-
     fun updateLastSyncDate() {
         val current = LocalDate.now()
 
@@ -32,10 +31,19 @@ class PreferencesRepository @Inject constructor(
             .apply()
     }
 
+    fun getPermissionShown() = preferences.getBoolean(FIRST_PERMISSION_REQUEST, false)
+
+    fun setPermissionShown() {
+        preferences.edit()
+            .putBoolean(FIRST_PERMISSION_REQUEST, true)
+            .apply()
+    }
+
 
     companion object {
         const val MAIN_PREFERENCES = "main_habits_prefs"
 
         const val LAST_SYNC = "last_sync"
+        const val FIRST_PERMISSION_REQUEST = "show_first_permission_request"
     }
 }

@@ -1,5 +1,6 @@
 package com.grigorevmp.habits.core.alarm
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +10,8 @@ import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.common.MainActivity
+import com.grigorevmp.habits.receiver.habit_notification.MarkAsDoneBroadcastReceiver
+import com.grigorevmp.habits.receiver.habit_notification.MarkAsMissedBroadcastReceiver
 
 private const val NOTIFICATION_ID = 33
 const val CHANNEL_ID = "ReminderChannel"
@@ -21,6 +24,7 @@ fun createChannel(context: Context) {
 }
 
 fun NotificationManager.sendReminderNotification(
+    id: Long,
     context: Context,
     title: String,
     message: String
@@ -33,6 +37,26 @@ fun NotificationManager.sendReminderNotification(
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
+    val doneIntent = Intent(context, MarkAsDoneBroadcastReceiver::class.java).apply {
+        putExtra("EXTRA_ID", id)
+    }
+    val donePendingIntent = PendingIntent.getBroadcast(
+        context,
+        0,
+        doneIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val missedIntent = Intent(context, MarkAsMissedBroadcastReceiver::class.java).apply {
+        putExtra("EXTRA_ID", id)
+    }
+    val missedPendingIntent = PendingIntent.getBroadcast(
+        context,
+        0,
+        missedIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
     val builder = NotificationCompat.Builder(context, CHANNEL_ID)
         .setContentTitle(title)
         .setContentText(message)
@@ -41,10 +65,16 @@ fun NotificationManager.sendReminderNotification(
                 .bigText(message)
         )
         .setSmallIcon(R.drawable.ic_task)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        .addAction(R.drawable.ic_done, "Done", donePendingIntent)
+        .addAction(R.drawable.ic_clear, "Missed", missedPendingIntent)
         .setContentIntent(contentPendingIntent)
+        .setOngoing(false)
+        .setAutoCancel(true)
         .build()
+
+    builder.flags = builder.flags or Notification.FLAG_AUTO_CANCEL
 
     this.notify(NOTIFICATION_ID, builder)
 }
