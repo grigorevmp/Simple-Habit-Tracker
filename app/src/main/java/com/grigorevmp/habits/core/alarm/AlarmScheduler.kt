@@ -37,7 +37,7 @@ class AlarmScheduler {
             if (calendar.time < Calendar.getInstance().time) {
                 Log.d("Alarm manager", "Past date. Increasing")
 
-                calendar.add(Calendar.DATE, 7);
+                calendar.add(Calendar.DATE, 7)
 
                 Log.d("Alarm manager", "New date: Registered alarm $requestCode for id=${item.title} on ${dayOfWeek.name} in ${item.time.hour}:${item.time.minute}")
                 Log.d("Alarm manager", "New date: Calendar format: ${calendar.time}")

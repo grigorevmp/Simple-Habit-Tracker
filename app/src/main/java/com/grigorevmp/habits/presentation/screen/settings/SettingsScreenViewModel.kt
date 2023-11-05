@@ -17,5 +17,5 @@ class SettingsScreenViewModel @Inject constructor() : ViewModel() {
         return pm.isIgnoringBatteryOptimizations(packageName)
     }
 
-    fun getPackageName(context: Context) = context.packageName
+    fun getPackageName(context: Context): String = context.packageName
 }

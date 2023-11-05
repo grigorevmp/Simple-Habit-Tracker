@@ -34,17 +34,17 @@
 
         <receiver
             android:name=".core.alarm.AlarmReceiver"
-            android:exported="true" />
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.habit_notification.MarkAsDoneBroadcastReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.habit_notification.MarkAsMissedBroadcastReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

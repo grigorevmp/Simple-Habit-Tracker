@@ -15,28 +15,22 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +44,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.ConfigurationCompat
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.utils.Utils
+import com.grigorevmp.habits.presentation.screen.settings.elements.SettingsBaseCard
 import java.util.Locale
 
 
@@ -97,85 +92,6 @@ fun SettingsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LanguageChooserCard() {
-    val availableLanguages = listOf("ru" to "Русский", "en" to "English")
-    val context = LocalContext.current
-
-    val configuration = LocalConfiguration.current
-    val locale = ConfigurationCompat.getLocales(configuration).get(0)?.language ?: "en"
-
-    val selectedLanguage = remember {
-        mutableStateOf(locale)
-    }
-
-    val selectedLanguageReadable = remember {
-        mutableStateOf(
-            ConfigurationCompat.getLocales(configuration)
-                .get(0)?.displayName?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                ?: "English"
-        )
-    }
-
-    val isDropdownExpanded = remember {
-        mutableStateOf(false)
-    }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(
-                style = MaterialTheme.typography.titleMedium,
-                text = stringResource(R.string.settings_screen_language),
-            )
-
-            Box(contentAlignment = Alignment.TopEnd,
-                    modifier = Modifier.align(Alignment.End)) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
-                    onClick = {
-                        isDropdownExpanded.value = !isDropdownExpanded.value
-                    }
-                ) {
-                    Text(
-                        modifier = Modifier.padding(16.dp),
-                        text = selectedLanguageReadable.value
-                    )
-                }
-                MaterialTheme(
-                    shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(16.dp)),
-                ) {
-                    DropdownMenu(
-                        expanded = isDropdownExpanded.value,
-                        onDismissRequest = { isDropdownExpanded.value = !isDropdownExpanded.value },
-                    ) {
-                        availableLanguages.forEach { language ->
-                            DropdownMenuItem(
-                                text = { Text(language.second) },
-                                onClick = {
-                                    selectedLanguage.value = language.first
-
-                                    Utils.localeSelection(context, selectedLanguage.value)
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionsCard(
     isIgnoringBattery: (Context) -> Boolean,
@@ -213,14 +129,14 @@ fun PermissionsCard(
     Log.d("Settings", "==== ================ ====")
 
     if ((isTiramisuPlus.value && isCantPostNotifications.value) || isNotIgnoreBattery.value) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = CardDefaults.cardColors(
+        SettingsBaseCard(
+            cardTitle = stringResource(R.string.settings_screen_permissions_title),
+            cardIconResource = R.drawable.ic_warning,
+            cardIconDescription =  stringResource(R.string.settings_screen_up_to_date_icon_description),
+            cardColor = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer
             ),
-            onClick = {
+            cardOnClick = {
                 if (isTiramisuPlus.value && isCantPostNotifications.value) {
                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
@@ -239,61 +155,94 @@ fun PermissionsCard(
                     )
 
                 }
-            }
+            },
         ) {
-            Row {
-                Icon(
-                    Icons.Filled.Warning,
-                    contentDescription = stringResource(R.string.settings_screen_permissions_required_icon_description),
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 16.dp),
-                )
-
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.settings_screen_permissions_title),
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 8.dp),
-                        text = stringResource(R.string.settings_screen_permission_summary),
-                    )
-                }
-            }
-
+            Text(
+                modifier = Modifier.padding(top = 8.dp),
+                text = stringResource(R.string.settings_screen_permission_summary),
+            )
         }
     } else {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = CardDefaults.cardColors(
+        SettingsBaseCard(
+            cardTitle = stringResource(R.string.settings_screen_up_to_date_title),
+            cardIconResource = R.drawable.ic_done,
+            cardIconDescription =  stringResource(R.string.settings_screen_up_to_date_icon_description),
+            cardColor = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer
-            )
+            ),
         ) {
-            Row {
-                Icon(
-                    Icons.Filled.Done,
-                    contentDescription = stringResource(R.string.settings_screen_up_to_date_icon_description),
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 16.dp),
-                )
+            Text(
+                modifier = Modifier.padding(top = 8.dp),
+                text = stringResource(R.string.settings_screen_up_to_date_summary),
+            )
+        }
+    }
+}
 
-                Column(
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LanguageChooserCard() {
+    val availableLanguages = listOf("ru" to "Русский", "en" to "English")
+    val context = LocalContext.current
+
+    val configuration = LocalConfiguration.current
+    val locale = ConfigurationCompat.getLocales(configuration).get(0)?.language ?: "en"
+
+    val selectedLanguage = remember {
+        mutableStateOf(locale)
+    }
+
+    val selectedLanguageReadable = remember {
+        mutableStateOf(
+            ConfigurationCompat.getLocales(configuration)
+                .get(0)?.displayName?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+                ?: "English"
+        )
+    }
+
+    val isDropdownExpanded = remember {
+        mutableStateOf(false)
+    }
+
+    SettingsBaseCard(
+        cardTitle = stringResource(R.string.settings_screen_language),
+        cardIconResource = R.drawable.ic_language,
+        cardIconDescription = stringResource(R.string.settings_screen_language_icon_description),
+        cardColor = CardDefaults.cardColors(),
+        cardOnClick = { },
+    ) {
+        Box {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+                onClick = {
+                    isDropdownExpanded.value = !isDropdownExpanded.value
+                }
+            ) {
+                Text(
                     modifier = Modifier.padding(16.dp),
+                    text = selectedLanguageReadable.value
+                )
+            }
+            MaterialTheme(
+                shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(16.dp)),
+            ) {
+                DropdownMenu(
+                    expanded = isDropdownExpanded.value,
+                    onDismissRequest = { isDropdownExpanded.value = !isDropdownExpanded.value },
                 ) {
-                    Text(
-                        text = stringResource(R.string.settings_screen_up_to_date_title),
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 8.dp),
-                        text = stringResource(R.string.settings_screen_up_to_date_summary),
-                    )
+                    availableLanguages.forEach { language ->
+                        DropdownMenuItem(
+                            text = { Text(language.second) },
+                            onClick = {
+                                selectedLanguage.value = language.first
+
+                                Utils.localeSelection(context, selectedLanguage.value)
+                            }
+                        )
+                    }
                 }
             }
         }

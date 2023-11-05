@@ -26,7 +26,7 @@ android {
         }
         signingConfig = signingConfigs.getByName("debug")
 
-        resourceConfigurations.plus(listOf("ru", "en",))
+        resourceConfigurations.plus(listOf("ru", "en"))
     }
 
     buildTypes {

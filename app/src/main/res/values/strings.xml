@@ -65,4 +65,5 @@
     <string name="habit_screen_edit_habit_error_icon_description" translatable="false">@string/habit_screen_add_new_habit_error_icon_description</string>
     <string name="habit_screen_edit_habit_delete_button" translatable="false">@string/delete_button</string>
     <string name="habit_screen_edit_habit_edit_days_button">Edit days for habit</string>
+    <string name="settings_screen_language_icon_description">Language icon description</string>
 </resources>
