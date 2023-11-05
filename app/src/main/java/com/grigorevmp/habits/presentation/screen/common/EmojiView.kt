@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
-import kotlin.random.Random
 
 @Composable
 fun EmojiView(
@@ -29,5 +28,3 @@ fun EmojiView(
         },
     )
 }
-
-fun getRandomLikeEmoji(seed: Long) = listOf("⚡", "🫰", "🩶", "🤍", "🤎", "💛", "🧡", "💖", "❤️", "🩵", "💜", "💙", "💚", "❤️‍🔥", "🔥", "🧨", "✨", "🎉", "🎊").random(Random(seed))

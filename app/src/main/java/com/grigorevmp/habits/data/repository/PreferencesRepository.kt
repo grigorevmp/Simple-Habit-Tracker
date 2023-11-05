@@ -1,13 +1,13 @@
 package com.grigorevmp.habits.data.repository
 
+import android.app.Application
 import android.content.Context
-import dagger.hilt.android.qualifiers.ActivityContext
 import java.time.LocalDate
 import javax.inject.Inject
 
 
 class PreferencesRepository @Inject constructor(
-    @ActivityContext val context: Context
+    val context: Application
 ) {
 
     private val preferences = context.getSharedPreferences(MAIN_PREFERENCES, Context.MODE_PRIVATE)
@@ -39,11 +39,22 @@ class PreferencesRepository @Inject constructor(
             .apply()
     }
 
+    fun getCongratsEmoji() = preferences.getStringSet(CONGRATS_EMOJI, DEFAULT_EMOJI) ?: DEFAULT_EMOJI
+
+    fun setCongratsEmoji(emoji: Set<String>) {
+        preferences.edit()
+            .putStringSet(CONGRATS_EMOJI, emoji)
+            .apply()
+    }
+
 
     companion object {
         const val MAIN_PREFERENCES = "main_habits_prefs"
 
         const val LAST_SYNC = "last_sync"
         const val FIRST_PERMISSION_REQUEST = "show_first_permission_request"
+        const val CONGRATS_EMOJI = "congratulation_emoji"
+
+        val DEFAULT_EMOJI = setOf("⚡", "🫰", "🩶", "🤍", "🤎", "💛", "🧡", "💖", "❤️", "🩵", "💜", "💙", "💚", "❤️‍🔥", "🔥", "🧨", "✨", "🎉", "🎊")
     }
 }

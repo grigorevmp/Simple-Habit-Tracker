@@ -32,12 +32,23 @@
     <string name="settings_screen_permissions_required_icon_description">Иконка требований разрешений</string>
 
     <string name="settings_screen_language">Язык</string>
+    <string name="settings_screen_language_icon_description">Иконка языка</string>
 
     <string name="settings_screen_up_to_date_title">Всё в порядке</string>
-    <string name="settings_screen_up_to_date_summary">Вы предоставили все необходимые разрешения. Скоро появятся новые функции…</string>
+    <string name="settings_screen_up_to_date_summary">Вы предоставили все необходимые разрешения</string>
     <string name="settings_screen_up_to_date_icon_description">Иконка \"Всё в порядке\"</string>
 
+    <string name="settings_screen_emoji_title">Эмодзи успеха</string>
+    <string name="settings_screen_emoji_energy_icon_description">Иконка энергии</string>
+    <string name="settings_screen_emoji_summary">Введите несколько эмодзи, которые будут отображаться на экране статистики, когда все запланированные привычки будут выполнены</string>
+    <string name="settings_screen_emoji_dialog_title">Установить эмодзи</string>
+    <string name="settings_screen_emoji_dialog_summary">Напишите любимые эмодлзи, разделённые запятыми</string>
+    <string name="settings_screen_emoji_dialog_hint">Введите любимые эмодлзи, разделённые запятыми</string>
+    <string name="settings_screen_emoji_dialog_label">Набор эмодзи</string>
+
     <string name="settings_screen_version">Версия 1.0.0 alpha | Сборка #25</string>
+    <string name="settings_screen_version_title">Версия</string>
+    <string name="settings_screen_version_settings_icon_description">Иконка настройки</string>
 
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Ваши привычки</string>

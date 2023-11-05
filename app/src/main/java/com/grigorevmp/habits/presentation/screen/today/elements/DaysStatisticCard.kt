@@ -38,13 +38,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.common.EmojiView
-import com.grigorevmp.habits.presentation.screen.common.getRandomLikeEmoji
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
 import java.util.Calendar
 
 @Composable
 fun DaysStatisticCard(
     allHabitsStatisticData: List<HabitStatisticItemUi>,
+    getRandomEmoji: (Long) -> String,
 ) {
     Card(
         modifier = Modifier
@@ -103,7 +103,7 @@ fun DaysStatisticCard(
                     }
                 }
                 for (percent in percents) {
-                    Circle(percent)
+                    Circle(percent, getRandomEmoji)
                 }
             }
         }
@@ -112,8 +112,12 @@ fun DaysStatisticCard(
 
 
 @Composable
-fun Circle(percent: Pair<Int, Long>, modifier: Modifier = Modifier) {
-    val emoji by remember(percent.first != 100) { mutableStateOf(getRandomLikeEmoji(percent.second)) }
+fun Circle(
+    percent: Pair<Int, Long>,
+    getRandomEmoji: (Long) -> String,
+    modifier: Modifier = Modifier,
+) {
+    val emoji by remember(percent.first != 100) { mutableStateOf(getRandomEmoji(percent.second)) }
 
     val color by animateColorAsState(
         when (percent.first) {
@@ -196,7 +200,7 @@ fun Circle(percent: Pair<Int, Long>, modifier: Modifier = Modifier) {
 @Composable
 fun DaysStatisticCardPreview() {
     DaysStatisticCard(
-        listOf(
+        allHabitsStatisticData = listOf(
             HabitStatisticItemUi(4, 5, 1, 1L),
             HabitStatisticItemUi(0, 5, 2, 1L),
             HabitStatisticItemUi(0, 0, 3, 1L),
@@ -204,6 +208,7 @@ fun DaysStatisticCardPreview() {
             HabitStatisticItemUi(5, 5, 5, 1L),
             HabitStatisticItemUi(4, 8, 6, 1L),
             HabitStatisticItemUi(5, 0, 7, 1L),
-        )
+        ),
+        getRandomEmoji = { _ -> ""}
     )
 }

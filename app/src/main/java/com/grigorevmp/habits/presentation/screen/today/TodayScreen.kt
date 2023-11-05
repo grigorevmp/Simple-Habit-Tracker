@@ -68,6 +68,9 @@ fun TodayScreen(habitViewModel: TodayScreenViewModel) {
         updateHabitRef = { dateId: Long, id: Long, habitType: HabitType ->
             habitViewModel.updateHabitRef(dateId, id, habitType)
         },
+        getRandomEmoji = { seed: Long ->
+            habitViewModel.getRandomEmoji(seed)
+        }
     )
 }
 
@@ -77,6 +80,7 @@ fun TodayScreen(
     allHabitsWithDateData: List<HabitWithDatesUI>,
     allHabitsStatisticData: List<HabitStatisticItemUi>,
     updateHabitRef: (Long, Long, HabitType) -> Unit,
+    getRandomEmoji: (Long) -> String,
 ) {
     var allHabitsWithDate by remember { mutableStateOf<List<HabitWithDatesUI>>(mutableListOf()) }
     var allHabitsStatistic by remember { mutableStateOf<List<HabitStatisticItemUi>>(mutableListOf()) }
@@ -102,7 +106,8 @@ fun TodayScreen(
         TodayView(
             allHabitsWithDate,
             allHabitsStatistic,
-            updateHabitRef
+            updateHabitRef,
+            getRandomEmoji,
         )
     }
 
@@ -122,6 +127,7 @@ fun TodayView(
     allHabits: List<HabitWithDatesUI>,
     allHabitsStatisticData: List<HabitStatisticItemUi>,
     updateHabitRef: (Long, Long, HabitType) -> Unit,
+    getRandomEmoji: (Long) -> String,
 ) {
     val listState = rememberLazyListState()
 
@@ -156,7 +162,7 @@ fun TodayView(
                 }
 
                 item {
-                    DaysStatisticCard(allHabitsStatisticData)
+                    DaysStatisticCard(allHabitsStatisticData, getRandomEmoji)
                 }
 
                 stickyHeader {
@@ -261,6 +267,7 @@ fun TodayScreenPreview() {
         ),
         allHabitsStatisticData = listOf(),
         updateHabitRef = { _, _, _ -> },
+        getRandomEmoji = { _ -> ""}
     )
 }
 

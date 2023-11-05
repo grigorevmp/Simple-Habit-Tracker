@@ -22,14 +22,30 @@
 
     <!-- Settings screen -->
     <string name="settings_screen_settings_title">Settings</string>
-    <string name="settings_screen_version">Version 1.0.0 alpha | Build #23</string>
+
     <string name="settings_screen_permissions_required_icon_description">Permissions required icon</string>
     <string name="settings_screen_permission_summary">We want you to give access to ignoring battery optimisation and notification posting</string>
     <string name="settings_screen_permissions_title">Permissions required</string>
+
     <string name="settings_screen_language">Language</string>
+    <string name="settings_screen_language_icon_description">Language icon</string>
+
+    <string name="settings_screen_version">Version 1.0.0 alpha | Build #23</string>
+    <string name="settings_screen_version_title">Version</string>
+    <string name="settings_screen_version_settings_icon_description">Settings icon</string>
+
     <string name="settings_screen_up_to_date_title">Everything is up to date</string>
-    <string name="settings_screen_up_to_date_summary">You gave all required permissions. New features coming soon…</string>
+    <string name="settings_screen_up_to_date_summary">You gave all required permissions</string>
     <string name="settings_screen_up_to_date_icon_description">Everything is up to date icon</string>
+
+    <string name="settings_screen_emoji_title">Congratulations emoji</string>
+    <string name="settings_screen_emoji_energy_icon_description">Energy icon</string>
+    <string name="settings_screen_emoji_summary">Enter a few emoji to display on the stats screen when all scheduled habits are completed</string>
+    <string name="settings_screen_emoji_dialog_title">Set congrats emoji</string>
+    <string name="settings_screen_emoji_dialog_summary">Write your favorite emoji, separated by comma</string>
+    <string name="settings_screen_emoji_dialog_hint">Enter emoji separated by commas</string>
+    <string name="settings_screen_emoji_dialog_label">Emoji set</string>
+    <string name="settings_screen_emoji_dialog_save_button" translatable="false">@string/save_button</string>
 
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Your habits</string>
@@ -65,5 +81,4 @@
     <string name="habit_screen_edit_habit_error_icon_description" translatable="false">@string/habit_screen_add_new_habit_error_icon_description</string>
     <string name="habit_screen_edit_habit_delete_button" translatable="false">@string/delete_button</string>
     <string name="habit_screen_edit_habit_edit_days_button">Edit days for habit</string>
-    <string name="settings_screen_language_icon_description">Language icon description</string>
 </resources>

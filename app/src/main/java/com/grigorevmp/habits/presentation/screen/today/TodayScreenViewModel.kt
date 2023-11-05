@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.core.in_app_bus.GlobalBus
 import com.grigorevmp.habits.data.data.DateEntity
 import com.grigorevmp.habits.data.habit.HabitType
+import com.grigorevmp.habits.data.repository.PreferencesRepository
 import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
 import com.grigorevmp.habits.domain.usecase.habit_ref.GetHabitRefUseCase
 import com.grigorevmp.habits.domain.usecase.habit_ref.UpdateHabitRefUseCase
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 @HiltViewModel
@@ -37,6 +39,7 @@ class TodayScreenViewModel @Inject constructor(
     private val getHabitRefUseCase: GetHabitRefUseCase,
     private val updateHabitRefUseCase: UpdateHabitRefUseCase,
     private val todayScreenMapper: TodayScreenMapper,
+    private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     var uiState = MutableStateFlow(listOf<HabitWithDatesUI>())
@@ -157,12 +160,17 @@ class TodayScreenViewModel @Inject constructor(
         updateWeekStatistic()
     }
 
+    fun getRandomEmoji(seed: Long): String {
+        val emojiSet = preferencesRepository.getCongratsEmoji()
+
+        return emojiSet.random(Random(seed))
+    }
+
     private fun getDate(date: LocalDate): Flow<DateEntity> = flow {
         getDateUseCase.invoke(date)?.also {
             emit(it)
         }
     }.flowOn(Dispatchers.IO)
-
 
     private fun getDateOrNull(date: LocalDate): Flow<DateEntity?> = flow {
         emit(getDateUseCase.invoke(date))
