@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.utils.Utils
+import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.elements.dialogs.EditHabitDialog
@@ -52,6 +54,8 @@ fun HabitCard(
     val title = habitEntity.title
     val description = habitEntity.description
     val alertEnabled = habitEntity.alertEnabled
+    val countable = habitEntity.countable
+    val countableEntity = habitEntity.countableEntity
     val days = habitEntity.days.parseToDate()
     val time = habitEntity.time.toReadableForms()
 
@@ -106,6 +110,36 @@ fun HabitCard(
                 }
             }
 
+            if (countable && countableEntity != null) {
+                Card(
+                    modifier = Modifier.padding(top = 8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = "Reminder",
+
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+
+                        Text(
+                            text = "${countableEntity.actionName} ${countableEntity.targetValue} ${countableEntity.valueName}",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(start = 8.dp),
+                        )
+                    }
+                }
+            }
+
             if (alertEnabled) {
                 Card(
                     modifier = Modifier.padding(top = 8.dp),
@@ -120,7 +154,7 @@ fun HabitCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            Icons.Filled.Notifications,
+                            Icons.Outlined.Notifications,
                             contentDescription = "Reminder",
 
                             modifier = Modifier
@@ -128,7 +162,7 @@ fun HabitCard(
                         )
 
                         Text(
-                            text = stringResource(R.string.habit_screen_remind_in, time),
+                            text = stringResource(R.string.habit_screen_remind_at, time),
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(start = 8.dp),
                         )
@@ -154,7 +188,6 @@ fun HabitCard(
                     }
                 }
             }
-
         }
     }
 
@@ -191,6 +224,10 @@ fun HabitCardPreview() {
             alertEnabled = true,
             time = SerializableTimePickerState(10, 10),
             completed = false,
+            countable = true,
+            countableEntity = CountableEntity(
+                30, "Bla-bla", "Do"
+            )
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },

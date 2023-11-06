@@ -24,7 +24,7 @@ data class HabitEntity(
     @ColumnInfo(name = "habit_time") var time: SerializableTimePickerState,
     @ColumnInfo(name = "habit_completed") val completed: Boolean = false,
     @ColumnInfo(name = "habit_deleted") val deleted: Boolean = false,
-    @ColumnInfo(name = "habit_countable") val countable: Boolean = false,
+    @ColumnInfo(name = "habit_countable") var countable: Boolean = false,
     @ColumnInfo(name = "habit_countable_entity") var countableEntity: CountableEntity? = null,
 )
 
@@ -48,8 +48,8 @@ data class SerializableTimePickerState(
 @Serializable
 data class CountableEntity(
     val targetValue: Int,
-    val valueName: Int,
-    val actionName: Int,
+    val valueName: String,
+    val actionName: String,
 )
 
 class Converters {

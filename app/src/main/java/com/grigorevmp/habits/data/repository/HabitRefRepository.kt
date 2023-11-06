@@ -14,6 +14,10 @@ class HabitRefRepository @Inject constructor(private val habitRefDao: HabitRefDa
         habitRefDao.update(dateId, habitId, habitType)
     }
 
+    suspend fun update(dateId: Long, habitId: Long, habitType: HabitType, value: Int) {
+        habitRefDao.update(dateId, habitId, habitType, value)
+    }
+
     fun getHabitRefForDate(dateId: Long, habitId: Long) =
         habitRefDao.getHabitRefForDate(dateId, habitId)
 

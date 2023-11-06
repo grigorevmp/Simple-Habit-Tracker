@@ -8,4 +8,9 @@ data class HabitEntityUI(
     val title: String,
     val description: String,
     var type: HabitType,
+    var countable: Boolean = false,
+    var maxValue: Int? = null,
+    var value: Int? = null,
+    var valueName: String? = null,
+    var valueAction: String? = null,
 )

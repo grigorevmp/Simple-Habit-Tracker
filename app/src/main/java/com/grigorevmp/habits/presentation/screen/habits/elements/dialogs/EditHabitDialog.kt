@@ -10,7 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,12 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import java.time.DayOfWeek
@@ -64,6 +66,7 @@ fun EditHabitDialog(
         )
     }
     var useAlert by remember { mutableStateOf(habitEntity.alertEnabled) }
+    var countableEntity by remember { mutableStateOf(habitEntity.countableEntity) }
 
     Column(
         modifier = Modifier
@@ -73,7 +76,7 @@ fun EditHabitDialog(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp),
+                .padding(top = 20.dp, bottom = 8.dp),
             text = stringResource(R.string.habit_screen_edit_habit_dialog_title),
             fontSize = 24.sp
         )
@@ -88,7 +91,7 @@ fun EditHabitDialog(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp),
+                .padding(top = 8.dp),
             shape = RoundedCornerShape(8.dp),
             value = title,
             isError = isError,
@@ -135,6 +138,7 @@ fun EditHabitDialog(
 
         var timeDialogShown by remember { mutableStateOf(false) }
         var habitDaysShown by remember { mutableStateOf(false) }
+        var countableShown by remember { mutableStateOf(false) }
 
         if (timeDialogShown) {
             Dialog(onDismissRequest = { timeDialogShown = false }) {
@@ -168,9 +172,25 @@ fun EditHabitDialog(
             }
         }
 
+        if (countableShown) {
+            Dialog(onDismissRequest = { countableShown = false }) {
+                Surface(
+                    modifier = Modifier.clip(RoundedCornerShape(12.dp)),
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest
+                ) {
+                    SetCountableValueDialog(
+                        countableEntity = countableEntity,
+                        { newCountableEntity: CountableEntity? ->
+                            countableEntity = newCountableEntity
+                        }
+                    ) { countableShown = false }
+                }
+            }
+        }
+
         Card(
             modifier = Modifier
-                .padding(top = 12.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth(),
             onClick = {
                 habitDaysShown = true
@@ -195,7 +215,7 @@ fun EditHabitDialog(
 
         Card(
             modifier = Modifier
-                .padding(top = 12.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth(),
             onClick = {
                 timeDialogShown = true
@@ -208,11 +228,36 @@ fun EditHabitDialog(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    Icons.Filled.Notifications,
+                    Icons.Outlined.Notifications,
                     contentDescription = stringResource(R.string.habit_screen_edit_habit_reminder_description)
                 )
                 Text(
                     text = stringResource(R.string.habit_screen_edit_habit_change_notification_button),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            onClick = {
+                countableShown = true
+            }, colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_countable),
+                    contentDescription = stringResource(R.string.habit_screen_edit_habit_dialog_countable_icon_description)
+                )
+                Text(
+                    text = if (countableEntity == null) stringResource(R.string.habit_screen_add_new_habit_dialog_countable_new_button) else stringResource(R.string.habit_screen_edit_habit_dialog_countable_change_icon),
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -244,6 +289,8 @@ fun EditHabitDialog(
                         hour = timePickerState.hour,
                         minute = timePickerState.minute,
                     )
+                    habitEntity.countableEntity = countableEntity
+                    habitEntity.countable = countableEntity != null
 
                     updateHabitEntity(context, habitEntity)
                     hideDialog()

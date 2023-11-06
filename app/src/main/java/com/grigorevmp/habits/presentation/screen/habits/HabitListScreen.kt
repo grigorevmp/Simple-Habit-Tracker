@@ -22,9 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.grigorevmp.habits.R
+import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.elements.AllHabitList
@@ -49,7 +52,9 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
         description: String,
         daysForHabit: Array<DayOfWeek>,
         useAlert: Boolean,
-        timeState: SerializableTimePickerState ->
+        timeState: SerializableTimePickerState,
+        countable: Boolean,
+        countableEntity: CountableEntity? ->
         habitsViewModel.addHabit(
             context,
             title,
@@ -60,6 +65,8 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
                 hour = timeState.hour,
                 minute = timeState.minute,
             ),
+            countable,
+            countableEntity,
         )
     }
 }
@@ -70,7 +77,7 @@ fun HabitListScreen(
     allHabits: List<HabitEntity>,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
-    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState) -> Unit,
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit,
 ) {
     var dialogShown by remember { mutableStateOf(false) }
 
@@ -106,7 +113,7 @@ fun HabitListScreen(
                 onClick = { dialogShown = true },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Localized description")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.habit_screen_localize_icon_description))
             }
         }
     }
@@ -130,7 +137,7 @@ fun HabitListScreenPreview() {
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
-        addHabitEntity = { _, _, _, _, _, _ -> },
+        addHabitEntity = { _, _, _, _, _, _, _, _ -> },
     )
 }
 
