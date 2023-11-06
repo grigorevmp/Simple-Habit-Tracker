@@ -6,7 +6,8 @@ import androidx.room.Entity
 data class HabitRefEntity(
     val habitId: Long,
     val dateId: Long,
-    val habitType: HabitType = HabitType.Missed
+    val habitType: HabitType = HabitType.Missed,
+    val value: Int? = null,
 )
 
 enum class HabitType {
