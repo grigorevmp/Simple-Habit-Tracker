@@ -9,6 +9,7 @@ import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.data.repository.PreferencesRepository
 import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
 import com.grigorevmp.habits.domain.usecase.habit_ref.GetHabitRefUseCase
+import com.grigorevmp.habits.domain.usecase.habit_ref.UpdateCountableHabitRefUseCase
 import com.grigorevmp.habits.domain.usecase.habit_ref.UpdateHabitRefUseCase
 import com.grigorevmp.habits.domain.usecase.habits.GetOnlyHabitsUseCase
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
@@ -38,6 +39,7 @@ class TodayScreenViewModel @Inject constructor(
     private val getDateUseCase: GetDateUseCase,
     private val getHabitRefUseCase: GetHabitRefUseCase,
     private val updateHabitRefUseCase: UpdateHabitRefUseCase,
+    private val updateCountableHabitRefUseCase: UpdateCountableHabitRefUseCase,
     private val todayScreenMapper: TodayScreenMapper,
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
@@ -97,7 +99,12 @@ class TodayScreenViewModel @Inject constructor(
                                             dateId = targetDateId,
                                             title = habit.title,
                                             description = habit.description,
-                                            type = habitRef.habitType
+                                            type = habitRef.habitType,
+                                            countable = habit.countable,
+                                            maxValue = habit.countableEntity?.targetValue,
+                                            value = habitRef.value ?: 0,
+                                            valueName = habit.countableEntity?.valueName,
+                                            valueAction = habit.countableEntity?.actionName,
                                         )
                                     )
                                 }
@@ -157,6 +164,11 @@ class TodayScreenViewModel @Inject constructor(
 
     fun updateHabitRef(dateId: Long, habitId: Long, habitType: HabitType) = viewModelScope.launch {
         updateHabitRefUseCase.invoke(dateId, habitId, habitType)
+        updateWeekStatistic()
+    }
+
+    fun updateHabitRefCountable(dateId: Long, habitId: Long, habitType: HabitType, value: Int) = viewModelScope.launch {
+        updateCountableHabitRefUseCase.invoke(dateId, habitId, habitType, value)
         updateWeekStatistic()
     }
 

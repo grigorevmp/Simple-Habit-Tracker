@@ -11,6 +11,7 @@ import com.grigorevmp.habits.domain.usecase.habits.DeleteHabitUseCase
 import com.grigorevmp.habits.domain.usecase.habits.GetOnlyHabitsUseCase
 import com.grigorevmp.habits.domain.usecase.habits.UpdateHabitUseCase
 import com.grigorevmp.habits.core.alarm.AlarmScheduler
+import com.grigorevmp.habits.data.CountableEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,8 @@ class HabitsViewModel @Inject constructor(
         selectedDays: Array<DayOfWeek>,
         useAlert: Boolean,
         timePickerState: SerializableTimePickerState,
+        countable: Boolean,
+        countableEntity: CountableEntity?,
     ) = viewModelScope.launch {
         CoroutineScope(Dispatchers.IO).launch {
             val habit = addHabitUseCase.invoke(
@@ -48,7 +51,9 @@ class HabitsViewModel @Inject constructor(
                 description,
                 selectedDays,
                 useAlert,
-                timePickerState
+                timePickerState,
+                countable,
+                countableEntity,
             )
 
             if (useAlert) {

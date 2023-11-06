@@ -31,12 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import java.time.DayOfWeek
 
@@ -44,7 +46,7 @@ import java.time.DayOfWeek
 @ExperimentalMaterial3Api
 @Composable
 fun AddHabitDialog(
-    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState) -> Unit,
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit,
     hideDialog: () -> Unit
 ) {
     var title by remember { mutableStateOf("") }
@@ -53,6 +55,7 @@ fun AddHabitDialog(
     var useAlert by remember { mutableStateOf(false) }
     var daysForHabit by remember { mutableStateOf(DayOfWeek.values()) }
 
+    var countableEntity by remember { mutableStateOf<CountableEntity?>(null) }
 
     Column(
         modifier = Modifier
@@ -62,7 +65,7 @@ fun AddHabitDialog(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp),
+                .padding(top = 20.dp, bottom = 8.dp),
             text = stringResource(R.string.habit_screen_add_new_habit_dialog_title),
             fontSize = 24.sp
         )
@@ -77,7 +80,7 @@ fun AddHabitDialog(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = 8.dp),
             shape = RoundedCornerShape(8.dp),
             value = title,
             isError = isError,
@@ -125,6 +128,7 @@ fun AddHabitDialog(
 
         var timeDialogShown by remember { mutableStateOf(false) }
         var habitDaysShown by remember { mutableStateOf(false) }
+        var countableShown by remember { mutableStateOf(false) }
 
         if (timeDialogShown) {
             Dialog(onDismissRequest = { timeDialogShown = false }) {
@@ -158,9 +162,25 @@ fun AddHabitDialog(
             }
         }
 
+        if (countableShown) {
+            Dialog(onDismissRequest = { countableShown = false }) {
+                Surface(
+                    modifier = Modifier.clip(RoundedCornerShape(12.dp)),
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest
+                ) {
+                    SetCountableValueDialog(
+                        countableEntity,
+                        { newCountableEntity: CountableEntity? ->
+                            countableEntity = newCountableEntity
+                        }
+                    ) { countableShown = false }
+                }
+            }
+        }
+
         Card(
             modifier = Modifier
-                .padding(top = 12.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth(),
             onClick = {
                 habitDaysShown = true
@@ -182,7 +202,7 @@ fun AddHabitDialog(
 
         Card(
             modifier = Modifier
-                .padding(top = 12.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth(),
             onClick = {
                 timeDialogShown = true
@@ -208,6 +228,31 @@ fun AddHabitDialog(
             }
         }
 
+        Card(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            onClick = {
+                countableShown = true
+            }, colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_countable),
+                    contentDescription = stringResource(R.string.habit_screen_add_new_habit_dialog_countable_icon_description)
+                )
+                Text(
+                    text = if (countableEntity == null) stringResource(id = R.string.habit_screen_add_new_habit_dialog_countable_new_button) else stringResource(id = R.string.habit_screen_add_new_habit_dialog_countable_change_icon),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
         val context = LocalContext.current
 
         Button(modifier = Modifier
@@ -225,6 +270,8 @@ fun AddHabitDialog(
                         hour = timePickerState.hour,
                         minute = timePickerState.minute,
                     ),
+                    countableEntity != null,
+                    countableEntity,
                 )
             }
         }) {
@@ -238,7 +285,7 @@ fun AddHabitDialog(
 @Composable
 fun AddHabitDialogPreview() {
     AddHabitDialog(
-        addHabitEntity = { _, _, _, _, _, _ -> },
+        addHabitEntity = { _, _, _, _, _, _, _, _ -> },
         hideDialog = { },
     )
 }

@@ -1,6 +1,5 @@
 package com.grigorevmp.habits.data
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -14,7 +13,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.util.Collections
 
 @Entity(tableName = "habit_table")
 data class HabitEntity(
@@ -26,6 +24,8 @@ data class HabitEntity(
     @ColumnInfo(name = "habit_time") var time: SerializableTimePickerState,
     @ColumnInfo(name = "habit_completed") val completed: Boolean = false,
     @ColumnInfo(name = "habit_deleted") val deleted: Boolean = false,
+    @ColumnInfo(name = "habit_countable") var countable: Boolean = false,
+    @ColumnInfo(name = "habit_countable_entity") var countableEntity: CountableEntity? = null,
 )
 
 data class HabitWithDates(
@@ -45,6 +45,13 @@ data class SerializableTimePickerState(
     val minute: Int
 )
 
+@Serializable
+data class CountableEntity(
+    val targetValue: Int,
+    val valueName: String,
+    val actionName: String,
+)
+
 class Converters {
 
     @TypeConverter
@@ -56,7 +63,20 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromDayOfWeek(someObjects: SerializableTimePickerState): String {
+    fun fromTimePickerState(someObjects: SerializableTimePickerState): String {
+        return Json.encodeToString(someObjects)
+    }
+
+    @TypeConverter
+    fun toCountableEntity(data: String?): CountableEntity? {
+        if (data == null) {
+            return null
+        }
+        return Json.decodeFromString(data)
+    }
+
+    @TypeConverter
+    fun fromCountableEntity(someObjects: CountableEntity?): String {
         return Json.encodeToString(someObjects)
     }
 
@@ -70,19 +90,6 @@ class Converters {
 
     @TypeConverter
     fun fromDayOfWeek(someObjects: Array<DayOfWeek>): String {
-        return Json.encodeToString(someObjects)
-    }
-
-    @TypeConverter
-    fun toHabitRefEntity(data: String?): MutableList<Long?>? {
-        if (data == null) {
-            return Collections.emptyList()
-        }
-        return Json.decodeFromString(data)
-    }
-
-    @TypeConverter
-    fun fromHabitRefEntity(someObjects: MutableList<Long?>?): String {
         return Json.encodeToString(someObjects)
     }
 

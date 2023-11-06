@@ -20,6 +20,12 @@
     <string name="today_screen_habit_card_no_planned_habits">No planned habits</string>
     <string name="today_screen_reminder_icon_description">Reminder icon</string>
 
+    <string name="today_screen_countable_dialog_title">Countable value set up</string>
+    <string name="today_screen_countable_dialog_value_label">Value</string>
+    <string name="today_screen_countable_dialog_info_icon_description" translatable="false">@string/habit_screen_countable_dialog_info_icon_description</string>
+    <string name="today_screen_countable_dialog_cancel_button" translatable="false">@string/cancel_button</string>
+    <string name="today_screen_countable_dialog_save_button" translatable="false">@string/save_button</string>
+
     <!-- Settings screen -->
     <string name="settings_screen_settings_title">Settings</string>
 
@@ -30,7 +36,7 @@
     <string name="settings_screen_language">Language</string>
     <string name="settings_screen_language_icon_description">Language icon</string>
 
-    <string name="settings_screen_version">Version 1.0.0 alpha | Build #23</string>
+    <string name="settings_screen_version">Version %1$s</string>
     <string name="settings_screen_version_title">Version</string>
     <string name="settings_screen_version_settings_icon_description">Settings icon</string>
 
@@ -49,7 +55,7 @@
 
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Your habits</string>
-    <string name="habit_screen_remind_in">Remind you in %1$s</string>
+    <string name="habit_screen_remind_at">Remind you at %1$s</string>
 
     <string name="habit_screen_add_new_habit_dialog_title">Add new habit</string>
     <string name="habit_screen_add_new_habit_title">Title</string>
@@ -62,6 +68,9 @@
     <string name="habit_screen_add_new_habit_reminder_icon_description">Reminder icon</string>
     <string name="habit_screen_add_new_habit_days_icon_description">Days icon</string>
     <string name="habit_screen_add_new_habit_error_icon_description">Error icon\n</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_icon_description">Countable icon</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_new_button">Make it countable</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_change_icon">Change countable</string>
 
     <string name="habit_screen_choose_days_title">Set days for habit</string>
     <string name="habit_screen_choose_time_set_notification_title">Set notification</string>
@@ -81,4 +90,20 @@
     <string name="habit_screen_edit_habit_error_icon_description" translatable="false">@string/habit_screen_add_new_habit_error_icon_description</string>
     <string name="habit_screen_edit_habit_delete_button" translatable="false">@string/delete_button</string>
     <string name="habit_screen_edit_habit_edit_days_button">Edit days for habit</string>
+    <string name="habit_screen_edit_habit_dialog_countable_icon_description" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_icon_description</string>
+    <string name="habit_screen_edit_habit_dialog_countable_new_button" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_new_button</string>
+    <string name="habit_screen_edit_habit_dialog_countable_change_icon" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_change_icon</string>
+
+    <string name="habit_screen_localize_icon_description">Localized icon</string>
+
+    <string name="habit_screen_countable_dialog_title">Countable value set up</string>
+    <string name="habit_screen_countable_dialog_value_action_label">Action</string>
+    <string name="habit_screen_countable_dialog_max_value_label">Max value</string>
+    <string name="habit_screen_countable_dialog_value_name_label">Name</string>
+    <string name="habit_screen_countable_dialog_info_icon_description">Info icon</string>
+
+    <string name="habit_screen_countable_dialog_remove_button" translatable="false">@string/remove_button</string>
+    <string name="habit_screen_countable_dialog_cancel_button" translatable="false">@string/cancel_button</string>
+    <string name="habit_screen_countable_dialog_save_button" translatable="false">@string/save_button</string>
+
 </resources>

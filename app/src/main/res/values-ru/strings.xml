@@ -24,6 +24,9 @@
 
     <string name="today_screen_reminder_icon_description">Иконка календаря</string>
 
+    <string name="today_screen_countable_dialog_title">Установить количественное значение</string>
+    <string name="today_screen_countable_dialog_value_label">Значение</string>
+
     <!-- Settings screen -->
     <string name="settings_screen_settings_title">Настройки</string>
 
@@ -46,13 +49,13 @@
     <string name="settings_screen_emoji_dialog_hint">Введите любимые эмодлзи, разделённые запятыми</string>
     <string name="settings_screen_emoji_dialog_label">Набор эмодзи</string>
 
-    <string name="settings_screen_version">Версия 1.0.0 alpha | Сборка #25</string>
+    <string name="settings_screen_version">Версия %1$s</string>
     <string name="settings_screen_version_title">Версия</string>
     <string name="settings_screen_version_settings_icon_description">Иконка настройки</string>
 
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Ваши привычки</string>
-    <string name="habit_screen_remind_in">Напомним в %1$s</string>
+    <string name="habit_screen_remind_at">Напомним в %1$s</string>
 
     <string name="habit_screen_add_new_habit_dialog_title">Добавить привычку</string>
     <string name="habit_screen_add_new_habit_title">Заголовок</string>
@@ -65,10 +68,21 @@
     <string name="habit_screen_add_new_habit_reminder_icon_description">Иконка уведомлений</string>
     <string name="habit_screen_add_new_habit_days_icon_description">Иконка дней</string>
     <string name="habit_screen_add_new_habit_error_icon_description">Иконка ошибки</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_icon_description">Иконка перечесления</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_new_button">Сделать количественным</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_change_icon">Изменить количественное</string>
 
     <string name="habit_screen_choose_days_title">Установить дни</string>
     <string name="habit_screen_choose_time_set_notification_title">Установить уведомление</string>
 
     <string name="habit_screen_edit_habit_dialog_title">Редактировать</string>
     <string name="habit_screen_edit_habit_edit_days_button">Изменить дни</string>
+
+    <string name="habit_screen_localize_icon_description">Иконка локализации</string>
+
+    <string name="habit_screen_countable_dialog_title">Установить значение</string>
+    <string name="habit_screen_countable_dialog_value_action_label">Действие</string>
+    <string name="habit_screen_countable_dialog_max_value_label">Максимальное значение</string>
+    <string name="habit_screen_countable_dialog_value_name_label">Имя</string>
+    <string name="habit_screen_countable_dialog_info_icon_description">Иконка информации</string>
 </resources>

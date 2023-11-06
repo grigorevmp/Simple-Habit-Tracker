@@ -1,8 +1,11 @@
-package com.grigorevmp.habits.data
+package com.grigorevmp.habits.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.grigorevmp.habits.data.Converters
+import com.grigorevmp.habits.data.HabitEntity
+import com.grigorevmp.habits.data.HabitWithDateDao
 import com.grigorevmp.habits.data.data.DateDao
 import com.grigorevmp.habits.data.data.DateEntity
 import com.grigorevmp.habits.data.habit.HabitRefDao
@@ -19,7 +22,7 @@ import javax.inject.Provider
         DateEntity::class,
         HabitRefEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -31,9 +34,9 @@ abstract class HabitDatabase : RoomDatabase() {
     abstract fun getHabitRefDao(): HabitRefDao
 
 
+    @Suppress("unused")
     class Callback @Inject constructor(
         private val database: Provider<HabitDatabase>,
         @ApplicationScope private val applicationScope: CoroutineScope
     ) : RoomDatabase.Callback()
-
 }

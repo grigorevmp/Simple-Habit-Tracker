@@ -60,5 +60,6 @@ fun HabitsForDateCardEmptyPreview() {
             date = "2023-10-28",
         ),
         updateHabitRef = { _, _, _ -> },
+        updateHabitRefCountable = { _, _, _ , _ -> },
     )
 }

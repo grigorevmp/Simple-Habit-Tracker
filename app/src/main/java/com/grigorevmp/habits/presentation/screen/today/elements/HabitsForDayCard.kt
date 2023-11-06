@@ -18,6 +18,7 @@ import com.grigorevmp.habits.presentation.screen.today.data.HabitWithDatesUI
 fun HabitsForDayCard(
     habitsForDate: HabitWithDatesUI,
     updateHabitRef: (Long, Long, HabitType) -> Unit,
+    updateHabitRefCountable: (Long, Long, HabitType, Int) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -38,6 +39,7 @@ fun HabitsForDayCard(
         for (habit in habitsForDate.habits) {
             HabitForDayCompletedSubCard(
                 updateHabitRef = updateHabitRef,
+                updateHabitRefCountable = updateHabitRefCountable,
                 habit = habit,
             ) { newHabitType: HabitType ->
                 habit.type = newHabitType
@@ -73,6 +75,7 @@ fun HabitsForDateCardPreview() {
             date = "2023-10-28",
         ),
         updateHabitRef = { _, _, _ -> },
+        updateHabitRefCountable = { _, _, _, _ -> },
     )
 }
 
@@ -86,5 +89,6 @@ fun HabitsForDateCardEmpty2Preview() {
             date = "2023-10-28",
         ),
         updateHabitRef = { _, _, _ -> },
+        updateHabitRefCountable = { _, _, _, _ -> },
     )
 }
