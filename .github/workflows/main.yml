@@ -1,0 +1,4 @@
+- name: Setup ktlint
+  uses: nbadal/action-ktlint-setup@v1
+  with:
+    ktlint_version: default
