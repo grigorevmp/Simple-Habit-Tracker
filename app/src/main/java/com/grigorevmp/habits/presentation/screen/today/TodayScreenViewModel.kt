@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -178,6 +179,9 @@ class TodayScreenViewModel @Inject constructor(
         return emojiSet.random(Random(seed))
     }
 
+
+    private fun isLongerDate(): Boolean = preferencesRepository.getLongerDateFlag()
+
     private fun getDate(date: LocalDate): Flow<DateEntity> = flow {
         getDateUseCase.invoke(date)?.also {
             emit(it)
@@ -189,18 +193,24 @@ class TodayScreenViewModel @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     private fun getDatesCut(days: Int): List<LocalDate> {
-        val dates = mutableListOf<LocalDate>()
-        var date = LocalDate.now()
+        val dates = mutableListOf<LocalDateTime>()
+        var date = LocalDateTime.now()
 
-        for (i in 0..<days) {
-            dates.add(date)
+        for (i in 0 until days) {
+            dates.add(if (isLongerDate()) date.minusHours(3) else date)
             date = date.minusDays(1)
         }
-        return dates
+        return dates.map { it.toLocalDate() }
     }
 
-    private fun getWeekDays(): Array<LocalDate> {
-        val startDate = LocalDate.now().with(java.time.DayOfWeek.MONDAY)
-        return Array(7) { i -> startDate.plusDays(i.toLong()) }
+    private fun getWeekDays(): List<LocalDate> {
+        val startDate = LocalDateTime.now().with(java.time.DayOfWeek.MONDAY)
+        val weekDays = Array(7) { i -> startDate.plusDays(i.toLong()) }
+        if (isLongerDate()) {
+            for (i in weekDays.indices) {
+                weekDays[i] = weekDays[i].minusHours(3)
+            }
+        }
+        return weekDays.map { it.toLocalDate() }
     }
 }

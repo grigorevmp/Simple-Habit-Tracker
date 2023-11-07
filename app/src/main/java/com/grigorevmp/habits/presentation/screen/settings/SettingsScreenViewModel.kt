@@ -3,8 +3,10 @@ package com.grigorevmp.habits.presentation.screen.settings
 import android.content.Context
 import android.os.PowerManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.data.repository.PreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -24,7 +26,13 @@ class SettingsScreenViewModel @Inject constructor(
 
     fun getCongratsEmoji(): Set<String> = preferencesRepository.getCongratsEmoji()
 
-    fun setCongratsEmoji(emoji: Set<String>) {
+    fun setCongratsEmoji(emoji: Set<String>) = viewModelScope.launch {
         preferencesRepository.setCongratsEmoji(emoji)
+    }
+
+    fun getLongerDateFlag(): Boolean = preferencesRepository.getLongerDateFlag()
+
+    fun setLongerDateFlag(makeDayLonger: Boolean) = viewModelScope.launch {
+        preferencesRepository.setLongerDateFlag(makeDayLonger)
     }
 }
