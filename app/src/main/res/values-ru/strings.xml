@@ -53,6 +53,10 @@
     <string name="settings_screen_version_title">Версия</string>
     <string name="settings_screen_version_settings_icon_description">Иконка настройки</string>
 
+    <string name="settings_screen_extend_the_day_title">Продлить день</string>
+    <string name="settings_screen_extend_the_day_summary">Продлить текущий день и не отображать новые события до 3х утра</string>
+    <string name="settings_screen_calendar_icon_description">Иконка календаря</string>
+
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Ваши привычки</string>
     <string name="habit_screen_remind_at">Напомним в %1$s</string>

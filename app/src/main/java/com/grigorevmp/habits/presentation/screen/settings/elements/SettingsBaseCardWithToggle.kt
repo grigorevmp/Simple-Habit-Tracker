@@ -40,7 +40,9 @@ fun SettingsBaseCardWithToggle(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        onClick = cardOnClick,
+        onClick = {
+            onCheckedChange(!switchState)
+        },
         colors = cardColor,
     ) {
         Row {

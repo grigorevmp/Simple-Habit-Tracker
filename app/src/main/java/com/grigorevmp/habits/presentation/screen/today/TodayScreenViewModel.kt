@@ -55,6 +55,9 @@ class TodayScreenViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), emptyList())
 
 
+    private val extendDayValue = 3L
+
+
     fun init(context: Context, daysCount: Int) = viewModelScope.launch {
         CoroutineScope(Dispatchers.IO).launch {
             GlobalBus.events().collect {
@@ -129,11 +132,15 @@ class TodayScreenViewModel @Inject constructor(
                 val minorAllHabitStatisticItemUiData = mutableListOf<HabitStatisticItemUi>()
                 val datesData = getWeekDays()
 
+                val localDateTime = LocalDateTime.now()
+
                 for ((index, date) in datesData.withIndex()) {
                     val statisticItem = HabitStatisticItemUi(0, 0, index, date.dayOfMonth.toLong())
 
                     getDateOrNull(date).collect { targetDate ->
                         if (targetDate == null) return@collect
+
+                        if (date == localDateTime.toLocalDate() && localDateTime.hour < extendDayValue) return@collect
 
                         for (habit in habitsData) {
 
@@ -196,8 +203,12 @@ class TodayScreenViewModel @Inject constructor(
         val dates = mutableListOf<LocalDateTime>()
         var date = LocalDateTime.now()
 
+        if (isLongerDate()) {
+            date = date.minusHours(extendDayValue)
+        }
+
         for (i in 0 until days) {
-            dates.add(if (isLongerDate()) date.minusHours(3) else date)
+            dates.add(date)
             date = date.minusDays(1)
         }
         return dates.map { it.toLocalDate() }
@@ -205,12 +216,9 @@ class TodayScreenViewModel @Inject constructor(
 
     private fun getWeekDays(): List<LocalDate> {
         val startDate = LocalDateTime.now().with(java.time.DayOfWeek.MONDAY)
+
         val weekDays = Array(7) { i -> startDate.plusDays(i.toLong()) }
-        if (isLongerDate()) {
-            for (i in weekDays.indices) {
-                weekDays[i] = weekDays[i].minusHours(3)
-            }
-        }
+
         return weekDays.map { it.toLocalDate() }
     }
 }

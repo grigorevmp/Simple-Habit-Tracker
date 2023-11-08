@@ -53,6 +53,9 @@
     <string name="settings_screen_emoji_dialog_label">Emoji set</string>
     <string name="settings_screen_emoji_dialog_save_button" translatable="false">@string/save_button</string>
 
+    <string name="settings_screen_extend_the_day_title">Extend the day</string>
+    <string name="settings_screen_extend_the_day_summary">Extend the current day and do not display new events until 3 am</string>
+    <string name="settings_screen_calendar_icon_description">Calendar color</string>
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Your habits</string>
     <string name="habit_screen_remind_at">Remind you at %1$s</string>
