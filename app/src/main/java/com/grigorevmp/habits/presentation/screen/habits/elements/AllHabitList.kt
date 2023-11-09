@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
-import com.grigorevmp.habits.presentation.screen.habits.elements.dialogs.EditHabitDialog
+import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.components.AddEditHabitComponent
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -103,7 +103,7 @@ fun PreviewHabit() {
 @Preview(showBackground = true)
 @Composable
 fun EditHabitPreview() {
-    EditHabitDialog(
+    AddEditHabitComponent(
         HabitEntity(
             id = 0,
             title = "Title",
@@ -115,6 +115,7 @@ fun EditHabitPreview() {
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
+        addHabitEntity  = { _, _, _, _, _, _, _, _ -> },
         { },
     )
 }

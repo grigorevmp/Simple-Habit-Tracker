@@ -3,6 +3,8 @@
     <string name="app_name_beta">[B] Habit tracker</string>
 
     <!-- Common -->
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
     <string name="remove_button">Remove</string>
     <string name="delete_button">Delete</string>
     <string name="cancel_button">Cancel</string>
@@ -10,6 +12,24 @@
     <string name="bottom_nav_home">Today</string>
     <string name="bottom_nav_habits">Habits</string>
     <string name="bottom_nav_settings">Settings</string>
+    <string name="action_read_summary">Read</string>
+    <string name="action_read_name">pages</string>
+
+    <string name="day_1_short">Mon</string>
+    <string name="day_2_short">Tue</string>
+    <string name="day_3_short">Wed</string>
+    <string name="day_4_short">Thu</string>
+    <string name="day_5_short">Fri</string>
+    <string name="day_6_short">Sat</string>
+    <string name="day_7_short">Sun</string>
+
+    <string name="day_1_short_1">M</string>
+    <string name="day_2_short_1">T</string>
+    <string name="day_3_short_1">W</string>
+    <string name="day_4_short_1">T</string>
+    <string name="day_5_short_1">F</string>
+    <string name="day_6_short_1">S</string>
+    <string name="day_7_short_1">S</string>
 
     <!-- Today screen -->
     <string name="today_screen_statistics_title">Statistics</string>
@@ -66,14 +86,14 @@
     <string name="habit_screen_add_new_habit_enter_something_error">Enter something</string>
     <string name="habit_screen_add_new_habit_edit_days_for_habit_button">Edit days for habit</string>
     <string name="habit_screen_add_new_habit_add_notification_button">Add notification</string>
-    <string name="habit_screen_add_new_habit_change_notification_button">Change notification</string>
+    <string name="habit_screen_add_new_habit_change_notification_button">Enable notification</string>
     <string name="habit_screen_add_new_habit_add_habit_button">Add Habit</string>
     <string name="habit_screen_add_new_habit_reminder_icon_description">Reminder icon</string>
     <string name="habit_screen_add_new_habit_days_icon_description">Days icon</string>
     <string name="habit_screen_add_new_habit_error_icon_description">Error icon\n</string>
     <string name="habit_screen_add_new_habit_dialog_countable_icon_description">Countable icon</string>
     <string name="habit_screen_add_new_habit_dialog_countable_new_button">Make it countable</string>
-    <string name="habit_screen_add_new_habit_dialog_countable_change_icon">Change countable</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_change_button">Countable</string>
 
     <string name="habit_screen_choose_days_title">Set days for habit</string>
     <string name="habit_screen_choose_time_set_notification_title">Set notification</string>
@@ -95,7 +115,7 @@
     <string name="habit_screen_edit_habit_edit_days_button">Edit days for habit</string>
     <string name="habit_screen_edit_habit_dialog_countable_icon_description" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_icon_description</string>
     <string name="habit_screen_edit_habit_dialog_countable_new_button" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_new_button</string>
-    <string name="habit_screen_edit_habit_dialog_countable_change_icon" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_change_icon</string>
+    <string name="habit_screen_edit_habit_dialog_countable_change_icon" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_change_button</string>
 
     <string name="habit_screen_localize_icon_description">Localized icon</string>
 
@@ -108,5 +128,8 @@
     <string name="habit_screen_countable_dialog_remove_button" translatable="false">@string/remove_button</string>
     <string name="habit_screen_countable_dialog_cancel_button" translatable="false">@string/cancel_button</string>
     <string name="habit_screen_countable_dialog_save_button" translatable="false">@string/save_button</string>
+
+    <string name="add_edit_bottom_sheet_cancel_changes">Cancel changes</string>
+    <string name="add_edit_bottom_sheet_summary">Are you sure you want to close the dialog?</string>
 
 </resources>

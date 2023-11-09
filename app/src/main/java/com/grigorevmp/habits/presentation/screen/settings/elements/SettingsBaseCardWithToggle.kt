@@ -33,7 +33,6 @@ fun SettingsBaseCardWithToggle(
     switchState: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     cardColor: CardColors = CardDefaults.cardColors(),
-    cardOnClick: () -> Unit = { },
     content: @Composable () -> Unit = { },
 ) {
     Card(
@@ -89,10 +88,9 @@ fun SettingsBaseCardWithTogglePreview() {
         cardTitle = "Settings title",
         cardIconResource = R.drawable.ic_settings,
         cardIconDescription = "Test description",
-        cardColor = CardDefaults.cardColors(),
-        cardOnClick = { },
         switchState = true,
         onCheckedChange = { },
+        cardColor = CardDefaults.cardColors(),
     ) {
         Text(
             modifier = Modifier.padding(top = 8.dp),
