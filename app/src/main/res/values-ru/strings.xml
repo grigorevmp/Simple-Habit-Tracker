@@ -4,6 +4,8 @@
     <string name="app_name_beta">[B] Трекер привычек</string>
 
     <!-- Common -->
+    <string name="yes_button">Да</string>
+    <string name="no_button">Нет</string>
     <string name="delete_button">Удалить</string>
     <string name="remove_button">Удалить</string>
     <string name="cancel_button">Закрыть</string>
@@ -11,6 +13,24 @@
     <string name="bottom_nav_home">Сегодня</string>
     <string name="bottom_nav_habits">Привычки</string>
     <string name="bottom_nav_settings">Настройки</string>
+    <string name="action_read_summary">Прочитать</string>
+    <string name="action_read_name">страниц</string>
+
+    <string name="day_1_short">Пн</string>
+    <string name="day_2_short">Вт</string>
+    <string name="day_3_short">Ср</string>
+    <string name="day_4_short">Чт</string>
+    <string name="day_5_short">Пт</string>
+    <string name="day_6_short">Сб</string>
+    <string name="day_7_short">Вс</string>
+
+    <string name="day_1_short_1">П</string>
+    <string name="day_2_short_1">В</string>
+    <string name="day_3_short_1">С</string>
+    <string name="day_4_short_1">Ч</string>
+    <string name="day_5_short_1">П</string>
+    <string name="day_6_short_1">С</string>
+    <string name="day_7_short_1">В</string>
 
     <!-- Today screen -->
     <string name="today_screen_statistics_title">Статистика</string>
@@ -53,6 +73,10 @@
     <string name="settings_screen_version_title">Версия</string>
     <string name="settings_screen_version_settings_icon_description">Иконка настройки</string>
 
+    <string name="settings_screen_extend_the_day_title">Продлить день</string>
+    <string name="settings_screen_extend_the_day_summary">Продлить текущий день и не отображать новые события до 3х утра</string>
+    <string name="settings_screen_calendar_icon_description">Иконка календаря</string>
+
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Ваши привычки</string>
     <string name="habit_screen_remind_at">Напомним в %1$s</string>
@@ -63,14 +87,14 @@
     <string name="habit_screen_add_new_habit_enter_something_error">Введите что-то</string>
     <string name="habit_screen_add_new_habit_edit_days_for_habit_button">Редактировать дни</string>
     <string name="habit_screen_add_new_habit_add_notification_button">Добавить уведомление</string>
-    <string name="habit_screen_add_new_habit_change_notification_button">Изменить уведомление</string>
+    <string name="habit_screen_add_new_habit_change_notification_button">Включить уведомление</string>
     <string name="habit_screen_add_new_habit_add_habit_button">Добавить привычку</string>
     <string name="habit_screen_add_new_habit_reminder_icon_description">Иконка уведомлений</string>
     <string name="habit_screen_add_new_habit_days_icon_description">Иконка дней</string>
     <string name="habit_screen_add_new_habit_error_icon_description">Иконка ошибки</string>
     <string name="habit_screen_add_new_habit_dialog_countable_icon_description">Иконка перечесления</string>
     <string name="habit_screen_add_new_habit_dialog_countable_new_button">Сделать количественным</string>
-    <string name="habit_screen_add_new_habit_dialog_countable_change_icon">Изменить количественное</string>
+    <string name="habit_screen_add_new_habit_dialog_countable_change_button">Количественное</string>
 
     <string name="habit_screen_choose_days_title">Установить дни</string>
     <string name="habit_screen_choose_time_set_notification_title">Установить уведомление</string>
@@ -85,4 +109,8 @@
     <string name="habit_screen_countable_dialog_max_value_label">Максимальное значение</string>
     <string name="habit_screen_countable_dialog_value_name_label">Имя</string>
     <string name="habit_screen_countable_dialog_info_icon_description">Иконка информации</string>
+
+    <string name="add_edit_bottom_sheet_cancel_changes">Отменить изменения</string>
+    <string name="add_edit_bottom_sheet_summary">Вы уверены, что хотите закрыть диалог?</string>
+
 </resources>

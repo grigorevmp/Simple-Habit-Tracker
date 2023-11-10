@@ -47,14 +47,23 @@ class PreferencesRepository @Inject constructor(
             .apply()
     }
 
+    fun getLongerDateFlag() = preferences.getBoolean(LONGER_DAY, false)
+
+    fun setLongerDateFlag(makeDayLonger: Boolean) {
+        preferences.edit()
+            .putBoolean(LONGER_DAY, makeDayLonger)
+            .apply()
+    }
+
 
     companion object {
         const val MAIN_PREFERENCES = "main_habits_prefs"
 
         const val LAST_SYNC = "last_sync"
         const val FIRST_PERMISSION_REQUEST = "show_first_permission_request"
-        const val CONGRATS_EMOJI = "congratulation_emoji"
+        const val LONGER_DAY = "longer_day"
 
+        const val CONGRATS_EMOJI = "congratulation_emoji"
         val DEFAULT_EMOJI = setOf("⚡", "🫰", "🩶", "🤍", "🤎", "💛", "🧡", "💖", "❤️", "🩵", "💜", "💙", "💚", "❤️‍🔥", "🔥", "🧨", "✨", "🎉", "🎊")
     }
 }

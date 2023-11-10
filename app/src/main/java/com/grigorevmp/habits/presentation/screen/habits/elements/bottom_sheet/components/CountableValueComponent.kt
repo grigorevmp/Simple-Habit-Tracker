@@ -1,15 +1,13 @@
-package com.grigorevmp.habits.presentation.screen.habits.elements.dialogs
+package com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,36 +29,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.CountableEntity
 
 @Composable
-fun SetCountableValueDialog(
+fun CountableValueComponent(
     countableEntity: CountableEntity?,
-    setCountableEntity: (CountableEntity?) -> Unit,
-    closeDialog: () -> Unit
+    setCountableEntity: (CountableEntity?) -> Unit
 ) {
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp, bottom = 16.dp),
-            text = stringResource(R.string.habit_screen_countable_dialog_title),
-            fontSize = 24.sp
-        )
-
         val isCountable = countableEntity != null
 
-        var valueName by rememberSaveable { mutableStateOf(countableEntity?.valueName ?: "") }
-        var valueAction by rememberSaveable { mutableStateOf(countableEntity?.actionName ?: "") }
+        val action = stringResource(R.string.action_read_summary)
+        val name = stringResource(R.string.action_read_name)
+
+        var valueAction by rememberSaveable { mutableStateOf(countableEntity?.actionName ?: action) }
         var maxValue by rememberSaveable { mutableIntStateOf(countableEntity?.targetValue ?: 0) }
+        var valueName by rememberSaveable { mutableStateOf(countableEntity?.valueName ?: name) }
+
         var maxValueStr by rememberSaveable { mutableStateOf(maxValue.toString()) }
 
         TextField(
@@ -69,7 +59,16 @@ fun SetCountableValueDialog(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             shape = RoundedCornerShape(8.dp),
-            onValueChange = { newValue: String -> valueAction = newValue },
+            onValueChange = { newValue: String ->
+                valueAction = newValue
+                setCountableEntity(
+                    CountableEntity(
+                        actionName = valueAction,
+                        valueName = valueName,
+                        targetValue = maxValue,
+                    )
+                )
+            },
             label = { Text(stringResource(R.string.habit_screen_countable_dialog_value_action_label)) },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
@@ -94,6 +93,13 @@ fun SetCountableValueDialog(
                     0
                 }
                 maxValueStr = newValue
+                setCountableEntity(
+                    CountableEntity(
+                        actionName = valueAction,
+                        valueName = valueName,
+                        targetValue = maxValue,
+                    )
+                )
             },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
@@ -109,7 +115,16 @@ fun SetCountableValueDialog(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
             shape = RoundedCornerShape(8.dp),
-            onValueChange = { newValue: String -> valueName = newValue },
+            onValueChange = { newValue: String ->
+                valueName = newValue
+                setCountableEntity(
+                    CountableEntity(
+                        actionName = valueAction,
+                        valueName = valueName,
+                        targetValue = maxValue,
+                    )
+                )
+            },
             label = { Text(stringResource(R.string.habit_screen_countable_dialog_value_name_label)) },
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
@@ -144,49 +159,6 @@ fun SetCountableValueDialog(
                 )
             }
         }
-
-        if (isCountable) {
-            Button(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    setCountableEntity(null)
-                    closeDialog()
-                }
-            ) {
-                Text(stringResource(R.string.habit_screen_countable_dialog_remove_button))
-            }
-        }
-
-        Row(
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Button(modifier = Modifier.padding(vertical = 16.dp),
-                onClick = {
-                    closeDialog()
-                }
-            ) {
-                Text(stringResource(R.string.habit_screen_countable_dialog_cancel_button))
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Button(modifier = Modifier
-                .padding(vertical = 16.dp), onClick = {
-                setCountableEntity(
-                    CountableEntity(
-                        actionName = valueAction,
-                        valueName = valueName,
-                        targetValue = maxValue,
-                    )
-                )
-                closeDialog()
-            }) {
-                Text(stringResource(R.string.habit_screen_countable_dialog_save_button))
-            }
-        }
-
     }
 }
 
@@ -195,8 +167,7 @@ fun SetCountableValueDialog(
 @Preview(showBackground = true)
 @Composable
 fun SetCountableValueDialogPreview() {
-    SetCountableValueDialog(
-        countableEntity = null,
-        setCountableEntity = { }
+    CountableValueComponent(
+        countableEntity = null
     ) { }
 }
