@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
+import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
 import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.components.AddEditHabitComponent
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -29,11 +30,13 @@ fun AllHabitList(
     allHabits: List<HabitEntity>,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
+    getAllHabitDates: Map<Long, List<StatYear>>,
 ) {
     HabitList(
         allHabits = allHabits,
         updateHabitEntity = updateHabitEntity,
         deleteHabitEntity = deleteHabitEntity,
+        getAllHabitDates = getAllHabitDates,
     )
 }
 
@@ -43,6 +46,7 @@ fun HabitList(
     allHabits: List<HabitEntity>,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
+    getAllHabitDates: Map<Long, List<StatYear>>,
 ) {
     val listState = rememberLazyListState()
 
@@ -52,7 +56,9 @@ fun HabitList(
     ) {
         item {
             Text(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp, bottom = 12.dp),
                 text = stringResource(R.string.habit_screen_your_habits_title),
                 fontSize = 24.sp
             )
@@ -73,6 +79,7 @@ fun HabitList(
                             habitEntity = item,
                             updateHabitEntity = updateHabitEntity,
                             deleteHabitEntity = deleteHabitEntity,
+                            getAllHabitDates = getAllHabitDates,
                         )
                     }
                 }
@@ -95,6 +102,7 @@ fun PreviewHabit() {
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
+        getAllHabitDates = mapOf(),
     )
 }
 

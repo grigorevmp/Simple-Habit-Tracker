@@ -21,4 +21,6 @@ class HabitRefRepository @Inject constructor(private val habitRefDao: HabitRefDa
     fun getHabitRefForDate(dateId: Long, habitId: Long) =
         habitRefDao.getHabitRefForDate(dateId, habitId)
 
+    fun getAllHabitRefs(habitId: Long) =
+        habitRefDao.getAllHabitRefs(habitId)
 }

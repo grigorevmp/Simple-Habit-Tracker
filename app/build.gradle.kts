@@ -125,4 +125,10 @@ dependencies {
     implementation(libs.compose.shimmer)
 
     implementation(libs.androidx.emoji2.views.helper)
+
+    // Vico charts
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
+    implementation(libs.vico.views)
 }

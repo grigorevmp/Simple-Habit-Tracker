@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.habit.HabitType
+import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.ShimmerCard
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
 import com.grigorevmp.habits.presentation.screen.today.data.HabitWithDatesUI
@@ -122,7 +123,7 @@ fun TodayScreen(
             animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
         )
     ) {
-        TodayShimmedView()
+        ShimmerCard()
     }
 }
 
@@ -236,7 +237,7 @@ fun TodayShimmedView() {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp)
+                            .padding(horizontal = 8.dp)
                             .shimmer(),
                     ) {
                         LinearProgressIndicator(

@@ -13,8 +13,9 @@ class DateRepository @Inject constructor(private val dateDao: DateDao) {
 
     fun getDateId(date: LocalDate): DateEntity? = dateDao.getDateId(date)
 
-
     fun delete(date: DateEntity) {
         dateDao.delete(date)
     }
+
+    fun getDate(dateId: Long) = dateDao.getDate(dateId)
 }
