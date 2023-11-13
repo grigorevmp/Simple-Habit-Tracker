@@ -50,8 +50,8 @@ import com.valentinilk.shimmer.shimmer
 @Composable
 fun TodayScreen(habitViewModel: TodayScreenViewModel) {
     val context = LocalContext.current
-    val allHabitsStatisticData by habitViewModel.statisticUiState.collectAsState()
-    val allHabitsWithDateData by habitViewModel.uiState.collectAsState()
+    val allHabitsStatisticData by habitViewModel.uiState.statisticData.collectAsState()
+    val allHabitsWithDateData by habitViewModel.uiState.todayHabitData.collectAsState()
 
     LaunchedEffect(Unit) {
         habitViewModel.init(context, daysCount = 10)

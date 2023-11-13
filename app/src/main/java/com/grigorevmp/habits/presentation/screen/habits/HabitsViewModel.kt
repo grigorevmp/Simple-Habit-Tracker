@@ -3,18 +3,17 @@ package com.grigorevmp.habits.presentation.screen.habits
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grigorevmp.habits.core.alarm.AlarmScheduler
 import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.domain.usecase.date.GetDateIdUseCase
-import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
 import com.grigorevmp.habits.domain.usecase.habit_ref.GetAllDateOfHabitRefUseCase
 import com.grigorevmp.habits.domain.usecase.habits.AddHabitUseCase
 import com.grigorevmp.habits.domain.usecase.habits.DeleteHabitUseCase
 import com.grigorevmp.habits.domain.usecase.habits.GetOnlyHabitsUseCase
 import com.grigorevmp.habits.domain.usecase.habits.UpdateHabitUseCase
+import com.grigorevmp.habits.domain.usecase.scheduler.ScheduleAlarmUseCase
 import com.grigorevmp.habits.domain.usecase.synchronizer.AddSyncPointForNewHabitUseCase
 import com.grigorevmp.habits.presentation.screen.habits.data.StatDay
 import com.grigorevmp.habits.presentation.screen.habits.data.StatMonth
@@ -23,7 +22,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -37,22 +35,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HabitsViewModel @Inject constructor(
+    private val scheduleAlarmUseCase: ScheduleAlarmUseCase,
     private val getHabitsUseCase: GetOnlyHabitsUseCase,
     private val addHabitUseCase: AddHabitUseCase,
     private val getDateIdUseCase: GetDateIdUseCase,
-    private val getDateUseCase: GetDateUseCase,
     private val deleteHabitUseCase: DeleteHabitUseCase,
     private val updateHabitUseCase: UpdateHabitUseCase,
     private val addSyncPointForNewHabitUseCase: AddSyncPointForNewHabitUseCase,
     private val getAllDateOfHabitRefUseCase: GetAllDateOfHabitRefUseCase,
 ) : ViewModel() {
 
-    private val alarmScheduler = AlarmScheduler()
-
-    var habits = getHabitsUseCase.invoke()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), emptyList())
-
-    var statisticUiState = MutableStateFlow(mapOf<Long, List<StatYear>>())
+    var uiState = HabitListScreenUiState(
+        habitsData = getHabitsUseCase.invoke()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), emptyList())
+    )
         private set
 
     fun loadData(payload: () -> Unit) {
@@ -103,7 +99,7 @@ class HabitsViewModel @Inject constructor(
                         true
                     }
                 }
-                statisticUiState.value = resultMap
+                uiState.statisticData.value = resultMap
                 payload()
             }
             cancel()
@@ -176,7 +172,7 @@ class HabitsViewModel @Inject constructor(
             )
 
             if (useAlert) {
-                alarmScheduler.schedule(context, habit)
+                scheduleAlarmUseCase.invoke(context, habit)
             }
 
             addSyncPointForNewHabitUseCase.invoke(habit.id)
@@ -187,7 +183,7 @@ class HabitsViewModel @Inject constructor(
         updateHabitUseCase.invoke(habit)
 
         if (habit.alertEnabled) {
-            alarmScheduler.schedule(context, habit)
+            scheduleAlarmUseCase.invoke(context, habit)
         }
     }
 

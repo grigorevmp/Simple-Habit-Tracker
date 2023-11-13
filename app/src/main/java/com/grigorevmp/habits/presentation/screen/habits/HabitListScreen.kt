@@ -43,13 +43,13 @@ import java.time.DayOfWeek
 
 @Composable
 fun HabitListScreen(habitsViewModel: HabitsViewModel) {
-    val allHabits by habitsViewModel.habits.collectAsState()
-    val allHabitStat by habitsViewModel.statisticUiState.collectAsState()
+    val habitsData by habitsViewModel.uiState.habitsData.collectAsState()
+    val statisticData by habitsViewModel.uiState.statisticData.collectAsState()
 
 
     HabitListScreen(
-        allHabits = allHabits,
-        allHabitStat = allHabitStat,
+        habitsData = habitsData,
+        statisticData = statisticData,
         updateHabitEntity = { context: Context, habitEntity: HabitEntity ->
             habitsViewModel.updateHabit(context, habitEntity)
         },
@@ -88,8 +88,8 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitListScreen(
-    allHabits: List<HabitEntity>,
-    allHabitStat: Map<Long, List<StatYear>>,
+    habitsData: List<HabitEntity>,
+    statisticData: Map<Long, List<StatYear>>,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
     prepareStat: (() -> Unit) -> Unit,
@@ -110,7 +110,7 @@ fun HabitListScreen(
     }
 
     if (dataIsReady) {
-        allHabitStatData = allHabitStat
+        allHabitStatData = statisticData
     }
 
     AddEditBottomSheet(
@@ -130,7 +130,7 @@ fun HabitListScreen(
         Surface(Modifier.fillMaxSize()) {
             Column {
                 AllHabitList(
-                    allHabits = allHabits,
+                    allHabits = habitsData,
                     updateHabitEntity = updateHabitEntity,
                     deleteHabitEntity = deleteHabitEntity,
                     getAllHabitDates = allHabitStatData,
@@ -169,7 +169,7 @@ fun HabitListScreen(
 @Composable
 fun HabitListScreenPreview() {
     HabitListScreen(
-        allHabits = listOf(
+        habitsData = listOf(
             HabitEntity(
                 id = 0,
                 title = "Title",
@@ -180,7 +180,7 @@ fun HabitListScreenPreview() {
                 completed = false,
             )
         ),
-        allHabitStat = mapOf(),
+        statisticData = mapOf(),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
         prepareStat = { _ -> },
