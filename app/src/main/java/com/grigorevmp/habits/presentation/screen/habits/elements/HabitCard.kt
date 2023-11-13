@@ -4,18 +4,16 @@ import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Warning
@@ -40,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +50,7 @@ import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
 import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.AddEditBottomSheet
+import com.grigorevmp.habits.presentation.screen.habits.elements.common.ActionIcon
 import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.MonthCard
 import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.YearCard
 import com.grigorevmp.habits.presentation.screen.habits.parseToDate
@@ -109,7 +107,9 @@ fun HabitCard(
             Row(
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Column {
+                Column (
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
                     Text(
                         text = title,
                         fontSize = 20.sp,
@@ -124,49 +124,27 @@ fun HabitCard(
 
                 AnimatedVisibility(
                     visible = isStatisticsOpened.value,
-                    enter = fadeIn(
-                        animationSpec = TweenSpec(400, 200, LinearOutSlowInEasing)
+                    enter = scaleIn(
+                        animationSpec = TweenSpec(200, 0, FastOutSlowInEasing)
                     ),
-                    exit = fadeOut(
+                    exit = scaleOut(
                         animationSpec = TweenSpec(200, 0, FastOutLinearInEasing)
                     ),
                 ) {
-                    Card(
-                        modifier = Modifier.size(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.secondary
-                        ),
-                        onClick = {
-                            selectedHabit = habitEntity
-                            openBottomSheet = true
-                        }
+                    ActionIcon(
+                        iconId = R.drawable.ic_edit,
+                        iconDescription = stringResource(R.string.edit_icon_description)
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_edit),
-                            contentDescription = "Edit icon",
-                            modifier = Modifier.padding(12.dp)
-                        )
+                        selectedHabit = habitEntity
+                        openBottomSheet = true
                     }
                 }
 
-                Spacer(modifier = Modifier.size(8.dp))
-
-                Card(
-                    modifier = Modifier.size(48.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
-                    ),
-                    onClick = {
-                        isStatisticsOpened.value = !isStatisticsOpened.value
-                    }
+                ActionIcon(
+                    iconId = R.drawable.ic_stat,
+                    iconDescription = stringResource(R.string.statistic_icon_description)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_stat),
-                        contentDescription = "Date range icon",
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    isStatisticsOpened.value = !isStatisticsOpened.value
                 }
             }
 
@@ -183,9 +161,9 @@ fun HabitCard(
             AnimatedVisibility(
                 visible = isStatisticsOpened.value,
                 enter = fadeIn(
-                    animationSpec = TweenSpec(400, 400, FastOutSlowInEasing)
+                    animationSpec = TweenSpec(400, 0, FastOutSlowInEasing)
                 ) + expandVertically(
-                    animationSpec = TweenSpec(400, 400, FastOutSlowInEasing)
+                    animationSpec = TweenSpec(200, 0, FastOutSlowInEasing)
                 )
             ) {
                 TabCard(
@@ -202,7 +180,10 @@ fun TabCard(
     habitId: Long,
     getAllHabitDates: Map<Long, List<StatYear>>,
 ) {
-    val tabOptions = listOf("Month", "Year")
+    val tabOptions = listOf(
+        stringResource(R.string.statistic_month),
+        stringResource(R.string.statistic_year),
+    )
     var selectedTab by remember { mutableIntStateOf(0) }
     val stats = getAllHabitDates[habitId]
 
@@ -251,7 +232,7 @@ private fun DateInfoCard(days: String) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Filled.DateRange, contentDescription = "Reminder",
+                Icons.Filled.DateRange, contentDescription = stringResource(R.string.reminder_icon_description),
 
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
@@ -279,7 +260,7 @@ private fun CountableInfoCard(countableEntity: CountableEntity) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Outlined.Info, contentDescription = "Reminder",
+                Icons.Outlined.Info, contentDescription = stringResource(R.string.reminder_icon_description),
 
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
@@ -307,7 +288,7 @@ private fun NotificationInfoCard(time: String, habitEntity: HabitEntity) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Outlined.Notifications, contentDescription = "Reminder",
+                Icons.Outlined.Notifications, contentDescription = stringResource(R.string.reminder_icon_description),
 
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
@@ -328,7 +309,7 @@ private fun NotificationInfoCard(time: String, habitEntity: HabitEntity) {
                 )
             ) {
                 Icon(
-                    Icons.Filled.Warning, contentDescription = "Failed",
+                    Icons.Filled.Warning, contentDescription = stringResource(R.string.failed_icon_description),
 
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )

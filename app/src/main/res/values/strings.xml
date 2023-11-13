@@ -31,6 +31,15 @@
     <string name="day_6_short_1">S</string>
     <string name="day_7_short_1">S</string>
 
+    <string name="reminder_icon_description">Reminder icon</string>
+    <string name="failed_icon_description">Warning icon</string>
+    <string name="icon_left_description">Icon left</string>
+    <string name="icon_right_description">Icon right</string>
+    <string name="edit_icon_description">Edit icon</string>
+    <string name="statistic_icon_description">Statistic icon</string>
+    <string name="statistic_month">Month</string>
+    <string name="statistic_year">Year</string>
+
     <!-- Today screen -->
     <string name="today_screen_statistics_title">Statistics</string>
     <string name="today_screen_latest_title">Latest habits</string>
@@ -38,7 +47,6 @@
     <string name="today_screen_statistics_week">Week №%1$s</string>
     <string name="today_screen_statistics_totally_completed">Totally: %1$s%%</string>
     <string name="today_screen_habit_card_no_planned_habits">No planned habits</string>
-    <string name="today_screen_reminder_icon_description">Reminder icon</string>
 
     <string name="today_screen_countable_dialog_title">Countable value set up</string>
     <string name="today_screen_countable_dialog_value_label">Value</string>
@@ -88,7 +96,6 @@
     <string name="habit_screen_add_new_habit_add_notification_button">Add notification</string>
     <string name="habit_screen_add_new_habit_change_notification_button">Enable notification</string>
     <string name="habit_screen_add_new_habit_add_habit_button">Add Habit</string>
-    <string name="habit_screen_add_new_habit_reminder_icon_description">Reminder icon</string>
     <string name="habit_screen_add_new_habit_days_icon_description">Days icon</string>
     <string name="habit_screen_add_new_habit_error_icon_description">Error icon\n</string>
     <string name="habit_screen_add_new_habit_dialog_countable_icon_description">Countable icon</string>
@@ -107,7 +114,7 @@
     <string name="habit_screen_edit_habit_title" translatable="false">@string/habit_screen_add_new_habit_title</string>
     <string name="habit_screen_edit_habit_description" translatable="false">@string/habit_screen_add_new_habit_description</string>
     <string name="habit_screen_edit_habit_days_icon_description" translatable="false">@string/habit_screen_add_new_habit_days_icon_description</string>
-    <string name="habit_screen_edit_habit_reminder_description" translatable="false">@string/habit_screen_add_new_habit_reminder_icon_description</string>
+    <string name="habit_screen_edit_habit_reminder_description" translatable="false">@string/reminder_icon_description</string>
     <string name="habit_screen_edit_habit_change_notification_button" translatable="false">@string/habit_screen_add_new_habit_change_notification_button</string>
     <string name="habit_screen_edit_habit_save_changes_button" translatable="false">@string/save_button</string>
     <string name="habit_screen_edit_habit_error_icon_description" translatable="false">@string/habit_screen_add_new_habit_error_icon_description</string>

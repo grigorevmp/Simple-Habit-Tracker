@@ -36,7 +36,7 @@ fun NoHabitsForDayCard() {
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_today),
-                contentDescription = stringResource(R.string.today_screen_reminder_icon_description),
+                contentDescription = stringResource(R.string.reminder_icon_description),
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
             )

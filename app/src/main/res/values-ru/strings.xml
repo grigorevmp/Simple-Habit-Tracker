@@ -32,6 +32,15 @@
     <string name="day_6_short_1">С</string>
     <string name="day_7_short_1">В</string>
 
+    <string name="reminder_icon_description">Иконка уведомлений</string>
+    <string name="failed_icon_description">Иконка предупреждения</string>
+    <string name="icon_left_description">Левая иконка</string>
+    <string name="icon_right_description">Правая иконка</string>
+    <string name="edit_icon_description">Иконка редактирлвания</string>
+    <string name="statistic_icon_description">Иконка статистики</string>
+    <string name="statistic_month">Месяц</string>
+    <string name="statistic_year">Год</string>
+
     <!-- Today screen -->
     <string name="today_screen_statistics_title">Статистика</string>
     <string name="today_screen_statistics_week">Неделя №%1$s</string>
@@ -41,8 +50,6 @@
 
     <string name="today_screen_habit_state_icon_description">Иконка состояния привычки</string>
     <string name="today_screen_habit_card_no_planned_habits">Не запланировано привычек</string>
-
-    <string name="today_screen_reminder_icon_description">Иконка календаря</string>
 
     <string name="today_screen_countable_dialog_title">Установить количественное значение</string>
     <string name="today_screen_countable_dialog_value_label">Значение</string>
@@ -89,7 +96,6 @@
     <string name="habit_screen_add_new_habit_add_notification_button">Добавить уведомление</string>
     <string name="habit_screen_add_new_habit_change_notification_button">Включить уведомление</string>
     <string name="habit_screen_add_new_habit_add_habit_button">Добавить привычку</string>
-    <string name="habit_screen_add_new_habit_reminder_icon_description">Иконка уведомлений</string>
     <string name="habit_screen_add_new_habit_days_icon_description">Иконка дней</string>
     <string name="habit_screen_add_new_habit_error_icon_description">Иконка ошибки</string>
     <string name="habit_screen_add_new_habit_dialog_countable_icon_description">Иконка перечесления</string>
