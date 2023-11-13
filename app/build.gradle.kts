@@ -17,8 +17,8 @@ android {
         applicationId = "com.grigorevmp.habits"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.0 Beta 2"
+        versionCode = 4
+        versionName = "1.0.0 Beta 3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
