@@ -1,7 +1,9 @@
 package com.grigorevmp.habits.presentation.screen.settings.settings
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -9,6 +11,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -18,18 +21,22 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.settings.elements.SettingsBaseCard
 
 
+@SuppressLint("BatteryLife")
 @Composable
 fun PermissionsCard(
     isIgnoringBattery: (Context) -> Boolean,
@@ -40,9 +47,26 @@ fun PermissionsCard(
     val isTiramisuPlus =
         remember { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) }
     val isCantPostNotifications = remember {
-        mutableStateOf(
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            )
+        } else {
+            mutableStateOf(true)
+        }
+    }
+
+    var canScheduleExactAlarms by remember {
+        mutableStateOf(false)
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val alarmManager: AlarmManager = (context.getSystemService() as AlarmManager?)!!
+
+        canScheduleExactAlarms = alarmManager.canScheduleExactAlarms()
     }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -60,23 +84,35 @@ fun PermissionsCard(
             }
         }
 
+    val launcherExactAlarm =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                isNotIgnoreBattery.value = false
+            } else {
+                isNotIgnoreBattery.value = !isIgnoringBattery(context)
+            }
+        }
+
     Log.d("Settings", "==== Permission block ====")
     Log.d("Settings", "Tiramisu+: ${isTiramisuPlus.value}")
     Log.d("Settings", "Post notifications: ${!isCantPostNotifications.value}")
     Log.d("Settings", "Battery optimization: ${!isNotIgnoreBattery.value}")
+    Log.d("Settings", "Can schedule exact alarms: $canScheduleExactAlarms")
     Log.d("Settings", "==== ================ ====")
 
     if ((isTiramisuPlus.value && isCantPostNotifications.value) || isNotIgnoreBattery.value) {
         SettingsBaseCard(
             cardTitle = stringResource(R.string.settings_screen_permissions_title),
             cardIconResource = R.drawable.ic_warning,
-            cardIconDescription =  stringResource(R.string.settings_screen_up_to_date_icon_description),
+            cardIconDescription = stringResource(R.string.settings_screen_up_to_date_icon_description),
             cardColor = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer
             ),
             cardOnClick = {
-                if (isTiramisuPlus.value && isCantPostNotifications.value) {
-                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (isTiramisuPlus.value && isCantPostNotifications.value) {
+                        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
                 }
 
                 if (isNotIgnoreBattery.value) {
@@ -91,7 +127,26 @@ fun PermissionsCard(
                     launcherBattery.launch(
                         IntentSenderRequest.Builder(pendIntent).build()
                     )
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (!canScheduleExactAlarms) {
+                        val intent = Intent()
+                        intent.action = ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        val pendIntent =
+                            PendingIntent.getActivity(
+                                context,
+                                0,
+                                intent,
+                                PendingIntent.FLAG_IMMUTABLE
+                            )
+                        ContextCompat.startActivity(context, intent, null)
+
+                        launcherExactAlarm.launch(
+                            IntentSenderRequest.Builder(pendIntent).build()
+                        )
+                    }
                 }
             },
         ) {
@@ -104,7 +159,7 @@ fun PermissionsCard(
         SettingsBaseCard(
             cardTitle = stringResource(R.string.settings_screen_up_to_date_title),
             cardIconResource = R.drawable.ic_done,
-            cardIconDescription =  stringResource(R.string.settings_screen_up_to_date_icon_description),
+            cardIconDescription = stringResource(R.string.settings_screen_up_to_date_icon_description),
         ) {
             Text(
                 modifier = Modifier.padding(top = 8.dp),
