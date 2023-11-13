@@ -17,8 +17,8 @@ android {
         applicationId = "com.grigorevmp.habits"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.0 Beta 2"
+        versionCode = 4
+        versionName = "1.0.0 Beta 3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -125,4 +125,10 @@ dependencies {
     implementation(libs.compose.shimmer)
 
     implementation(libs.androidx.emoji2.views.helper)
+
+    // Vico charts
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
+    implementation(libs.vico.views)
 }

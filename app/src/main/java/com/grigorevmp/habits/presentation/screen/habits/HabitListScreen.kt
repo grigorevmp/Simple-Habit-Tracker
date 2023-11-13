@@ -1,6 +1,11 @@
 package com.grigorevmp.habits.presentation.screen.habits
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,23 +34,33 @@ import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
+import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
 import com.grigorevmp.habits.presentation.screen.habits.elements.AllHabitList
 import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.AddEditBottomSheet
+import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.ShimmerCard
 import java.time.DayOfWeek
 
 
 @Composable
 fun HabitListScreen(habitsViewModel: HabitsViewModel) {
     val allHabits by habitsViewModel.habits.collectAsState()
+    val allHabitStat by habitsViewModel.statisticUiState.collectAsState()
+
 
     HabitListScreen(
         allHabits = allHabits,
+        allHabitStat = allHabitStat,
         updateHabitEntity = { context: Context, habitEntity: HabitEntity ->
             habitsViewModel.updateHabit(context, habitEntity)
         },
         deleteHabitEntity = { habitEntity: HabitEntity ->
             habitsViewModel.deleteHabit(habitEntity)
-        }
+        },
+        prepareStat = { payload: () -> Unit ->
+            habitsViewModel.loadData {
+                payload()
+            }
+        },
     ) { context: Context,
         title: String,
         description: String,
@@ -72,38 +89,78 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
 @Composable
 fun HabitListScreen(
     allHabits: List<HabitEntity>,
+    allHabitStat: Map<Long, List<StatYear>>,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
+    prepareStat: (() -> Unit) -> Unit,
     addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit,
 ) {
 
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded  = true)
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    AddEditBottomSheet(openBottomSheet, bottomSheetState, addHabitEntity = addHabitEntity) { state ->
+    var allHabitStatData by remember { mutableStateOf<Map<Long, List<StatYear>>>(mapOf()) }
+
+    var dataIsReady by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        prepareStat {
+            dataIsReady = true
+        }
+    }
+
+    if (dataIsReady) {
+        allHabitStatData = allHabitStat
+    }
+
+    AddEditBottomSheet(
+        openBottomSheet,
+        bottomSheetState,
+        addHabitEntity = addHabitEntity
+    ) { state ->
         openBottomSheet = state
     }
 
-    Surface(Modifier.fillMaxSize()) {
-        Column {
-            AllHabitList(
-                allHabits = allHabits,
-                updateHabitEntity = updateHabitEntity,
-                deleteHabitEntity = deleteHabitEntity
-            )
-        }
+    AnimatedVisibility(
+        visible = dataIsReady,
+        enter = fadeIn(
+            animationSpec = TweenSpec(400, 200, FastOutLinearInEasing)
+        )
+    ) {
+        Surface(Modifier.fillMaxSize()) {
+            Column {
+                AllHabitList(
+                    allHabits = allHabits,
+                    updateHabitEntity = updateHabitEntity,
+                    deleteHabitEntity = deleteHabitEntity,
+                    getAllHabitDates = allHabitStatData,
+                )
+            }
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            FloatingActionButton(
-                onClick = { openBottomSheet = true },
-                modifier = Modifier.padding(16.dp)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomEnd
             ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.habit_screen_localize_icon_description))
+                FloatingActionButton(
+                    onClick = { openBottomSheet = true },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.habit_screen_localize_icon_description)
+                    )
+                }
             }
         }
+    }
+
+    AnimatedVisibility(
+        visible = !dataIsReady,
+        exit = fadeOut(
+            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
+        )
+    ) {
+        ShimmerCard()
     }
 }
 
@@ -123,8 +180,10 @@ fun HabitListScreenPreview() {
                 completed = false,
             )
         ),
+        allHabitStat = mapOf(),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
+        prepareStat = { _ -> },
         addHabitEntity = { _, _, _, _, _, _, _, _ -> },
     )
 }

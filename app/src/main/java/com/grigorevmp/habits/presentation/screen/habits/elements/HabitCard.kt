@@ -1,11 +1,21 @@
 package com.grigorevmp.habits.presentation.screen.habits.elements
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Warning
@@ -16,10 +26,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +51,10 @@ import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
+import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
 import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.AddEditBottomSheet
+import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.MonthCard
+import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.YearCard
 import com.grigorevmp.habits.presentation.screen.habits.parseToDate
 import com.grigorevmp.habits.presentation.screen.habits.toReadableForms
 import java.time.DayOfWeek
@@ -48,6 +65,7 @@ fun HabitCard(
     habitEntity: HabitEntity,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
+    getAllHabitDates: Map<Long, List<StatYear>>,
 ) {
     val title = habitEntity.title
     val description = habitEntity.description
@@ -59,13 +77,14 @@ fun HabitCard(
 
     var selectedHabit by remember { mutableStateOf<HabitEntity?>(null) }
 
-
+    val isStatisticsOpened = remember { mutableStateOf(false) }
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded  = true)
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     selectedHabit?.also {
         AddEditBottomSheet(
-            openBottomSheet, bottomSheetState,
+            openBottomSheet,
+            bottomSheetState,
             habitEntity = it,
             updateHabitEntity = updateHabitEntity,
             deleteHabitEntity = deleteHabitEntity,
@@ -74,131 +93,245 @@ fun HabitCard(
         }
     }
 
-    Card(
-        modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-            .fillMaxWidth(),
-        onClick = {
+    Card(modifier = Modifier
+        .padding(vertical = 4.dp, horizontal = 8.dp)
+        .fillMaxWidth(), onClick = {
+        if (!isStatisticsOpened.value) {
             selectedHabit = habitEntity
             openBottomSheet = true
+        } else {
+            isStatisticsOpened.value = !isStatisticsOpened.value
         }
-    ) {
+    }) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            Text(
-                text = title, fontSize = 20.sp, modifier = Modifier.padding(top = 4.dp)
-            )
-
-            if (description.isNotBlank()) {
-                Text(text = description, modifier = Modifier.padding(top = 4.dp))
-            }
-
-            Card(
-                modifier = Modifier.padding(top = 12.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary
-                )
+            Row(
+                modifier = Modifier.padding(top = 8.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Filled.DateRange,
-                        contentDescription = "Reminder",
-
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                    )
-
+                Column {
                     Text(
-                        text = days,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(start = 8.dp),
+                        text = title,
+                        fontSize = 20.sp,
                     )
-                }
-            }
 
-            if (countable && countableEntity != null) {
-                Card(
-                    modifier = Modifier.padding(top = 8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
-                    )
+                    if (description.isNotBlank()) {
+                        Text(text = description, modifier = Modifier.padding(top = 4.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                AnimatedVisibility(
+                    visible = isStatisticsOpened.value,
+                    enter = fadeIn(
+                        animationSpec = TweenSpec(400, 200, LinearOutSlowInEasing)
+                    ),
+                    exit = fadeOut(
+                        animationSpec = TweenSpec(200, 0, FastOutLinearInEasing)
+                    ),
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Card(
+                        modifier = Modifier.size(48.dp),
+                        shape = RoundedCornerShape(24.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondary
+                        ),
+                        onClick = {
+                            selectedHabit = habitEntity
+                            openBottomSheet = true
+                        }
                     ) {
                         Icon(
-                            Icons.Outlined.Info,
-                            contentDescription = "Reminder",
-
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
-
-                        Text(
-                            text = "${countableEntity.actionName} ${countableEntity.targetValue} ${countableEntity.valueName}",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(start = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_edit),
+                            contentDescription = "Edit icon",
+                            modifier = Modifier.padding(12.dp)
                         )
                     }
                 }
+
+                Spacer(modifier = Modifier.size(8.dp))
+
+                Card(
+                    modifier = Modifier.size(48.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    ),
+                    onClick = {
+                        isStatisticsOpened.value = !isStatisticsOpened.value
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_stat),
+                        contentDescription = "Date range icon",
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+
+            DateInfoCard(days)
+
+            if (countable && countableEntity != null) {
+                CountableInfoCard(countableEntity)
             }
 
             if (alertEnabled) {
-                Card(
-                    modifier = Modifier.padding(top = 8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Outlined.Notifications,
-                            contentDescription = "Reminder",
+                NotificationInfoCard(time, habitEntity)
+            }
 
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
+            AnimatedVisibility(
+                visible = isStatisticsOpened.value,
+                enter = fadeIn(
+                    animationSpec = TweenSpec(400, 400, FastOutSlowInEasing)
+                ) + expandVertically(
+                    animationSpec = TweenSpec(400, 400, FastOutSlowInEasing)
+                )
+            ) {
+                TabCard(
+                    habitEntity.id,
+                    getAllHabitDates,
+                )
+            }
+        }
+    }
+}
 
-                        Text(
-                            text = stringResource(R.string.habit_screen_remind_at, time),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(start = 8.dp),
-                        )
+@Composable
+fun TabCard(
+    habitId: Long,
+    getAllHabitDates: Map<Long, List<StatYear>>,
+) {
+    val tabOptions = listOf("Month", "Year")
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val stats = getAllHabitDates[habitId]
 
-                        Spacer(modifier = Modifier.weight(1f))
-
-
-                        val requestCode =
-                            (habitEntity.id * 100).toInt() + habitEntity.days[0].ordinal
-
-                        if (!Utils.checkIfPendingIntentIsRegistered(
-                                LocalContext.current, requestCode
-                            )
-                        ) {
-                            Icon(
-                                Icons.Filled.Warning,
-                                contentDescription = "Failed",
-
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically)
-                            )
-                        }
-                    }
+    Card(
+        Modifier.padding(top = 8.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            PrimaryTabRow(
+                selectedTabIndex = selectedTab,
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.surfaceBright
+            ) {
+                tabOptions.forEachIndexed { index, option ->
+                    Tab(text = { Text(option) },
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index })
                 }
+            }
+
+            AnimatedVisibility(
+                visible = selectedTab == 1,
+            ) {
+                YearCard(stats)
+            }
+
+            AnimatedVisibility(
+                visible = selectedTab != 1,
+            ) {
+                MonthCard(stats)
+            }
+        }
+    }
+}
+
+@Composable
+private fun DateInfoCard(days: String) {
+    Card(
+        modifier = Modifier.padding(top = 12.dp), colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                Icons.Filled.DateRange, contentDescription = "Reminder",
+
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+
+            Text(
+                text = days,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 8.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun CountableInfoCard(countableEntity: CountableEntity) {
+    Card(
+        modifier = Modifier.padding(top = 8.dp), colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                Icons.Outlined.Info, contentDescription = "Reminder",
+
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+
+            Text(
+                text = "${countableEntity.actionName} ${countableEntity.targetValue} ${countableEntity.valueName}",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 8.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun NotificationInfoCard(time: String, habitEntity: HabitEntity) {
+    Card(
+        modifier = Modifier.padding(top = 8.dp), colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondary
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                Icons.Outlined.Notifications, contentDescription = "Reminder",
+
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+
+            Text(
+                text = stringResource(R.string.habit_screen_remind_at, time),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 8.dp),
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+
+            val requestCode = (habitEntity.id * 100).toInt() + habitEntity.days[0].ordinal
+
+            if (!Utils.checkIfPendingIntentIsRegistered(
+                    LocalContext.current, requestCode
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Warning, contentDescription = "Failed",
+
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
         }
     }
@@ -224,5 +357,6 @@ fun HabitCardPreview() {
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
+        getAllHabitDates = mapOf(),
     )
 }

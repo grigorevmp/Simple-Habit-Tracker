@@ -33,11 +33,22 @@ fun AddEditBottomSheet(
     addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit = { _, _, _, _, _, _, _, _ -> },
     close: (Boolean) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
     var showConfirmationDialog by remember { mutableStateOf(false) }
 
     if (openBottomSheetState) {
         ModalBottomSheet(
-            onDismissRequest = { showConfirmationDialog = true },
+            onDismissRequest = {
+
+                scope.launch {
+                    if(bottomSheetState.hasExpandedState) {
+                        showConfirmationDialog = true
+                    } else {
+                        close(true)
+                    }
+                }
+
+           },
             sheetState = bottomSheetState,
         ) {
             AddEditHabitComponentWrapper(
@@ -50,7 +61,6 @@ fun AddEditBottomSheet(
             }
         }
     }
-    val scope = rememberCoroutineScope()
 
     if (showConfirmationDialog) {
         AlertDialog(
