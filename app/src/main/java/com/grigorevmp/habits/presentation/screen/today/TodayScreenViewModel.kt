@@ -21,6 +21,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -49,6 +50,8 @@ class TodayScreenViewModel @Inject constructor(
 
     fun init(context: Context, daysCount: Int) = viewModelScope.launch {
         CoroutineScope(Dispatchers.IO).launch {
+            delay(1000)
+
             GlobalBus.events().collect {
                 getPreparedHabitsList(context, daysCount) { }
                 updateWeekStatistic()

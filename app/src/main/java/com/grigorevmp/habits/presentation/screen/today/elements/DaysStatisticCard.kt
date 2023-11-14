@@ -63,6 +63,7 @@ import java.util.Calendar
 @Composable
 fun DaysStatisticCard(
     allHabitsStatisticData: List<HabitStatisticItemUi>,
+    modifier: Modifier = Modifier,
     getRandomEmoji: (Long) -> String,
 ) {
     val isStatisticsOpened = remember {
@@ -70,7 +71,7 @@ fun DaysStatisticCard(
     }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
             .padding(bottom = 8.dp),

@@ -39,15 +39,9 @@ fun AddEditBottomSheet(
     if (openBottomSheetState) {
         ModalBottomSheet(
             onDismissRequest = {
-
                 scope.launch {
-                    if(bottomSheetState.hasExpandedState) {
-                        showConfirmationDialog = true
-                    } else {
-                        close(true)
-                    }
+                    showConfirmationDialog = true
                 }
-
            },
             sheetState = bottomSheetState,
         ) {
