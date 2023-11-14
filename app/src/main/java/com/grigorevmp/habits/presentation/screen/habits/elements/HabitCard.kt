@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
@@ -26,6 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -107,7 +110,7 @@ fun HabitCard(
             Row(
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Column (
+                Column(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text(
@@ -159,8 +162,7 @@ fun HabitCard(
             }
 
             AnimatedVisibility(
-                visible = isStatisticsOpened.value,
-                enter = fadeIn(
+                visible = isStatisticsOpened.value, enter = fadeIn(
                     animationSpec = TweenSpec(400, 0, FastOutSlowInEasing)
                 ) + expandVertically(
                     animationSpec = TweenSpec(200, 0, FastOutSlowInEasing)
@@ -194,7 +196,20 @@ fun TabCard(
             PrimaryTabRow(
                 selectedTabIndex = selectedTab,
                 containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.surfaceBright
+                contentColor = MaterialTheme.colorScheme.surfaceBright,
+                indicator = @Composable { tabPositions ->
+                    if (selectedTab < tabPositions.size) {
+                        val width by animateDpAsState(
+                            targetValue = tabPositions[selectedTab].contentWidth,
+                            label = "animateDpAsState"
+                        )
+                        TabRowDefaults.PrimaryIndicator(
+                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                            width = width,
+                            color = MaterialTheme.colorScheme.surfaceBright,
+                        )
+                    }
+                },
             ) {
                 tabOptions.forEachIndexed { index, option ->
                     Tab(text = { Text(option) },
@@ -232,7 +247,8 @@ private fun DateInfoCard(days: String) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Filled.DateRange, contentDescription = stringResource(R.string.reminder_icon_description),
+                Icons.Filled.DateRange,
+                contentDescription = stringResource(R.string.reminder_icon_description),
 
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
@@ -260,7 +276,8 @@ private fun CountableInfoCard(countableEntity: CountableEntity) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Outlined.Info, contentDescription = stringResource(R.string.reminder_icon_description),
+                Icons.Outlined.Info,
+                contentDescription = stringResource(R.string.reminder_icon_description),
 
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
@@ -288,7 +305,8 @@ private fun NotificationInfoCard(time: String, habitEntity: HabitEntity) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Outlined.Notifications, contentDescription = stringResource(R.string.reminder_icon_description),
+                Icons.Outlined.Notifications,
+                contentDescription = stringResource(R.string.reminder_icon_description),
 
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
@@ -309,7 +327,8 @@ private fun NotificationInfoCard(time: String, habitEntity: HabitEntity) {
                 )
             ) {
                 Icon(
-                    Icons.Filled.Warning, contentDescription = stringResource(R.string.failed_icon_description),
+                    Icons.Filled.Warning,
+                    contentDescription = stringResource(R.string.failed_icon_description),
 
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
@@ -339,5 +358,14 @@ fun HabitCardPreview() {
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
         getAllHabitDates = mapOf(),
+    )
+}
+
+@Preview
+@Composable
+fun TabCardPreview() {
+    TabCard(
+        habitId = 0L,
+        getAllHabitDates = mapOf()
     )
 }
