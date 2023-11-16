@@ -4,6 +4,7 @@ import android.content.Context
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.format.TextStyle
+import java.util.Locale
 import javax.inject.Inject
 
 class TodayScreenMapper @Inject constructor() {
@@ -14,7 +15,13 @@ class TodayScreenMapper @Inject constructor() {
         month: Month,
         dayOfWeek: DayOfWeek,
     ): String {
-        return  "$dayOfMonth ${month.toUniversalMonth(context)} · ${dayOfWeek.toUniversalMonth(context)}"
+        return  "$dayOfMonth ${month.toUniversalMonth(context)} · ${
+            dayOfWeek.toUniversalMonth(context)?.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.ROOT
+                ) else it.toString()
+            }
+        }"
     }
 
     private fun Month.toUniversalMonth(context: Context): String? {

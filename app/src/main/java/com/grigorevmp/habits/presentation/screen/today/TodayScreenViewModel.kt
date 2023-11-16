@@ -1,6 +1,7 @@
 package com.grigorevmp.habits.presentation.screen.today
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.core.in_app_bus.GlobalBus
@@ -20,13 +21,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -45,21 +44,14 @@ class TodayScreenViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
-    var uiState = MutableStateFlow(listOf<HabitWithDatesUI>())
+    var uiState = TodayScreenUiState()
         private set
-
-    var statisticUiState = MutableStateFlow(listOf<HabitStatisticItemUi>())
-        private set
-
-    var habits = getHabitsUseCase.invoke()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1000), emptyList())
-
-
-    private val extendDayValue = 3L
 
 
     fun init(context: Context, daysCount: Int) = viewModelScope.launch {
         CoroutineScope(Dispatchers.IO).launch {
+            delay(1000)
+
             GlobalBus.events().collect {
                 getPreparedHabitsList(context, daysCount) { }
                 updateWeekStatistic()
@@ -119,7 +111,7 @@ class TodayScreenViewModel @Inject constructor(
                     }
                 }
 
-                uiState.value = minorAllHabitsWithDateData
+                uiState.todayHabitData.value = minorAllHabitsWithDateData
                 payload()
             }
             cancel()
@@ -127,6 +119,7 @@ class TodayScreenViewModel @Inject constructor(
     }
 
     fun updateWeekStatistic() {
+        Log.d("!!!!!!!!!!", "updateWeekStatistic")
         CoroutineScope(Dispatchers.IO).launch {
             getHabitsUseCase.invoke().collectLatest { habitsData ->
                 val minorAllHabitStatisticItemUiData = mutableListOf<HabitStatisticItemUi>()
@@ -140,7 +133,7 @@ class TodayScreenViewModel @Inject constructor(
                     getDateOrNull(date).collect { targetDate ->
                         if (targetDate == null) return@collect
 
-                        if (date == localDateTime.toLocalDate() && localDateTime.hour < extendDayValue) return@collect
+                        if (date == localDateTime.toLocalDate() && isLongerDate() && localDateTime.hour < extendDayValue) return@collect
 
                         for (habit in habitsData) {
 
@@ -164,7 +157,7 @@ class TodayScreenViewModel @Inject constructor(
                     minorAllHabitStatisticItemUiData.add(statisticItem)
                 }
 
-                statisticUiState.value = minorAllHabitStatisticItemUiData
+                uiState.statisticData.value = minorAllHabitStatisticItemUiData
             }
             cancel()
         }
@@ -220,5 +213,10 @@ class TodayScreenViewModel @Inject constructor(
         val weekDays = Array(7) { i -> startDate.plusDays(i.toLong()) }
 
         return weekDays.map { it.toLocalDate() }
+    }
+
+
+    companion object {
+        private const val extendDayValue = 3L
     }
 }

@@ -3,6 +3,7 @@ package com.grigorevmp.habits.presentation.screen.today
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,7 +19,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.habit.HabitType
-import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.ShimmerCard
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
 import com.grigorevmp.habits.presentation.screen.today.data.HabitWithDatesUI
@@ -50,8 +49,8 @@ import com.valentinilk.shimmer.shimmer
 @Composable
 fun TodayScreen(habitViewModel: TodayScreenViewModel) {
     val context = LocalContext.current
-    val allHabitsStatisticData by habitViewModel.statisticUiState.collectAsState()
-    val allHabitsWithDateData by habitViewModel.uiState.collectAsState()
+    val allHabitsStatisticData by habitViewModel.uiState.statisticData.collectAsState()
+    val allHabitsWithDateData by habitViewModel.uiState.todayHabitData.collectAsState()
 
     LaunchedEffect(Unit) {
         habitViewModel.init(context, daysCount = 10)
@@ -102,28 +101,31 @@ fun TodayScreen(
         allHabitsStatistic = allHabitsStatisticData
     }
 
-    AnimatedVisibility(
-        visible = dataIsReady,
-        enter = fadeIn(
-            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
-        )
-    ) {
-        TodayView(
-            allHabitsWithDate,
-            allHabitsStatistic,
-            updateHabitRef,
-            updateHabitRefCountable,
-            getRandomEmoji,
-        )
-    }
 
-    AnimatedVisibility(
-        visible = !dataIsReady,
-        exit = fadeOut(
-            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
-        )
-    ) {
-        ShimmerCard()
+    Surface(Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = dataIsReady,
+            enter = fadeIn(
+                animationSpec = TweenSpec(500, 0, FastOutSlowInEasing)
+            )
+        ) {
+            TodayView(
+                allHabitsWithDate,
+                allHabitsStatistic,
+                updateHabitRef,
+                updateHabitRefCountable,
+                getRandomEmoji,
+            )
+        }
+
+        AnimatedVisibility(
+            visible = !dataIsReady,
+            exit = fadeOut(
+                animationSpec = TweenSpec(500, 0, FastOutLinearInEasing)
+            )
+        ) {
+            TodayShimmedView()
+        }
     }
 }
 
@@ -137,118 +139,103 @@ fun TodayView(
     getRandomEmoji: (Long) -> String,
 ) {
     val listState = rememberLazyListState()
-
-    Surface(Modifier.fillMaxSize()) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxSize()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .animateContentSize(),
+            state = listState,
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .animateContentSize(),
-                state = listState,
-            ) {
-                stickyHeader {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateItemPlacement(),
-                        shape = RoundedCornerShape(0.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = stringResource(R.string.today_screen_statistics_title),
-                            fontSize = 24.sp
-                        )
-                    }
-                }
-
-                item {
-                    DaysStatisticCard(allHabitsStatisticData, getRandomEmoji)
-                }
-
-                stickyHeader {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateItemPlacement(),
-                        shape = RoundedCornerShape(0.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = stringResource(R.string.today_screen_latest_title),
-                            fontSize = 24.sp
-                        )
-                    }
-                }
-
-                itemsIndexed(allHabits) { _, habitsForDate ->
-
-                    HabitsForDayCard(
-                        habitsForDate,
-                        updateHabitRef,
-                        updateHabitRefCountable,
+            stickyHeader {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItemPlacement(),
+                    shape = RoundedCornerShape(0.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                ) {
+                    Text(
+                        modifier = Modifier.padding(16.dp),
+                        text = stringResource(R.string.today_screen_statistics_title),
+                        fontSize = 24.sp
                     )
                 }
+            }
+
+            item {
+                DaysStatisticCard(allHabitsStatisticData, getRandomEmoji = getRandomEmoji)
+            }
+
+            stickyHeader {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItemPlacement(),
+                    shape = RoundedCornerShape(0.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                ) {
+                    Text(
+                        modifier = Modifier.padding(16.dp),
+                        text = stringResource(R.string.today_screen_latest_title),
+                        fontSize = 24.sp
+                    )
+                }
+            }
+
+            itemsIndexed(allHabits) { _, habitsForDate ->
+
+                HabitsForDayCard(
+                    habitsForDate,
+                    updateHabitRef,
+                    updateHabitRefCountable,
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TodayShimmedView() {
-    Surface(Modifier.fillMaxSize()) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier.fillMaxSize()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
         ) {
-            LazyColumn(
+            Text(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .animateContentSize(),
-            ) {
-                stickyHeader {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(0.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = stringResource(id = R.string.today_screen_statistics_title),
-                            fontSize = 24.sp
-                        )
-                    }
-                }
-
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp)
-                            .shimmer(),
-                    ) {
-                        LinearProgressIndicator(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        )
-                    }
-                }
-            }
+                    .padding(16.dp),
+                text = stringResource(id = R.string.today_screen_statistics_title),
+                fontSize = 24.sp
+            )
         }
+
+        DaysStatisticCard(
+            allHabitsStatisticData = listOf(
+                HabitStatisticItemUi(0, 0, 1, 1L),
+                HabitStatisticItemUi(0, 0, 1, 1L),
+                HabitStatisticItemUi(0, 0, 1, 1L),
+                HabitStatisticItemUi(0, 0, 1, 1L),
+                HabitStatisticItemUi(0, 0, 1, 1L),
+                HabitStatisticItemUi(0, 0, 1, 1L),
+                HabitStatisticItemUi(0, 0, 1, 1L),
+            ),
+            modifier = Modifier.shimmer(),
+        ) { "" }
     }
 }
 

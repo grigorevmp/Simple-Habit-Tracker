@@ -3,6 +3,7 @@ package com.grigorevmp.habits.presentation.screen.habits
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.CountableEntity
 import com.grigorevmp.habits.data.HabitEntity
@@ -37,19 +40,18 @@ import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
 import com.grigorevmp.habits.presentation.screen.habits.elements.AllHabitList
 import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.AddEditBottomSheet
-import com.grigorevmp.habits.presentation.screen.habits.elements.stastistic.ShimmerCard
 import java.time.DayOfWeek
 
 
 @Composable
 fun HabitListScreen(habitsViewModel: HabitsViewModel) {
-    val allHabits by habitsViewModel.habits.collectAsState()
-    val allHabitStat by habitsViewModel.statisticUiState.collectAsState()
+    val habitsData by habitsViewModel.uiState.habitsData.collectAsState()
+    val statisticData by habitsViewModel.uiState.statisticData.collectAsState()
 
 
     HabitListScreen(
-        allHabits = allHabits,
-        allHabitStat = allHabitStat,
+        habitsData = habitsData,
+        statisticData = statisticData,
         updateHabitEntity = { context: Context, habitEntity: HabitEntity ->
             habitsViewModel.updateHabit(context, habitEntity)
         },
@@ -88,8 +90,8 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitListScreen(
-    allHabits: List<HabitEntity>,
-    allHabitStat: Map<Long, List<StatYear>>,
+    habitsData: List<HabitEntity>,
+    statisticData: Map<Long, List<StatYear>>,
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
     prepareStat: (() -> Unit) -> Unit,
@@ -110,7 +112,7 @@ fun HabitListScreen(
     }
 
     if (dataIsReady) {
-        allHabitStatData = allHabitStat
+        allHabitStatData = statisticData
     }
 
     AddEditBottomSheet(
@@ -124,13 +126,13 @@ fun HabitListScreen(
     AnimatedVisibility(
         visible = dataIsReady,
         enter = fadeIn(
-            animationSpec = TweenSpec(400, 200, FastOutLinearInEasing)
+            animationSpec = TweenSpec(500, 0, FastOutSlowInEasing)
         )
     ) {
         Surface(Modifier.fillMaxSize()) {
             Column {
                 AllHabitList(
-                    allHabits = allHabits,
+                    allHabits = habitsData,
                     updateHabitEntity = updateHabitEntity,
                     deleteHabitEntity = deleteHabitEntity,
                     getAllHabitDates = allHabitStatData,
@@ -157,10 +159,16 @@ fun HabitListScreen(
     AnimatedVisibility(
         visible = !dataIsReady,
         exit = fadeOut(
-            animationSpec = TweenSpec(200, 200, FastOutLinearInEasing)
+            animationSpec = TweenSpec(500, 0, FastOutLinearInEasing)
         )
     ) {
-        ShimmerCard()
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp, bottom = 12.dp),
+            text = stringResource(R.string.habit_screen_your_habits_title),
+            fontSize = 24.sp
+        )
     }
 }
 
@@ -169,7 +177,7 @@ fun HabitListScreen(
 @Composable
 fun HabitListScreenPreview() {
     HabitListScreen(
-        allHabits = listOf(
+        habitsData = listOf(
             HabitEntity(
                 id = 0,
                 title = "Title",
@@ -180,7 +188,7 @@ fun HabitListScreenPreview() {
                 completed = false,
             )
         ),
-        allHabitStat = mapOf(),
+        statisticData = mapOf(),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
         prepareStat = { _ -> },

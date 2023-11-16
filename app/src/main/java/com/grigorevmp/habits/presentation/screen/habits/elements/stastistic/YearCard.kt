@@ -5,12 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
+import com.grigorevmp.habits.presentation.screen.habits.elements.common.ActionIcon
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -36,7 +31,6 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.entryOf
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun YearCard(
     stats: List<StatYear>?
@@ -105,24 +99,13 @@ fun YearCard(
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
-
-            Card(
-                modifier = Modifier.size(36.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
-                ),
-                onClick = {
-                    if (year - 1 in years) {
-                        year -= 1
-                    }
-                }
+            ActionIcon(
+                iconId = R.drawable.ic_left,
+                iconDescription = stringResource(R.string.icon_left_description)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_left),
-                    contentDescription = "Icon left",
-                    modifier = Modifier.padding(9.dp)
-                )
+                if (year - 1 in years) {
+                    year -= 1
+                }
             }
 
             Text(
@@ -132,23 +115,13 @@ fun YearCard(
                     .align(Alignment.CenterVertically),
             )
 
-            Card(
-                modifier = Modifier.size(36.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
-                ),
-                onClick = {
-                    if (year + 1 in years) {
-                        year += 1
-                    }
-                }
+            ActionIcon(
+                iconId = R.drawable.ic_right,
+                iconDescription = stringResource(R.string.icon_right_description)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_right),
-                    contentDescription = "Icon right",
-                    modifier = Modifier.padding(9.dp)
-                )
+                if (year + 1 in years) {
+                    year += 1
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))
