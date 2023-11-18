@@ -1,7 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.today
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.core.in_app_bus.GlobalBus
@@ -119,7 +118,6 @@ class TodayScreenViewModel @Inject constructor(
     }
 
     fun updateWeekStatistic() {
-        Log.d("!!!!!!!!!!", "updateWeekStatistic")
         CoroutineScope(Dispatchers.IO).launch {
             getHabitsUseCase.invoke().collectLatest { habitsData ->
                 val minorAllHabitStatisticItemUiData = mutableListOf<HabitStatisticItemUi>()

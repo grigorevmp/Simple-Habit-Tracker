@@ -5,10 +5,13 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
 interface DateDao {
+    @Query("SELECT * FROM date_table")
+    fun getAllDates(): Flow<MutableList<DateEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(date: DateEntity)

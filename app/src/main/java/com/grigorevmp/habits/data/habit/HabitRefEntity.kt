@@ -8,7 +8,10 @@ data class HabitRefEntity(
     val dateId: Long,
     val habitType: HabitType = HabitType.Missed,
     val value: Int? = null,
-)
+) {
+
+    fun representForBackup(): String = " -> $habitType | ${value ?: ""}\n"
+}
 
 enum class HabitType {
     Done,

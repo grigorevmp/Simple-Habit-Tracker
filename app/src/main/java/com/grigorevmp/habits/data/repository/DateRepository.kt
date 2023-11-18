@@ -6,6 +6,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class DateRepository @Inject constructor(private val dateDao: DateDao) {
+    fun getAllDates() = dateDao.getAllDates()
 
     fun insert(date: DateEntity) {
         dateDao.insert(date)

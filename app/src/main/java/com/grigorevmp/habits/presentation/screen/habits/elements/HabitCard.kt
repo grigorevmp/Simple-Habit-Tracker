@@ -177,6 +177,7 @@ fun HabitCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TabCard(
     habitId: Long,

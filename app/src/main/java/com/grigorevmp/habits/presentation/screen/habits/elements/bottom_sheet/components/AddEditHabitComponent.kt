@@ -39,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,7 +93,7 @@ fun AddEditHabitComponent(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp,)
+            .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp),
     ) {
         Text(
@@ -185,6 +187,8 @@ fun AddEditHabitComponent(
             )
         }
 
+        val timeInputContentDescription = stringResource(R.string.time_input_content_description)
+
         AnimatedVisibility(
             visible = useAlert,
             enter = fadeIn(
@@ -198,7 +202,10 @@ fun AddEditHabitComponent(
                 state = timeState,
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .semantics {
+                        this.contentDescription = timeInputContentDescription
+                    },
             )
         }
 
@@ -280,7 +287,8 @@ fun AddEditHabitComponent(
 
                     Button(modifier = Modifier.padding(vertical = 16.dp), onClick = {
 
-                        timePickerState = SerializableTimePickerState(timeState.hour, timeState.minute)
+                        timePickerState =
+                            SerializableTimePickerState(timeState.hour, timeState.minute)
 
                         if (validate(title)) {
                             habitEntity.title = title
