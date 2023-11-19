@@ -26,7 +26,10 @@ data class HabitEntity(
     @ColumnInfo(name = "habit_deleted") val deleted: Boolean = false,
     @ColumnInfo(name = "habit_countable") var countable: Boolean = false,
     @ColumnInfo(name = "habit_countable_entity") var countableEntity: CountableEntity? = null,
-)
+) {
+
+    fun representForBackup(): String = "$title. $description. ${days.joinToString { it.name }}"
+}
 
 data class HabitWithDates(
     @Embedded val habit: HabitEntity,
@@ -50,7 +53,10 @@ data class CountableEntity(
     val targetValue: Int,
     val valueName: String,
     val actionName: String,
-)
+) {
+
+    fun representForBackup(): String = " -> $actionName $targetValue $valueName\n"
+}
 
 class Converters {
 

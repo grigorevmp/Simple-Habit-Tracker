@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.settings.settings.EmojiChooserCard
+import com.grigorevmp.habits.presentation.screen.settings.settings.ImpexCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.LanguageChooserCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.LongerDateCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.PermissionsCard
@@ -33,6 +34,7 @@ fun SettingsScreen(vm: SettingsScreenViewModel) {
         vm::setCongratsEmoji,
         vm::getLongerDateFlag,
         vm::setLongerDateFlag,
+        vm::getPreparedHabitsList,
     )
 }
 
@@ -44,9 +46,10 @@ fun SettingsScreen(
     setCongratsEmoji: (Set<String>) -> Unit,
     getLongerDate: () -> Boolean,
     setLongerDate: (Boolean) -> Unit,
+    getPreparedHabitsList: ((String) -> Unit) -> Unit,
 ) {
     Surface(Modifier.fillMaxSize()) {
-        Column (
+        Column(
             Modifier.verticalScroll(rememberScrollState())
         ) {
             Text(
@@ -63,6 +66,8 @@ fun SettingsScreen(
             )
 
             LanguageChooserCard()
+
+            ImpexCard(getPreparedHabitsList)
 
             val switchState = remember { mutableStateOf(getLongerDate()) }
 
@@ -91,6 +96,7 @@ fun SettingsScreenPreview() {
         getCongratsEmoji = { setOf("") },
         setCongratsEmoji = { _ -> },
         getLongerDate = { false },
-        setLongerDate ={ _ -> },
+        setLongerDate = { _ -> },
+        getPreparedHabitsList = { _ -> },
     )
 }

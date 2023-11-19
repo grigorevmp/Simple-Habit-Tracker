@@ -119,4 +119,11 @@
     <string name="add_edit_bottom_sheet_cancel_changes">Отменить изменения</string>
     <string name="add_edit_bottom_sheet_summary">Вы уверены, что хотите закрыть диалог?</string>
 
+    <string name="impex_data_exported_to">Данные сохранены в %1$s</string>
+    <string name="impex_failed_to_export_data">Ошибка экспорта данных</string>
+    <string name="impex_export_statistic">Экспортировать статистику</string>
+    <string name="impex_export_icon_description">Иконка экспорта</string>
+    <string name="impex_export_title">Экспорт</string>
+
+    <string name="time_input_content_description">Введите время, чтобы настроить уведомление</string>
 </resources>

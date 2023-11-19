@@ -139,4 +139,11 @@
     <string name="add_edit_bottom_sheet_cancel_changes">Cancel changes</string>
     <string name="add_edit_bottom_sheet_summary">Are you sure you want to close the dialog?</string>
 
+    <string name="impex_data_exported_to">Data exported to %1$s</string>
+    <string name="impex_failed_to_export_data">Failed to export data. File creation failed.</string>
+    <string name="impex_export_statistic">Export statistic</string>
+    <string name="impex_export_icon_description">Export icon</string>
+    <string name="impex_export_title">Export</string>
+    <string name="time_input_content_description">Enter time for set up notification</string>
+
 </resources>

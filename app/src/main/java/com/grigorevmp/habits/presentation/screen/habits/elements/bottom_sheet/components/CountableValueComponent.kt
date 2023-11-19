@@ -42,8 +42,6 @@ fun CountableValueComponent(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        val isCountable = countableEntity != null
-
         val action = stringResource(R.string.action_read_summary)
         val name = stringResource(R.string.action_read_name)
 
