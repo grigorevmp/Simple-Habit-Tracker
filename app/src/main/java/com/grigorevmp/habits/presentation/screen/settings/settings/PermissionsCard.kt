@@ -64,9 +64,9 @@ fun PermissionsCard(
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        val alarmManager: AlarmManager = (context.getSystemService() as AlarmManager?)!!
-
-        canScheduleExactAlarms = alarmManager.canScheduleExactAlarms()
+        (context.getSystemService() as AlarmManager?)?.also {
+            canScheduleExactAlarms = it.canScheduleExactAlarms()
+        }
     }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {

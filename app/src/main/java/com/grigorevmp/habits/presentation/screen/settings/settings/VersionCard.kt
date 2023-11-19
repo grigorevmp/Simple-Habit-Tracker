@@ -25,7 +25,7 @@ fun VersionCard() {
     ) {
         val context = LocalContext.current
         val manager = context.packageManager
-        val info = manager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES)
+        val info = manager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES) ?: return@SettingsBaseCard
 
         Text(
             modifier = Modifier
