@@ -56,6 +56,15 @@
 
     <!-- Settings screen -->
     <string name="settings_screen_settings_title">Настройки</string>
+    <string name="ui">Интерфейс</string>
+    <string name="general">Основные</string>
+
+
+    <string name="settings_screen_theme_system">Системная</string>
+    <string name="settings_screen_theme_dark">Тёмная</string>
+    <string name="settings_screen_theme_light">Светлая</string>
+    <string name="settings_screen_theme_title">Тема</string>
+    <string name="settings_screen_theme_icon_description">Иконка темы</string>
 
     <string name="settings_screen_permissions_title">Требуются разрешения</string>
     <string name="settings_screen_permission_summary">Мы хотим, чтобы вы предоставили доступ к игнорированию оптимизации батареи и отправки уведомлений</string>

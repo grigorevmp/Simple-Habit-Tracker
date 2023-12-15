@@ -32,7 +32,8 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        val id = intent.getLongExtra("EXTRA_ID", -1L)
+
+        val id = intent.getLongExtra("EXTRA_NOTIF_ID", -1L)
 
         CoroutineScope(Dispatchers.IO).launch {
             getDateUseCase.invoke(LocalDate.now())?.also {
@@ -53,6 +54,7 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
         }
 
         val notificationId = (NOTIFICATION_ID * 1000 + id).toInt()
+        Log.d("MarkAsMissedBroadcastReceiver", "Cancel $notificationId")
         context.getSystemService(NotificationManager::class.java).cancel(notificationId)
 
         GlobalBus.post(

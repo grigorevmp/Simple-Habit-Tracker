@@ -14,45 +14,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import com.grigorevmp.habits.R
-import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.presentation.screen.settings.elements.SettingsBaseCard
-import java.util.Locale
+import com.grigorevmp.habits.presentation.theme.ThemePreference
 
 @Composable
-fun LanguageChooserCard() {
-    val availableLanguages = listOf("ru" to "Русский", "en" to "English")
-    val context = LocalContext.current
+fun ThemeChooserCard(
+    getTheme: () -> ThemePreference,
+    setTheme: (ThemePreference) -> Unit
+) {
+    val availableThemes = mapOf(
+        ThemePreference.System to stringResource(R.string.settings_screen_theme_system),
+        ThemePreference.Dark to stringResource(R.string.settings_screen_theme_dark),
+        ThemePreference.Light to stringResource(R.string.settings_screen_theme_light)
+    )
 
-    val configuration = LocalConfiguration.current
-    val locale = ConfigurationCompat.getLocales(configuration).get(0)?.language ?: "en"
-
-    val selectedLanguage = remember {
-        mutableStateOf(locale)
-    }
-
-    val selectedLanguageReadable = remember {
-        mutableStateOf(
-            ConfigurationCompat.getLocales(configuration)
-                .get(0)?.displayName?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                ?: "English"
-        )
-    }
+    val currentTheme = remember { mutableStateOf(getTheme()) }
 
     val isDropdownExpanded = remember {
         mutableStateOf(false)
     }
 
     SettingsBaseCard(
-        cardTitle = stringResource(R.string.settings_screen_language),
-        cardIconResource = R.drawable.ic_language,
-        cardIconDescription = stringResource(R.string.settings_screen_language_icon_description),
+        cardTitle = stringResource(R.string.settings_screen_theme_title),
+        cardIconResource = R.drawable.ic_palette,
+        cardIconDescription = stringResource(R.string.settings_screen_theme_icon_description),
         cardColor = CardDefaults.cardColors(),
         cardOnClick = { },
     ) {
@@ -68,7 +57,7 @@ fun LanguageChooserCard() {
             ) {
                 Text(
                     modifier = Modifier.padding(16.dp),
-                    text = selectedLanguageReadable.value
+                    text = availableThemes[currentTheme.value] ?: stringResource(R.string.settings_screen_theme_system)
                 )
             }
             MaterialTheme(
@@ -78,15 +67,17 @@ fun LanguageChooserCard() {
                     expanded = isDropdownExpanded.value,
                     onDismissRequest = { isDropdownExpanded.value = !isDropdownExpanded.value },
                 ) {
-                    availableLanguages.forEach { language ->
-                        DropdownMenuItem(
-                            text = { Text(language.second) },
-                            onClick = {
-                                selectedLanguage.value = language.first
-
-                                Utils.localeSelection(context, selectedLanguage.value)
-                            }
-                        )
+                    availableThemes.forEach { (key) ->
+                        availableThemes[key]?.let { themeName ->
+                            DropdownMenuItem(
+                                text = { Text(themeName) },
+                                onClick = {
+                                    setTheme(key)
+                                    currentTheme.value = key
+                                    isDropdownExpanded.value = !isDropdownExpanded.value
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -97,6 +88,9 @@ fun LanguageChooserCard() {
 
 @Preview(showBackground = true)
 @Composable
-fun LanguageChooserCardPreview() {
-    LanguageChooserCard()
+fun ThemeChooserCardPreview() {
+    ThemeChooserCard(
+        setTheme = { _ -> },
+        getTheme = { ThemePreference.System },
+    )
 }

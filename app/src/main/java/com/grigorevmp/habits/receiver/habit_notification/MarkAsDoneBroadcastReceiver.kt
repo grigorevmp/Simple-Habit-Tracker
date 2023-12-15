@@ -33,7 +33,8 @@ class MarkAsDoneBroadcastReceiver : HiltBroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        val id = intent.getLongExtra("EXTRA_ID", -1L)
+        val id = intent.getLongExtra("EXTRA_NOTIF_ID", -1L)
+
 
         CoroutineScope(Dispatchers.IO).launch {
             getDateUseCase.invoke(LocalDate.now())?.also {

@@ -22,7 +22,9 @@ import com.grigorevmp.habits.presentation.screen.settings.settings.ImpexCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.LanguageChooserCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.LongerDateCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.PermissionsCard
+import com.grigorevmp.habits.presentation.screen.settings.settings.ThemeChooserCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.VersionCard
+import com.grigorevmp.habits.presentation.theme.ThemePreference
 
 
 @Composable
@@ -35,6 +37,8 @@ fun SettingsScreen(vm: SettingsScreenViewModel) {
         vm::getLongerDateFlag,
         vm::setLongerDateFlag,
         vm::getPreparedHabitsList,
+        vm::setTheme,
+        vm::getTheme,
     )
 }
 
@@ -47,8 +51,11 @@ fun SettingsScreen(
     getLongerDate: () -> Boolean,
     setLongerDate: (Boolean) -> Unit,
     getPreparedHabitsList: ((String) -> Unit) -> Unit,
+    setTheme: (ThemePreference) -> Unit,
+    getTheme: () -> ThemePreference,
 ) {
     Surface(Modifier.fillMaxSize()) {
+
         Column(
             Modifier.verticalScroll(rememberScrollState())
         ) {
@@ -60,6 +67,12 @@ fun SettingsScreen(
 
             VersionCard()
 
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = stringResource(R.string.general),
+                fontSize = 18.sp
+            )
+
             PermissionsCard(
                 isIgnoringBattery,
                 getPackageName,
@@ -68,6 +81,16 @@ fun SettingsScreen(
             LanguageChooserCard()
 
             ImpexCard(getPreparedHabitsList)
+
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = stringResource(R.string.ui),
+                fontSize = 18.sp
+            )
+
+            ThemeChooserCard(getTheme) { theme: ThemePreference ->
+                setTheme(theme)
+            }
 
             val switchState = remember { mutableStateOf(getLongerDate()) }
 
@@ -98,5 +121,7 @@ fun SettingsScreenPreview() {
         getLongerDate = { false },
         setLongerDate = { _ -> },
         getPreparedHabitsList = { _ -> },
+        setTheme = { _ -> },
+        getTheme = { ThemePreference.System },
     )
 }

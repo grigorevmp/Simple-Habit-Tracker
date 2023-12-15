@@ -18,12 +18,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +44,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.alarm.createChannel
+import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.data.repository.PreferencesRepository
 import com.grigorevmp.habits.domain.usecase.synchronizer.UpdateNotificationUseCase
 import com.grigorevmp.habits.domain.usecase.synchronizer.UpdateSyncPointUseCase
@@ -48,6 +52,7 @@ import com.grigorevmp.habits.presentation.screen.habits.HabitsViewModel
 import com.grigorevmp.habits.presentation.screen.settings.SettingsScreenViewModel
 import com.grigorevmp.habits.presentation.screen.today.TodayScreenViewModel
 import com.grigorevmp.habits.presentation.theme.HabitTrackerTheme
+import com.grigorevmp.habits.presentation.theme.ThemePreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -91,7 +96,10 @@ class MainActivity : ComponentActivity() {
     ) {
         val navController = rememberNavController()
 
-        HabitTrackerTheme {
+        val appThemeString by preferencesRepository.getAppThemeFlow().collectAsState(initial = ThemePreference.System.name)
+        val appTheme = ThemePreference.valueOf(appThemeString ?: ThemePreference.System.name)
+
+        HabitTrackerTheme(appTheme) {
             Scaffold(bottomBar = { BottomNavigation(navController = navController) }) {
                 Box(modifier = Modifier.padding(it)) {
                     NavigationGraph(
@@ -136,18 +144,31 @@ class MainActivity : ComponentActivity() {
     fun BottomNavigation(navController: NavController) {
         val context = LocalContext.current
 
+        val notificationBadgeWarningState by Utils.isWarningSettings.collectAsState()
+
         val items = listOf(
             BottomNavItem.Today(context.getString(R.string.bottom_nav_home)),
             BottomNavItem.Habits(context.getString(R.string.bottom_nav_habits)),
             BottomNavItem.Settings(context.getString(R.string.bottom_nav_settings)),
         )
+
         NavigationBar {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             items.forEach { item ->
-                NavigationBarItem(icon = {
-                    Icon(painterResource(id = item.icon), contentDescription = item.title)
-                },
+                val showNotificationBadgeWarning = (item.title == context.getString(R.string.bottom_nav_settings)) && notificationBadgeWarningState
+
+                NavigationBarItem(
+                    icon = {
+                        BadgedBox(
+                            badge = {
+                                if (showNotificationBadgeWarning) {
+                                    Badge {}
+                                }
+                            }) {
+                            Icon(painterResource(id = item.icon), contentDescription = item.title)
+                        }
+                    },
                     label = {
                         Text(
                             text = item.title, fontSize = 9.sp

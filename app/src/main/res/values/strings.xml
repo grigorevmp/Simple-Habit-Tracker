@@ -56,6 +56,14 @@
 
     <!-- Settings screen -->
     <string name="settings_screen_settings_title">Settings</string>
+    <string name="general">General</string>
+    <string name="ui">UI</string>
+
+    <string name="settings_screen_theme_system">System</string>
+    <string name="settings_screen_theme_dark">Dark</string>
+    <string name="settings_screen_theme_light">Light</string>
+    <string name="settings_screen_theme_title">Theme</string>
+    <string name="settings_screen_theme_icon_description">Theme icon</string>
 
     <string name="settings_screen_permissions_required_icon_description">Permissions required icon</string>
     <string name="settings_screen_permission_summary">We want you to give access to ignoring battery optimisation and notification posting</string>
