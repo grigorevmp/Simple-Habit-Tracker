@@ -15,6 +15,7 @@
     <string name="bottom_nav_settings">Настройки</string>
     <string name="action_read_summary">Прочитать</string>
     <string name="action_read_name">страниц</string>
+    <string name="contacts">Контакты</string>
 
     <string name="day_1_short">Пн</string>
     <string name="day_2_short">Вт</string>
@@ -93,6 +94,8 @@
     <string name="settings_screen_extend_the_day_summary">Продлить текущий день и не отображать новые события до 3х утра</string>
     <string name="settings_screen_calendar_icon_description">Иконка календаря</string>
 
+    <string name="screen_settings_about_title">Есть советы или вопросы?</string>
+    <string name="screen_settings_about_description">Вы можете найти меня в телеграм</string>
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Ваши привычки</string>
     <string name="habit_screen_remind_at">Напомним в %1$s</string>
@@ -135,4 +138,8 @@
     <string name="impex_export_title">Экспорт</string>
 
     <string name="time_input_content_description">Введите время, чтобы настроить уведомление</string>
+
+    <!-- Changelog -->
+    <string name="new_features">Что нового?</string>
+    <string name="changelog_v_1">- Исправлена работа уведомлений\n- Исправлена отмена привычек\n- Добавлена ссылка на tg канал\n- Добавлено отображение списка изменений\n</string>
 </resources>

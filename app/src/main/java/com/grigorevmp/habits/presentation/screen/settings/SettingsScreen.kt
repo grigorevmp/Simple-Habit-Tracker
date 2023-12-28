@@ -2,7 +2,9 @@ package com.grigorevmp.habits.presentation.screen.settings
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.presentation.screen.settings.settings.AboutMeCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.EmojiChooserCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.ImpexCard
 import com.grigorevmp.habits.presentation.screen.settings.settings.LanguageChooserCard
@@ -105,6 +108,16 @@ fun SettingsScreen(
                 getCongratsEmoji,
                 setCongratsEmoji
             )
+
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = stringResource(R.string.contacts),
+                fontSize = 18.sp
+            )
+
+            AboutMeCard()
+
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

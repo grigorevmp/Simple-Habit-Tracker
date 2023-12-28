@@ -13,6 +13,7 @@ import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.common.MainActivity
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsDoneBroadcastReceiver
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsMissedBroadcastReceiver
+import java.time.LocalDate
 
 const val NOTIFICATION_ID = 33
 const val CHANNEL_ID = "ReminderChannel"
@@ -48,7 +49,7 @@ fun NotificationManager.sendReminderNotification(
     }
     val donePendingIntent = PendingIntent.getBroadcast(
         context,
-        notificationId,
+        notificationId + System.currentTimeMillis().toInt(),
         doneIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
@@ -58,7 +59,7 @@ fun NotificationManager.sendReminderNotification(
     }
     val missedPendingIntent = PendingIntent.getBroadcast(
         context,
-        notificationId,
+        notificationId + System.currentTimeMillis().toInt(),
         missedIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )

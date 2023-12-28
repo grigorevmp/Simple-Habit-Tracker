@@ -3,6 +3,7 @@ package com.grigorevmp.habits.data.repository
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.grigorevmp.habits.core.utils.Changelogs
 import com.grigorevmp.habits.presentation.theme.ThemePreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,6 +56,14 @@ class PreferencesRepository @Inject constructor(
     fun setPermissionShown() {
         preferences.edit()
             .putBoolean(FIRST_PERMISSION_REQUEST, true)
+            .apply()
+    }
+
+    fun getVersion() = preferences.getLong(LAST_DAY, Changelogs.version.toLong())
+
+    fun setVersion(version: Long) {
+        preferences.edit()
+            .putLong(LAST_DAY, version)
             .apply()
     }
 
@@ -113,6 +122,7 @@ class PreferencesRepository @Inject constructor(
         const val FIRST_PERMISSION_REQUEST = "show_first_permission_request_14_11_23"
         const val LONGER_DAY = "longer_day"
         const val APP_THEME = "app_theme"
+        const val LAST_DAY = "last_day"
 
         const val CONGRATS_EMOJI = "congratulation_emoji"
         val DEFAULT_EMOJI = setOf("⚡", "🫰", "🩶", "🤍", "🤎", "💛", "🧡", "💖", "❤️", "🩵", "💜", "💙", "💚", "❤️‍🔥", "🔥", "🧨", "✨", "🎉", "🎊")

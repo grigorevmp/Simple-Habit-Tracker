@@ -35,6 +35,8 @@ class MarkAsDoneBroadcastReceiver : HiltBroadcastReceiver() {
 
         val id = intent.getLongExtra("EXTRA_NOTIF_ID", -1L)
 
+        Log.d("MarkAsDoneBroadcastReceiver", "Done $id")
+
 
         CoroutineScope(Dispatchers.IO).launch {
             getDateUseCase.invoke(LocalDate.now())?.also {

@@ -21,18 +21,18 @@ import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsBaseCard(
     cardTitle: String,
     cardIconResource: Int,
     cardIconDescription: String,
+    modifier: Modifier = Modifier,
     cardColor: CardColors = CardDefaults.cardColors(),
     cardOnClick: () -> Unit = { },
     content: @Composable () -> Unit = { },
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
         colors = cardColor,

@@ -35,6 +35,8 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
 
         val id = intent.getLongExtra("EXTRA_NOTIF_ID", -1L)
 
+        Log.d("MarkAsMissedBroadcastReceiver", "Done $id")
+
         CoroutineScope(Dispatchers.IO).launch {
             getDateUseCase.invoke(LocalDate.now())?.also {
                 it.id?.let { dateId ->
