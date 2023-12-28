@@ -177,6 +177,9 @@ class TodayScreenViewModel @Inject constructor(
         return emojiSet.random(Random(seed))
     }
 
+    fun getVersion() = preferencesRepository.getVersion()
+
+    fun setVersion(version: Long) = preferencesRepository.setVersion(version)
 
     private fun isLongerDate(): Boolean = preferencesRepository.getLongerDateFlag()
 

@@ -9,6 +9,7 @@ import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.grigorevmp.habits.core.alarm.AlarmReceiver
+import kotlinx.coroutines.flow.MutableStateFlow
 
 object Utils {
     fun localeSelection(context: Context, localeTag: String) {
@@ -22,12 +23,14 @@ object Utils {
         }
     }
 
+    val isWarningSettings = MutableStateFlow(false)
+
     fun checkIfPendingIntentIsRegistered(context: Context, requestCode: Int): Boolean {
         val intent = Intent(context, AlarmReceiver::class.java)
         return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE) != null
     }
 
-    val fullEmojiRegex = "(?:[\\u2700-\\u27bf]|" +
+    const val fullEmojiRegex = "(?:[\\u2700-\\u27bf]|" +
 
             "(?:[\\ud83c\\udde6-\\ud83c\\uddff]){2}|" +
             "[\\ud800\\udc00-\\uDBFF\\uDFFF]|[\\u2600-\\u26FF])[\\ufe0e\\ufe0f]?(?:[\\u0300-\\u036f\\ufe20-\\ufe23\\u20d0-\\u20f0]|[\\ud83c\\udffb-\\ud83c\\udfff])?" +

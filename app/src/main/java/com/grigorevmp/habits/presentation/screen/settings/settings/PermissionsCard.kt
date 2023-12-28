@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.presentation.screen.settings.elements.SettingsBaseCard
 
 
@@ -64,9 +66,9 @@ fun PermissionsCard(
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        val alarmManager: AlarmManager = (context.getSystemService() as AlarmManager?)!!
-
-        canScheduleExactAlarms = alarmManager.canScheduleExactAlarms()
+        (context.getSystemService() as AlarmManager?)?.also {
+            canScheduleExactAlarms = it.canScheduleExactAlarms()
+        }
     }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -101,6 +103,11 @@ fun PermissionsCard(
     Log.d("Settings", "==== ================ ====")
 
     if ((isTiramisuPlus.value && isCantPostNotifications.value) || isNotIgnoreBattery.value) {
+        LaunchedEffect(Unit) {
+            Log.d("Permission card", "Warning card: true")
+            Utils.isWarningSettings.emit(true)
+        }
+
         SettingsBaseCard(
             cardTitle = stringResource(R.string.settings_screen_permissions_title),
             cardIconResource = R.drawable.ic_warning,
@@ -156,6 +163,11 @@ fun PermissionsCard(
             )
         }
     } else {
+        LaunchedEffect(Unit) {
+            Log.d("Permission card", "Warning card: true")
+            Utils.isWarningSettings.emit(false)
+        }
+
         SettingsBaseCard(
             cardTitle = stringResource(R.string.settings_screen_up_to_date_title),
             cardIconResource = R.drawable.ic_done,

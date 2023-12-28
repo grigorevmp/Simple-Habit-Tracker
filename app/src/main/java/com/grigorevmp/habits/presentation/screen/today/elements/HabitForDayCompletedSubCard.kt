@@ -1,5 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.today.elements
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
@@ -13,11 +14,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,10 +41,13 @@ fun HabitForDayCompletedSubCard(
     habit: HabitEntityUI,
     setNewHabitType: (HabitType) -> Unit
 ) {
-    val habitTypeMutable = remember(habit.type.ordinal) { mutableStateOf(habit.type) }
+    val habitTypeMutable = remember { mutableStateOf(habit.type) }
+    
     val countableDialog = remember {
         mutableStateOf(false)
     }
+
+    val haptics = LocalHapticFeedback.current
 
     Card(
         colors = CardDefaults.cardColors(
@@ -51,26 +58,26 @@ fun HabitForDayCompletedSubCard(
                 onClick = {
                     if (habit.countable) {
                         countableDialog.value = true
-
                     } else {
-                        habitTypeMutable.value = if (habitTypeMutable.value != HabitType.Unknown) {
-                            HabitType.Unknown
-                        } else {
-                            HabitType.Done
-                        }
+                        habitTypeMutable.value =
+                            if (habitTypeMutable.value  != HabitType.Unknown) {
+                                HabitType.Unknown
+                            } else {
+                                HabitType.Done
+                            }
                         updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value)
                     }
                 },
                 onLongClick = {
                     if (habit.countable) {
                         countableDialog.value = true
-
                     } else {
                         habitTypeMutable.value = if (habitTypeMutable.value != HabitType.Missed) {
                             HabitType.Missed
                         } else {
                             HabitType.Done
                         }
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                         updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value)
                     }
                 },
@@ -104,7 +111,8 @@ fun HabitForDayCompletedSubCard(
                     .align(Alignment.CenterVertically)
             )
 
-            val additionalText = if (habit.countable) " (${habit.value}/${habit.maxValue} ${habit.valueName})" else ""
+            val additionalText =
+                if (habit.countable) " (${habit.value}/${habit.maxValue} ${habit.valueName})" else ""
 
             Text(
                 text = habit.title + additionalText,

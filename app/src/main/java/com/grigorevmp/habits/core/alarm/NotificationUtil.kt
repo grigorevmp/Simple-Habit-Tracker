@@ -7,11 +7,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.common.MainActivity
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsDoneBroadcastReceiver
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsMissedBroadcastReceiver
+import java.time.LocalDate
 
 const val NOTIFICATION_ID = 33
 const val CHANNEL_ID = "ReminderChannel"
@@ -29,6 +31,11 @@ fun NotificationManager.sendReminderNotification(
     title: String,
     message: String
 ) {
+
+    Log.d("NotificationManager", "Saved $message with id=$id")
+
+    val notificationId = (NOTIFICATION_ID * 1000 + id).toInt()
+
     val contentIntent = Intent(context, MainActivity::class.java)
     val contentPendingIntent = PendingIntent.getActivity(
         context,
@@ -38,21 +45,21 @@ fun NotificationManager.sendReminderNotification(
     )
 
     val doneIntent = Intent(context, MarkAsDoneBroadcastReceiver::class.java).apply {
-        putExtra("EXTRA_ID", id)
+        putExtra("EXTRA_NOTIF_ID", id)
     }
     val donePendingIntent = PendingIntent.getBroadcast(
         context,
-        0,
+        notificationId + System.currentTimeMillis().toInt(),
         doneIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     val missedIntent = Intent(context, MarkAsMissedBroadcastReceiver::class.java).apply {
-        putExtra("EXTRA_ID", id)
+        putExtra("EXTRA_NOTIF_ID", id)
     }
     val missedPendingIntent = PendingIntent.getBroadcast(
         context,
-        0,
+        notificationId + System.currentTimeMillis().toInt(),
         missedIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
@@ -76,6 +83,7 @@ fun NotificationManager.sendReminderNotification(
 
     builder.flags = builder.flags or Notification.FLAG_AUTO_CANCEL
 
-    val notificationId = (NOTIFICATION_ID * 1000 + id).toInt()
+    Log.d("NotificationManager", "Saved $message with notificationId=$notificationId")
+
     this.notify(notificationId, builder)
 }

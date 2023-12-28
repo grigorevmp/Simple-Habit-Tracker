@@ -35,7 +35,6 @@ import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.utils.Utils.fullEmojiRegex
 import com.grigorevmp.habits.presentation.screen.settings.elements.SettingsBaseCard
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmojiChooserCard(
     getCongratsEmoji: () -> Set<String>,

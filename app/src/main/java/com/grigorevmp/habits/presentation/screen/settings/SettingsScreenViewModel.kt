@@ -8,6 +8,7 @@ import com.grigorevmp.habits.data.repository.PreferencesRepository
 import com.grigorevmp.habits.domain.usecase.date.GetAllDatesUseCase
 import com.grigorevmp.habits.domain.usecase.habit_ref.GetHabitRefUseCase
 import com.grigorevmp.habits.domain.usecase.habits.GetOnlyHabitsUseCase
+import com.grigorevmp.habits.presentation.theme.ThemePreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +46,12 @@ class SettingsScreenViewModel @Inject constructor(
     fun setLongerDateFlag(makeDayLonger: Boolean) = viewModelScope.launch {
         preferencesRepository.setLongerDateFlag(makeDayLonger)
     }
+
+    fun setTheme(theme: ThemePreference) = viewModelScope.launch {
+        preferencesRepository.setAppTheme(theme)
+    }
+
+    fun getTheme() = preferencesRepository.getAppTheme()
 
     fun getPreparedHabitsList(payload: (String) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {

@@ -14,6 +14,7 @@
     <string name="bottom_nav_settings">Settings</string>
     <string name="action_read_summary">Read</string>
     <string name="action_read_name">pages</string>
+    <string name="contacts">Contacts</string>
 
     <string name="day_1_short">Mon</string>
     <string name="day_2_short">Tue</string>
@@ -56,6 +57,14 @@
 
     <!-- Settings screen -->
     <string name="settings_screen_settings_title">Settings</string>
+    <string name="general">General</string>
+    <string name="ui">UI</string>
+
+    <string name="settings_screen_theme_system">System</string>
+    <string name="settings_screen_theme_dark">Dark</string>
+    <string name="settings_screen_theme_light">Light</string>
+    <string name="settings_screen_theme_title">Theme</string>
+    <string name="settings_screen_theme_icon_description">Theme icon</string>
 
     <string name="settings_screen_permissions_required_icon_description">Permissions required icon</string>
     <string name="settings_screen_permission_summary">We want you to give access to ignoring battery optimisation and notification posting</string>
@@ -84,6 +93,9 @@
     <string name="settings_screen_extend_the_day_title">Extend the day</string>
     <string name="settings_screen_extend_the_day_summary">Extend the current day and do not display new events until 3 am</string>
     <string name="settings_screen_calendar_icon_description">Calendar color</string>
+
+    <string name="screen_settings_about_title">Have any advice or questions?</string>
+    <string name="screen_settings_about_description">You can find me on telegram</string>
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Your habits</string>
     <string name="habit_screen_remind_at">Remind you at %1$s</string>
@@ -145,5 +157,9 @@
     <string name="impex_export_icon_description">Export icon</string>
     <string name="impex_export_title">Export</string>
     <string name="time_input_content_description">Enter time for set up notification</string>
+
+    <!-- Changelog -->
+    <string name="new_features">New features</string>
+    <string name="changelog_v_1">- Fixed notifications\n- Fixed canceling habits\n- Added a link to the tg channel\n- Added display of a list of changes\n</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.today
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -10,18 +11,28 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.core.utils.Changelogs
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
@@ -73,10 +85,17 @@ fun TodayScreen(habitViewModel: TodayScreenViewModel) {
         },
         getRandomEmoji = { seed: Long ->
             habitViewModel.getRandomEmoji(seed)
-        }
+        },
+        getVersion = {
+            habitViewModel.getVersion()
+        },
+        setVersion = { version: Long ->
+            habitViewModel.setVersion(version)
+        },
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(
     prepareHabitsList: (() -> Unit) -> Unit,
@@ -85,6 +104,8 @@ fun TodayScreen(
     updateHabitRef: (Long, Long, HabitType) -> Unit,
     updateHabitRefCountable: (Long, Long, HabitType, Int) -> Unit,
     getRandomEmoji: (Long) -> String,
+    getVersion: () -> Long,
+    setVersion: (Long) -> Unit,
 ) {
     var allHabitsWithDate by remember { mutableStateOf<List<HabitWithDatesUI>>(mutableListOf()) }
     var allHabitsStatistic by remember { mutableStateOf<List<HabitStatisticItemUi>>(mutableListOf()) }
@@ -104,8 +125,7 @@ fun TodayScreen(
 
     Surface(Modifier.fillMaxSize()) {
         AnimatedVisibility(
-            visible = dataIsReady,
-            enter = fadeIn(
+            visible = dataIsReady, enter = fadeIn(
                 animationSpec = TweenSpec(500, 0, FastOutSlowInEasing)
             )
         ) {
@@ -119,14 +139,91 @@ fun TodayScreen(
         }
 
         AnimatedVisibility(
-            visible = !dataIsReady,
-            exit = fadeOut(
+            visible = !dataIsReady, exit = fadeOut(
                 animationSpec = TweenSpec(500, 0, FastOutLinearInEasing)
             )
         ) {
             TodayShimmedView()
         }
     }
+
+    BottomVersionDialog(getVersion, setVersion)
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun BottomVersionDialog(getVersion: () -> Long, setVersion: (Long) -> Unit) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val context = LocalContext.current
+
+    val changelogs = getChangelogForVersions(context, version = getVersion())
+
+    setVersion(getVersion() + 1)
+
+    var shouldShowChangelog by remember {
+        mutableStateOf(getVersion() < Changelogs.version)
+    }
+
+    if (shouldShowChangelog) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = {
+                shouldShowChangelog = false
+            },
+        ) {
+            Icon(
+                Icons.Filled.Refresh,
+                contentDescription = "Update icon",
+                Modifier
+                    .size(64.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp)
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                text = stringResource(R.string.new_features),
+                fontSize = 24.sp
+            )
+            ChangelogSheet(changelogs = changelogs)
+            Button(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                onClick = {
+                    shouldShowChangelog = false
+                }) {
+                Text(stringResource(R.string.cancel_button))
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+@Composable
+fun ChangelogSheet(changelogs: List<String>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp)
+            .padding(horizontal = 24.dp)
+    ) {
+        for (changelog in changelogs) {
+            Text(text = changelog, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+fun getChangelogForVersions(context: Context, version: Long): List<String> {
+    val startIndex = version.toInt() - 1
+    if (startIndex < 0 || startIndex >= Changelogs.getVersions(context).size) {
+        return emptyList()
+    }
+    return Changelogs.getVersions(context).subList(startIndex, Changelogs.getVersions(context).size)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -217,8 +314,7 @@ fun TodayShimmedView() {
             ),
         ) {
             Text(
-                modifier = Modifier
-                    .padding(16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = stringResource(id = R.string.today_screen_statistics_title),
                 fontSize = 24.sp
             )
@@ -243,8 +339,7 @@ fun TodayShimmedView() {
 @Preview(showBackground = true)
 @Composable
 fun TodayScreenPreview() {
-    TodayScreen(
-        prepareHabitsList = { },
+    TodayScreen(prepareHabitsList = { },
         allHabitsWithDateData = listOf(
             HabitWithDatesUI(
                 habits = mutableListOf(
@@ -255,15 +350,15 @@ fun TodayScreenPreview() {
                         description = "Description",
                         type = HabitType.Missed,
                     )
-                ),
-                date = "Current date"
+                ), date = "Current date"
             )
         ),
         allHabitsStatisticData = listOf(),
         updateHabitRef = { _, _, _ -> },
         updateHabitRefCountable = { _, _, _, _ -> },
-        getRandomEmoji = { _ -> ""}
-    )
+        getRandomEmoji = { _ -> "" },
+        getVersion = { 3L },
+        setVersion = { _ -> })
 }
 
 
