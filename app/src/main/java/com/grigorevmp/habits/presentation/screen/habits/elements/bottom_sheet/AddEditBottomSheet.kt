@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ fun AddEditBottomSheet(
     habitEntity: HabitEntity? = null,
     updateHabitEntity: (Context, HabitEntity) -> Unit = { _, _ -> },
     deleteHabitEntity: (HabitEntity) -> Unit = { _ -> },
-    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit = { _, _, _, _, _, _, _, _ -> },
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?, HabitCategory) -> Unit = { _, _, _, _, _, _, _, _, _ -> },
     close: (Boolean) -> Unit,
 ) {
     val scope = rememberCoroutineScope()

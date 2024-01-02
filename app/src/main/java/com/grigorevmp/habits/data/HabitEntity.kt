@@ -22,6 +22,7 @@ data class HabitEntity(
     @TypeConverters(Converters::class) @ColumnInfo(name = "habit_days") var days: Array<DayOfWeek>,
     @ColumnInfo(name = "habit_alert") var alertEnabled: Boolean,
     @ColumnInfo(name = "habit_time") var time: SerializableTimePickerState,
+    @ColumnInfo(name = "habit_category") var habitCategory: HabitCategory = HabitCategory.None,
     @ColumnInfo(name = "habit_completed") val completed: Boolean = false,
     @ColumnInfo(name = "habit_deleted") val deleted: Boolean = false,
     @ColumnInfo(name = "habit_countable") var countable: Boolean = false,
@@ -29,6 +30,43 @@ data class HabitEntity(
 ) {
 
     fun representForBackup(): String = "$title. $description. ${days.joinToString { it.name }}"
+}
+
+enum class HabitCategory {
+    None,
+    Food,
+    PhysicalActivity,
+    Relaxation,
+    Meditation,
+    BadHabits,
+    Reading,
+    Education,
+    Languages,
+    Skills,
+    Planning,
+    Working,
+    Diary,
+    StressFighting,
+    Communication,
+    SelfTime,
+    Productivity,
+    WorkBalance,
+    FinanceControl,
+    Budget,
+    Hobby,
+    Cleaning,
+    Cooking,
+    PetTime,
+    Volunteering,
+    Personal,
+    FriendsTime;
+
+
+    companion object {
+        fun toList(): List<String> {
+            return entries.map { it.name }
+        }
+    }
 }
 
 data class HabitWithDates(

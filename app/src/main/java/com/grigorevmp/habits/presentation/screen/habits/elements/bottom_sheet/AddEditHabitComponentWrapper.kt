@@ -5,6 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.elements.bottom_sheet.components.AddEditHabitComponent
@@ -16,7 +17,7 @@ fun AddEditHabitComponentWrapper(
     habitEntity: HabitEntity? = null,
     updateHabitEntity: (Context, HabitEntity) -> Unit = { _, _ -> },
     deleteHabitEntity: (HabitEntity) -> Unit = { _ -> },
-    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit = { _, _, _, _, _, _, _, _ -> },
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?, HabitCategory) -> Unit = { _, _, _, _, _, _, _, _, _ -> },
     hideDialog: () -> Unit,
 ) {
     AddEditHabitComponent(

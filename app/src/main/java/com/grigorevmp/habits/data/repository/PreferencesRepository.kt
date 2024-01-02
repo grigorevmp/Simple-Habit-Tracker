@@ -59,11 +59,11 @@ class PreferencesRepository @Inject constructor(
             .apply()
     }
 
-    fun getVersion() = preferences.getLong(LAST_DAY, Changelogs.version.toLong())
+    fun getVersion() = preferences.getLong(VERSION_CODE, Changelogs.version.toLong())
 
     fun setVersion(version: Long) {
         preferences.edit()
-            .putLong(LAST_DAY, version)
+            .putLong(VERSION_CODE, version)
             .apply()
     }
 
@@ -122,7 +122,7 @@ class PreferencesRepository @Inject constructor(
         const val FIRST_PERMISSION_REQUEST = "show_first_permission_request_14_11_23"
         const val LONGER_DAY = "longer_day"
         const val APP_THEME = "app_theme"
-        const val LAST_DAY = "last_day"
+        const val VERSION_CODE = "version_code"
 
         const val CONGRATS_EMOJI = "congratulation_emoji"
         val DEFAULT_EMOJI = setOf("⚡", "🫰", "🩶", "🤍", "🤎", "💛", "🧡", "💖", "❤️", "🩵", "💜", "💙", "💚", "❤️‍🔥", "🔥", "🧨", "✨", "🎉", "🎊")

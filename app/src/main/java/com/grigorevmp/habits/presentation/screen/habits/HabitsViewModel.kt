@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.habit.HabitType
@@ -159,6 +160,7 @@ class HabitsViewModel @Inject constructor(
         timePickerState: SerializableTimePickerState,
         countable: Boolean,
         countableEntity: CountableEntity?,
+        habitCategory: HabitCategory,
     ) = viewModelScope.launch {
         CoroutineScope(Dispatchers.IO).launch {
             val habit = addHabitUseCase.invoke(
@@ -169,6 +171,7 @@ class HabitsViewModel @Inject constructor(
                 timePickerState,
                 countable,
                 countableEntity,
+                habitCategory,
             )
 
             if (useAlert) {

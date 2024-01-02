@@ -2,6 +2,7 @@ package com.grigorevmp.habits.domain.usecase.habits
 
 import android.util.Log
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.repository.HabitRepository
@@ -20,6 +21,7 @@ class AddHabitUseCase @Inject constructor(
         timePickerState: SerializableTimePickerState,
         countable: Boolean,
         countableEntity: CountableEntity?,
+        habitCategory: HabitCategory,
     ): HabitEntity {
         val habit = HabitEntity(
             title = title,
@@ -30,6 +32,7 @@ class AddHabitUseCase @Inject constructor(
             completed = false,
             countable = countable,
             countableEntity = countableEntity,
+            habitCategory = habitCategory,
         )
 
         Log.d("Habit added", habit.toString())

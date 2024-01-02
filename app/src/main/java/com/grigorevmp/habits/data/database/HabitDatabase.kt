@@ -6,8 +6,8 @@ import androidx.room.TypeConverters
 import com.grigorevmp.habits.data.Converters
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.HabitWithDateDao
-import com.grigorevmp.habits.data.data.DateDao
-import com.grigorevmp.habits.data.data.DateEntity
+import com.grigorevmp.habits.data.date.DateDao
+import com.grigorevmp.habits.data.date.DateEntity
 import com.grigorevmp.habits.data.habit.HabitRefDao
 import com.grigorevmp.habits.data.habit.HabitRefEntity
 import com.grigorevmp.habits.di.ApplicationScope
@@ -22,7 +22,7 @@ import javax.inject.Provider
         DateEntity::class,
         HabitRefEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

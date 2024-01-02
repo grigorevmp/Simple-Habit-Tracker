@@ -1,6 +1,7 @@
 package com.grigorevmp.habits.presentation.screen.today
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -95,7 +96,6 @@ fun TodayScreen(habitViewModel: TodayScreenViewModel) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(
     prepareHabitsList: (() -> Unit) -> Unit,
@@ -158,16 +158,15 @@ private fun BottomVersionDialog(getVersion: () -> Long, setVersion: (Long) -> Un
 
     val changelogs = getChangelogForVersions(context, version = getVersion())
 
-    setVersion(getVersion() + 1)
-
     var shouldShowChangelog by remember {
-        mutableStateOf(getVersion() < Changelogs.version)
+        mutableStateOf(getVersion() <= Changelogs.version)
     }
 
     if (shouldShowChangelog) {
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
+                setVersion(Changelogs.version.toLong() + 1)
                 shouldShowChangelog = false
             },
         ) {
@@ -195,6 +194,7 @@ private fun BottomVersionDialog(getVersion: () -> Long, setVersion: (Long) -> Un
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
                 onClick = {
+                    setVersion(Changelogs.version.toLong() + 1)
                     shouldShowChangelog = false
                 }) {
                 Text(stringResource(R.string.cancel_button))

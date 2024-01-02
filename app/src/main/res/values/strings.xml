@@ -96,6 +96,7 @@
 
     <string name="screen_settings_about_title">Have any advice or questions?</string>
     <string name="screen_settings_about_description">You can find me on telegram</string>
+
     <!-- Habit screen -->
     <string name="habit_screen_your_habits_title">Your habits</string>
     <string name="habit_screen_remind_at">Remind you at %1$s</string>
@@ -136,6 +137,35 @@
     <string name="habit_screen_edit_habit_dialog_countable_new_button" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_new_button</string>
     <string name="habit_screen_edit_habit_dialog_countable_change_icon" translatable="false">@string/habit_screen_add_new_habit_dialog_countable_change_button</string>
 
+    <string name="habit_property_category">Category</string>
+    <string name="habit_property_category_none">No category</string>
+    <string name="habit_property_category_food">Food</string>
+    <string name="habit_property_category_relax">Relaxation</string>
+    <string name="habit_property_category_sport">Physical activity</string>
+    <string name="habit_property_category_meditation">Meditation</string>
+    <string name="habit_property_category_bad">Bad habits fighting</string>
+    <string name="habit_property_category_reading">Reading</string>
+    <string name="habit_property_category_education">Education</string>
+    <string name="habit_property_category_lang">Languages</string>
+    <string name="habit_property_category_skills">Skills</string>
+    <string name="habit_property_category_planning">Planning</string>
+    <string name="habit_property_category_working">Working</string>
+    <string name="habit_property_category_diary">Diary</string>
+    <string name="habit_property_category_tress">Stress fighting</string>
+    <string name="habit_property_category_comm">Communication</string>
+    <string name="habit_property_category_self">Self time</string>
+    <string name="habit_property_category_friends">Friends time</string>
+    <string name="habit_property_category_volunteering">Volunteering</string>
+    <string name="habit_property_category_personal">Personal</string>
+    <string name="habit_property_category_pet_time">Pet time</string>
+    <string name="habit_property_category__cooking">Cooking</string>
+    <string name="habit_property_category_cleaning">Cleaning</string>
+    <string name="habit_property_category_hobby">Hobby</string>
+    <string name="habit_property_category_budget">Budget</string>
+    <string name="habit_property_category_finance_control">Finance control</string>
+    <string name="habit_property_category_work_life_balance">Work life balance</string>
+    <string name="habit_property_category_productivity">Productivity</string>
+
     <string name="habit_screen_localize_icon_description">Localized icon</string>
 
     <string name="habit_screen_countable_dialog_title">Countable value set up</string>
@@ -158,8 +188,10 @@
     <string name="impex_export_title">Export</string>
     <string name="time_input_content_description">Enter time for set up notification</string>
 
+
     <!-- Changelog -->
     <string name="new_features">New features</string>
-    <string name="changelog_v_1">- Fixed notifications\n- Fixed canceling habits\n- Added a link to the tg channel\n- Added display of a list of changes\n</string>
+    <string name="changelog_v_1">1.0 beta 6.1\n- Fixed notifications\n- Fixed canceling habits\n- Added a link to the tg channel\n- Added display of a list of changes\n</string>
+    <string name="changelog_v_2">1.0 beta 7\n- Add Categories for habits</string>
 
 </resources>

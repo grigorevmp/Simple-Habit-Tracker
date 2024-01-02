@@ -114,6 +114,35 @@
     <string name="habit_screen_add_new_habit_dialog_countable_new_button">Сделать количественным</string>
     <string name="habit_screen_add_new_habit_dialog_countable_change_button">Количественное</string>
 
+    <string name="habit_property_category">Категория</string>
+    <string name="habit_property_category_none">Без категории</string>
+    <string name="habit_property_category_food">Еда</string>
+    <string name="habit_property_category_relax">Отдых и сон</string>
+    <string name="habit_property_category_sport">Физическая активность</string>
+    <string name="habit_property_category_meditation">Медитация</string>
+    <string name="habit_property_category_bad">Больба с плохими привычками</string>
+    <string name="habit_property_category_reading">Чтение</string>
+    <string name="habit_property_category_education">Обучение</string>
+    <string name="habit_property_category_lang">Языки</string>
+    <string name="habit_property_category_skills">Навыки</string>
+    <string name="habit_property_category_planning">Планирование</string>
+    <string name="habit_property_category_working">Работа</string>
+    <string name="habit_property_category_diary">Дневник</string>
+    <string name="habit_property_category_tress">Борьба со стрессом</string>
+    <string name="habit_property_category_comm">Общеник</string>
+    <string name="habit_property_category_self">Время для себя</string>
+    <string name="habit_property_category_friends">Время для близких</string>
+    <string name="habit_property_category_volunteering">Волонтёрство</string>
+    <string name="habit_property_category_personal">Личное</string>
+    <string name="habit_property_category_pet_time">Питомцы</string>
+    <string name="habit_property_category__cooking">Готовка</string>
+    <string name="habit_property_category_cleaning">Уборка</string>
+    <string name="habit_property_category_hobby">Хобби</string>
+    <string name="habit_property_category_budget">Бюджет</string>
+    <string name="habit_property_category_finance_control">Контроль финансов</string>
+    <string name="habit_property_category_work_life_balance">Баланс работы и жизни</string>
+    <string name="habit_property_category_productivity">Продуктивность</string>
+
     <string name="habit_screen_choose_days_title">Установить дни</string>
     <string name="habit_screen_choose_time_set_notification_title">Установить уведомление</string>
 
@@ -141,5 +170,6 @@
 
     <!-- Changelog -->
     <string name="new_features">Что нового?</string>
-    <string name="changelog_v_1">- Исправлена работа уведомлений\n- Исправлена отмена привычек\n- Добавлена ссылка на tg канал\n- Добавлено отображение списка изменений\n</string>
+    <string name="changelog_v_1">1.0 beta 6.1\n- Исправлена работа уведомлений\n- Исправлена отмена привычек\n- Добавлена ссылка на tg канал\n- Добавлено отображение списка изменений\n</string>
+    <string name="changelog_v_2">1.0 beta 7\n- Добавлены категории привычек</string>
 </resources>

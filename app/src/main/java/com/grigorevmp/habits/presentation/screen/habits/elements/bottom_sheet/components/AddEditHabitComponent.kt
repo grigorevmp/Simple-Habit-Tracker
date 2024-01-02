@@ -16,8 +16,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +32,7 @@ import androidx.compose.material3.TimeInput
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -46,6 +50,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
+import com.grigorevmp.habits.data.HabitCategory.BadHabits
+import com.grigorevmp.habits.data.HabitCategory.Budget
+import com.grigorevmp.habits.data.HabitCategory.Cleaning
+import com.grigorevmp.habits.data.HabitCategory.Communication
+import com.grigorevmp.habits.data.HabitCategory.Cooking
+import com.grigorevmp.habits.data.HabitCategory.Diary
+import com.grigorevmp.habits.data.HabitCategory.Education
+import com.grigorevmp.habits.data.HabitCategory.FinanceControl
+import com.grigorevmp.habits.data.HabitCategory.Food
+import com.grigorevmp.habits.data.HabitCategory.FriendsTime
+import com.grigorevmp.habits.data.HabitCategory.Hobby
+import com.grigorevmp.habits.data.HabitCategory.Languages
+import com.grigorevmp.habits.data.HabitCategory.Meditation
+import com.grigorevmp.habits.data.HabitCategory.None
+import com.grigorevmp.habits.data.HabitCategory.Personal
+import com.grigorevmp.habits.data.HabitCategory.PetTime
+import com.grigorevmp.habits.data.HabitCategory.PhysicalActivity
+import com.grigorevmp.habits.data.HabitCategory.Planning
+import com.grigorevmp.habits.data.HabitCategory.Productivity
+import com.grigorevmp.habits.data.HabitCategory.Reading
+import com.grigorevmp.habits.data.HabitCategory.Relaxation
+import com.grigorevmp.habits.data.HabitCategory.SelfTime
+import com.grigorevmp.habits.data.HabitCategory.Skills
+import com.grigorevmp.habits.data.HabitCategory.StressFighting
+import com.grigorevmp.habits.data.HabitCategory.Volunteering
+import com.grigorevmp.habits.data.HabitCategory.WorkBalance
+import com.grigorevmp.habits.data.HabitCategory.Working
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import java.time.DayOfWeek
@@ -56,7 +88,7 @@ fun AddEditHabitComponent(
     habitEntity: HabitEntity? = null,
     updateHabitEntity: (Context, HabitEntity) -> Unit = { _, _ -> },
     deleteHabitEntity: (HabitEntity) -> Unit = { _ -> },
-    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit = { _, _, _, _, _, _, _, _ -> },
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?, HabitCategory) -> Unit = { _, _, _, _, _, _, _, _, _ -> },
     hideDialog: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -65,7 +97,11 @@ fun AddEditHabitComponent(
 
     var title by remember { mutableStateOf(habitEntity?.title ?: "") }
     var description by remember { mutableStateOf(habitEntity?.description ?: "") }
-    var selectedDays by remember { mutableStateOf(habitEntity?.days ?: DayOfWeek.values()) }
+    var selectedDays by remember {
+        mutableStateOf(
+            habitEntity?.days ?: DayOfWeek.entries.toTypedArray()
+        )
+    }
     var useAlert by remember { mutableStateOf(habitEntity?.alertEnabled ?: false) }
     var countableEntity by remember { mutableStateOf(habitEntity?.countableEntity) }
     var countableShown by remember { mutableStateOf(habitEntity?.countable ?: false) }
@@ -83,6 +119,12 @@ fun AddEditHabitComponent(
     )
 
     var isError by rememberSaveable { mutableStateOf(false) }
+
+    var habitCategory by remember {
+        mutableStateOf(
+            habitEntity?.habitCategory?.name ?: None.name
+        )
+    }
 
     fun validate(text: String): Boolean {
         isError = text.isBlank()
@@ -151,7 +193,6 @@ fun AddEditHabitComponent(
             ),
         )
 
-
         Text(
             modifier = Modifier.padding(top = 16.dp),
             text = stringResource(R.string.habit_screen_edit_habit_edit_days_button),
@@ -163,6 +204,16 @@ fun AddEditHabitComponent(
             modifier = Modifier.padding(top = 12.dp),
         ) { listWithDays ->
             selectedDays = listWithDays.toTypedArray()
+        }
+
+        Text(
+            modifier = Modifier.padding(top = 16.dp),
+            text = stringResource(R.string.habit_property_category),
+            fontSize = 18.sp
+        )
+
+        HabitCategoryDropdownMenu(habitCategory) {
+            habitCategory = it.name
         }
 
         Row(
@@ -263,6 +314,7 @@ fun AddEditHabitComponent(
                         ),
                         countableEntity != null,
                         countableEntity,
+                        HabitCategory.valueOf(habitCategory),
                     )
                 }
             }) {
@@ -301,7 +353,7 @@ fun AddEditHabitComponent(
                             )
                             habitEntity.countableEntity = countableEntity
                             habitEntity.countable = countableEntity != null
-
+                            habitEntity.habitCategory = HabitCategory.valueOf(habitCategory)
 
                             updateHabitEntity(context, habitEntity)
                             hideDialog()
@@ -313,6 +365,80 @@ fun AddEditHabitComponent(
             }
         }
     }
+}
+
+@Composable
+fun HabitCategoryDropdownMenu(
+    selectedCategory: String,
+    onCategorySelected: (HabitCategory) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val items = HabitCategory.entries.toList()
+    val selectedIndex =
+        remember { mutableIntStateOf(items.indexOf(HabitCategory.valueOf(selectedCategory))) }
+
+    val selectedCategoryText = getHabitNameValue(items[selectedIndex.intValue].name)
+
+    Column(
+        modifier = Modifier.padding(top = 12.dp)
+    ) {
+        Button(onClick = { expanded = true }) {
+            Text(text = selectedCategoryText)
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "Dropdown"
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            items.forEachIndexed { index, category ->
+                DropdownMenuItem(
+                    text = { Text(getHabitNameValue(category.name)) },
+                    onClick = {
+                        selectedIndex.intValue = index
+                        onCategorySelected(HabitCategory.valueOf(category.name))
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun getHabitNameValue(
+    habitName: String
+) = when (HabitCategory.valueOf(habitName)) {
+    None -> stringResource(R.string.habit_property_category_none)
+    Food -> stringResource(R.string.habit_property_category_food)
+    PhysicalActivity -> stringResource(R.string.habit_property_category_sport)
+    Relaxation -> stringResource(R.string.habit_property_category_relax)
+    Meditation -> stringResource(R.string.habit_property_category_meditation)
+    BadHabits -> stringResource(R.string.habit_property_category_bad)
+    Reading -> stringResource(R.string.habit_property_category_reading)
+    Education -> stringResource(R.string.habit_property_category_education)
+    Languages -> stringResource(R.string.habit_property_category_lang)
+    Skills -> stringResource(R.string.habit_property_category_skills)
+    Planning -> stringResource(R.string.habit_property_category_planning)
+    Working -> stringResource(R.string.habit_property_category_working)
+    Diary -> stringResource(R.string.habit_property_category_diary)
+    StressFighting -> stringResource(R.string.habit_property_category_tress)
+    Communication -> stringResource(R.string.habit_property_category_comm)
+    SelfTime -> stringResource(R.string.habit_property_category_self)
+    Productivity -> stringResource(R.string.habit_property_category_productivity)
+    WorkBalance -> stringResource(R.string.habit_property_category_work_life_balance)
+    FinanceControl -> stringResource(R.string.habit_property_category_finance_control)
+    Budget -> stringResource(R.string.habit_property_category_budget)
+    Hobby -> stringResource(R.string.habit_property_category_hobby)
+    Cleaning -> stringResource(R.string.habit_property_category_cleaning)
+    Cooking -> stringResource(R.string.habit_property_category__cooking)
+    PetTime -> stringResource(R.string.habit_property_category_pet_time)
+    Personal -> stringResource(R.string.habit_property_category_personal)
+    Volunteering -> stringResource(R.string.habit_property_category_volunteering)
+    FriendsTime -> stringResource(R.string.habit_property_category_friends)
 }
 
 
@@ -333,6 +459,6 @@ fun EditHabitDialogPreview() {
     ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { },
-        addHabitEntity = { _, _, _, _, _, _, _, _ -> },
+        addHabitEntity = { _, _, _, _, _, _, _, _, _ -> },
         hideDialog = { })
 }
