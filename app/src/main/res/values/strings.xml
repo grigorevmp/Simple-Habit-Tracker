@@ -195,6 +195,6 @@
     <!-- Changelog -->
     <string name="new_features">New features</string>
     <string name="changelog_v_1">1.0 beta 6.1\n- Fixed notifications\n- Fixed canceling habits\n- Added a link to the tg channel\n- Added display of a list of changes\n</string>
-    <string name="changelog_v_2">1.0 beta 7\n- Add Categories for habits\n- New today card UI</string>
+    <string name="changelog_v_2">1.0.0\n- Add Categories for habits\n- New today card UI</string>
 
 </resources>
