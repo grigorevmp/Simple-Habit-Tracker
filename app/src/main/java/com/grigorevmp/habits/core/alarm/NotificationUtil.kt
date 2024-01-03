@@ -13,7 +13,6 @@ import com.grigorevmp.habits.R
 import com.grigorevmp.habits.presentation.screen.common.MainActivity
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsDoneBroadcastReceiver
 import com.grigorevmp.habits.receiver.habit_notification.MarkAsMissedBroadcastReceiver
-import java.time.LocalDate
 
 const val NOTIFICATION_ID = 33
 const val CHANNEL_ID = "ReminderChannel"

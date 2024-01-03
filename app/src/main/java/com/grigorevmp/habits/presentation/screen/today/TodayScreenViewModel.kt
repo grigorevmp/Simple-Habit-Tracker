@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.core.in_app_bus.GlobalBus
-import com.grigorevmp.habits.data.HabitCategory
-import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.date.DateEntity
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.data.repository.PreferencesRepository

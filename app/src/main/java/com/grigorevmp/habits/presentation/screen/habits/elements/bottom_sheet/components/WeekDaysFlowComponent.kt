@@ -45,7 +45,7 @@ fun WeekDaysFlowComponent(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.padding(top = 0.dp)
         ) {
-            DayOfWeek.values().forEachIndexed { index, day ->
+            DayOfWeek.entries.forEachIndexed { index, day ->
                 DayItem(
                     isSelected = day in daysForHabit,
                     daysForHabit = daysForHabit,
@@ -53,7 +53,7 @@ fun WeekDaysFlowComponent(
                     onDaysSelected = onDaysSelected,
                 )
 
-                if (index != DayOfWeek.values().lastIndex) {
+                if (index != DayOfWeek.entries.toTypedArray().lastIndex) {
                     Spacer(Modifier.weight(1f))
                 }
             }

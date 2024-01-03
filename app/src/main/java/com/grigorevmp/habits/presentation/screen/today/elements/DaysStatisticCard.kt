@@ -59,7 +59,6 @@ import com.patrykandpatrick.vico.core.entry.entryOf
 import java.time.DayOfWeek
 import java.util.Calendar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DaysStatisticCard(
     allHabitsStatisticData: List<HabitStatisticItemUi>,
@@ -147,7 +146,7 @@ private fun ColumnScope.WeekProgressChart(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            for (day in DayOfWeek.values()) {
+            for (day in DayOfWeek.entries) {
                 Text(
                     text = day.parseToDate(context),
                     fontSize = 12.sp,

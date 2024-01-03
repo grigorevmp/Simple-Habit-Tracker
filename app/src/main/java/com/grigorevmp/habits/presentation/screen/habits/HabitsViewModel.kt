@@ -107,50 +107,6 @@ class HabitsViewModel @Inject constructor(
         }
     }
 
-
-    fun loadByDates(habitId: Long) = flow {
-        getAllDateOfHabitRefUseCase.invoke(habitId).collect { habitList ->
-
-            val all = habitList.sortedBy { it.dateId }
-                .filter {
-                    val date = getDateIdUseCase.invoke(it.dateId)?.date
-                    date != null
-                }.map {
-                    val date = getDateIdUseCase.invoke(it.dateId)?.date!!
-                    date to (it.habitType == HabitType.Done)
-                }
-
-            val allYears = all.groupBy { it.first.year }.map { habitsByYear ->
-                val year = habitsByYear.key
-                val months = habitsByYear.value.groupBy { it.first.month }.map { habitByMonth ->
-                    val month = habitByMonth.key
-                    val sumOfCompletedHabits =
-                        habitByMonth.value.map { if (it.second) 1 else 0 }.sum()
-                    val allHabits = habitByMonth.value.size
-                    val percentOfMonth =
-                        if (allHabits > 0) sumOfCompletedHabits.toFloat() / allHabits * 100 else 0f
-
-                    val days = habitByMonth.value.map {
-                        StatDay(it.first.dayOfMonth, if (it.second) 1f else 0f)
-                    }
-
-                    StatMonth(
-                        index = month.ordinal,
-                        percent = percentOfMonth,
-                        days = days,
-                    )
-                }
-
-                StatYear(
-                    year = year,
-                    months = months,
-                )
-            }
-
-            emit(allYears)
-        }
-    }.flowOn(Dispatchers.IO)
-
     fun addHabit(
         context: Context,
         title: String,

@@ -60,13 +60,6 @@ enum class HabitCategory {
     Volunteering,
     Personal,
     FriendsTime;
-
-
-    companion object {
-        fun toList(): List<String> {
-            return entries.map { it.name }
-        }
-    }
 }
 
 data class HabitWithDates(
