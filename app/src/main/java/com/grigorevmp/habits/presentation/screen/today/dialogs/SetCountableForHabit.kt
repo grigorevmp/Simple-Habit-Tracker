@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.grigorevmp.habits.R
+import com.grigorevmp.habits.data.HabitCategory
+import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 
@@ -144,7 +146,10 @@ fun SetCountableValueDialogPreview() {
             id = 0,
             dateId = 3,
             title = "Title",
+            alert = false,
+            time = SerializableTimePickerState(0, 0),
             description = "Description",
+            category = HabitCategory.None.name,
             type = HabitType.Missed,
         ),
         { _, _ ->}

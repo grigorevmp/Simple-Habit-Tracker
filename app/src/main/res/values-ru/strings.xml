@@ -166,10 +166,13 @@
     <string name="impex_export_icon_description">Иконка экспорта</string>
     <string name="impex_export_title">Экспорт</string>
 
+    <string name="habit_screen_habit_card_unplanned">В любое время</string>
+    <string name="habit_screen_habit_card_planned">Запланированные</string>
+
     <string name="time_input_content_description">Введите время, чтобы настроить уведомление</string>
 
     <!-- Changelog -->
     <string name="new_features">Что нового?</string>
     <string name="changelog_v_1">1.0 beta 6.1\n- Исправлена работа уведомлений\n- Исправлена отмена привычек\n- Добавлена ссылка на tg канал\n- Добавлено отображение списка изменений\n</string>
-    <string name="changelog_v_2">1.0 beta 7\n- Добавлены категории привычек</string>
+    <string name="changelog_v_2">1.0 beta 7\n- Добавлены категории привычек\n- Новый интерфейс карты последних привычек</string>
 </resources>

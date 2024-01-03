@@ -188,10 +188,13 @@
     <string name="impex_export_title">Export</string>
     <string name="time_input_content_description">Enter time for set up notification</string>
 
+    <string name="habit_screen_habit_card_unplanned">In any time</string>
+    <string name="habit_screen_habit_card_planned">Planned</string>
+
 
     <!-- Changelog -->
     <string name="new_features">New features</string>
     <string name="changelog_v_1">1.0 beta 6.1\n- Fixed notifications\n- Fixed canceling habits\n- Added a link to the tg channel\n- Added display of a list of changes\n</string>
-    <string name="changelog_v_2">1.0 beta 7\n- Add Categories for habits</string>
+    <string name="changelog_v_2">1.0 beta 7\n- Add Categories for habits\n- New today card UI</string>
 
 </resources>

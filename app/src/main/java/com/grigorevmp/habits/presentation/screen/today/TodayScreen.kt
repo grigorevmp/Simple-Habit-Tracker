@@ -1,7 +1,6 @@
 package com.grigorevmp.habits.presentation.screen.today
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -50,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.utils.Changelogs
+import com.grigorevmp.habits.data.HabitCategory
+import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.data.HabitStatisticItemUi
@@ -187,16 +188,14 @@ private fun BottomVersionDialog(getVersion: () -> Long, setVersion: (Long) -> Un
                 fontSize = 24.sp
             )
             ChangelogSheet(changelogs = changelogs)
-            Button(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
-                onClick = {
-                    setVersion(Changelogs.version.toLong() + 1)
-                    shouldShowChangelog = false
-                }) {
+            Button(modifier = Modifier
+                .padding(top = 8.dp)
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally), onClick = {
+                setVersion(Changelogs.version.toLong() + 1)
+                shouldShowChangelog = false
+            }) {
                 Text(stringResource(R.string.cancel_button))
             }
             Spacer(modifier = Modifier.height(32.dp))
@@ -288,7 +287,6 @@ fun TodayView(
             }
 
             itemsIndexed(allHabits) { _, habitsForDate ->
-
                 HabitsForDayCard(
                     habitsForDate,
                     updateHabitRef,
@@ -348,6 +346,9 @@ fun TodayScreenPreview() {
                         dateId = 3,
                         title = "Title",
                         description = "Description",
+                        category = HabitCategory.None.name,
+                        alert = false,
+                        time = SerializableTimePickerState(0, 0),
                         type = HabitType.Missed,
                     )
                 ), date = "Current date"
