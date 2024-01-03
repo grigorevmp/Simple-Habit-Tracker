@@ -7,6 +7,7 @@ import com.grigorevmp.habits.data.HabitWithDateDao
 import com.grigorevmp.habits.data.date.DateDao
 import com.grigorevmp.habits.data.database.migration.MIGRATION_1_2
 import com.grigorevmp.habits.data.database.migration.MIGRATION_2_3
+import com.grigorevmp.habits.data.database.migration.MIGRATION_3_4
 import com.grigorevmp.habits.data.habit.HabitRefDao
 import dagger.Module
 import dagger.Provides
@@ -26,6 +27,7 @@ object DatabaseModule {
             .addCallback(callback)
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_3_4)
 //        .setQueryCallback({ sqlQuery, bindArgs ->
 //            Log.d("DB", "SQL Query: $sqlQuery SQL Args: $bindArgs")
 //        }, Executors.newSingleThreadExecutor())
