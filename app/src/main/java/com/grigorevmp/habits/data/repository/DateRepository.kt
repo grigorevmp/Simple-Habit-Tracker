@@ -1,7 +1,7 @@
 package com.grigorevmp.habits.data.repository
 
-import com.grigorevmp.habits.data.data.DateDao
-import com.grigorevmp.habits.data.data.DateEntity
+import com.grigorevmp.habits.data.date.DateDao
+import com.grigorevmp.habits.data.date.DateEntity
 import java.time.LocalDate
 import javax.inject.Inject
 

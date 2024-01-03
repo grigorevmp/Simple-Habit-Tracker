@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
@@ -47,7 +48,6 @@ import java.time.DayOfWeek
 fun HabitListScreen(habitsViewModel: HabitsViewModel) {
     val habitsData by habitsViewModel.uiState.habitsData.collectAsState()
     val statisticData by habitsViewModel.uiState.statisticData.collectAsState()
-
 
     HabitListScreen(
         habitsData = habitsData,
@@ -70,7 +70,8 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
         useAlert: Boolean,
         timeState: SerializableTimePickerState,
         countable: Boolean,
-        countableEntity: CountableEntity? ->
+        countableEntity: CountableEntity?,
+        habitCategory: HabitCategory ->
         habitsViewModel.addHabit(
             context,
             title,
@@ -83,6 +84,7 @@ fun HabitListScreen(habitsViewModel: HabitsViewModel) {
             ),
             countable,
             countableEntity,
+            habitCategory
         )
     }
 }
@@ -95,7 +97,7 @@ fun HabitListScreen(
     updateHabitEntity: (Context, HabitEntity) -> Unit,
     deleteHabitEntity: (HabitEntity) -> Unit,
     prepareStat: (() -> Unit) -> Unit,
-    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?) -> Unit,
+    addHabitEntity: (Context, String, String, Array<DayOfWeek>, Boolean, SerializableTimePickerState, Boolean, CountableEntity?, HabitCategory) -> Unit,
 ) {
 
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -192,7 +194,7 @@ fun HabitListScreenPreview() {
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
         prepareStat = { _ -> },
-        addHabitEntity = { _, _, _, _, _, _, _, _ -> },
+        addHabitEntity = { _, _, _, _, _, _, _, _, _ -> },
     )
 }
 

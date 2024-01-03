@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.utils.Utils
 import com.grigorevmp.habits.data.CountableEntity
+import com.grigorevmp.habits.data.HabitCategory
 import com.grigorevmp.habits.data.HabitEntity
 import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.presentation.screen.habits.data.StatYear
@@ -70,6 +72,7 @@ fun HabitCard(
     val title = habitEntity.title
     val description = habitEntity.description
     val alertEnabled = habitEntity.alertEnabled
+    val category = habitEntity.habitCategory
     val countable = habitEntity.countable
     val countableEntity = habitEntity.countableEntity
     val days = habitEntity.days.parseToDate(LocalContext.current)
@@ -148,6 +151,10 @@ fun HabitCard(
                 ) {
                     isStatisticsOpened.value = !isStatisticsOpened.value
                 }
+            }
+
+            if (category != HabitCategory.None) {
+                CategoryCard(category.name)
             }
 
             DateInfoCard(days)
@@ -232,7 +239,7 @@ fun TabCard(
 @Composable
 private fun DateInfoCard(days: String) {
     Card(
-        modifier = Modifier.padding(top = 12.dp), colors = CardDefaults.cardColors(
+        modifier = Modifier.padding(top = 8.dp), colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.tertiary
         )
     ) {
@@ -280,6 +287,65 @@ private fun CountableInfoCard(countableEntity: CountableEntity) {
 
             Text(
                 text = "${countableEntity.actionName} ${countableEntity.targetValue} ${countableEntity.valueName}",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 8.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryCard(category: String) {
+    Card(
+        modifier = Modifier.padding(top = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary
+        )
+    ) {
+        val selectedCategoryText = when(HabitCategory.valueOf(category)){
+            HabitCategory.None -> stringResource(R.string.habit_property_category_none)
+            HabitCategory.Food -> stringResource(R.string.habit_property_category_food)
+            HabitCategory.PhysicalActivity -> stringResource(R.string.habit_property_category_sport)
+            HabitCategory.Relaxation -> stringResource(R.string.habit_property_category_relax)
+            HabitCategory.Meditation -> stringResource(R.string.habit_property_category_meditation)
+            HabitCategory.BadHabits -> stringResource(R.string.habit_property_category_bad)
+            HabitCategory.Reading -> stringResource(R.string.habit_property_category_reading)
+            HabitCategory.Education -> stringResource(R.string.habit_property_category_education)
+            HabitCategory.Languages -> stringResource(R.string.habit_property_category_lang)
+            HabitCategory.Skills -> stringResource(R.string.habit_property_category_skills)
+            HabitCategory.Planning -> stringResource(R.string.habit_property_category_planning)
+            HabitCategory.Working -> stringResource(R.string.habit_property_category_working)
+            HabitCategory.Diary -> stringResource(R.string.habit_property_category_diary)
+            HabitCategory.StressFighting -> stringResource(R.string.habit_property_category_tress)
+            HabitCategory.Communication -> stringResource(R.string.habit_property_category_comm)
+            HabitCategory.SelfTime -> stringResource(R.string.habit_property_category_self)
+            HabitCategory.Productivity -> stringResource(R.string.habit_property_category_productivity)
+            HabitCategory.WorkBalance -> stringResource(R.string.habit_property_category_work_life_balance)
+            HabitCategory.FinanceControl -> stringResource(R.string.habit_property_category_finance_control)
+            HabitCategory.Budget -> stringResource(R.string.habit_property_category_budget)
+            HabitCategory.Hobby -> stringResource(R.string.habit_property_category_hobby)
+            HabitCategory.Cleaning -> stringResource(R.string.habit_property_category_cleaning)
+            HabitCategory.Cooking -> stringResource(R.string.habit_property_category__cooking)
+            HabitCategory.PetTime -> stringResource(R.string.habit_property_category_pet_time)
+            HabitCategory.Personal -> stringResource(R.string.habit_property_category_personal)
+            HabitCategory.Volunteering -> stringResource(R.string.habit_property_category_volunteering)
+            HabitCategory.FriendsTime -> stringResource(R.string.habit_property_category_friends)
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painterResource(id = R.drawable.ic_category),
+                contentDescription = stringResource(R.string.reminder_icon_description),
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+
+            Text(
+                text = selectedCategoryText,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 8.dp),
             )

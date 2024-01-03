@@ -1,6 +1,6 @@
 package com.grigorevmp.habits.domain.usecase.synchronizer
 
-import com.grigorevmp.habits.data.data.DateEntity
+import com.grigorevmp.habits.data.date.DateEntity
 import com.grigorevmp.habits.data.habit.HabitRefEntity
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.data.repository.DateRepository

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grigorevmp.habits.core.in_app_bus.GlobalBus
-import com.grigorevmp.habits.data.data.DateEntity
+import com.grigorevmp.habits.data.date.DateEntity
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.data.repository.PreferencesRepository
 import com.grigorevmp.habits.domain.usecase.date.GetDateUseCase
@@ -93,7 +93,10 @@ class TodayScreenViewModel @Inject constructor(
                                             id = habit.id,
                                             dateId = targetDateId,
                                             title = habit.title,
+                                            category = habit.habitCategory.name,
                                             description = habit.description,
+                                            alert = habit.alertEnabled,
+                                            time = habit.time,
                                             type = habitRef.habitType,
                                             countable = habit.countable,
                                             maxValue = habit.countableEntity?.targetValue,

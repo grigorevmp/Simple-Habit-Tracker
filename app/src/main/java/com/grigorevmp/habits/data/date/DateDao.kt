@@ -1,4 +1,4 @@
-package com.grigorevmp.habits.data.data
+package com.grigorevmp.habits.data.date
 
 import androidx.room.Dao
 import androidx.room.Delete

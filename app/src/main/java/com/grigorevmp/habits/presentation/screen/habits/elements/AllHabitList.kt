@@ -107,6 +107,29 @@ fun PreviewHabit() {
 }
 
 
+
+@Preview(showBackground = true)
+@Composable
+fun AllHabitListHabit() {
+    AllHabitList(
+        allHabits = listOf(
+            HabitEntity(
+                id = 0,
+                title = "Title",
+                description = "Description",
+                days = arrayOf(DayOfWeek.FRIDAY),
+                alertEnabled = true,
+                time = SerializableTimePickerState(10, 10),
+                completed = false,
+            )
+        ),
+        updateHabitEntity = { _, _ -> },
+        deleteHabitEntity = { _ -> },
+        getAllHabitDates = mapOf(),
+    )
+}
+
+
 @ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
@@ -123,7 +146,7 @@ fun EditHabitPreview() {
         ),
         updateHabitEntity = { _, _ -> },
         deleteHabitEntity = { _ -> },
-        addHabitEntity  = { _, _, _, _, _, _, _, _ -> },
+        addHabitEntity  = { _, _, _, _, _, _, _, _, _ -> },
         { },
     )
 }
