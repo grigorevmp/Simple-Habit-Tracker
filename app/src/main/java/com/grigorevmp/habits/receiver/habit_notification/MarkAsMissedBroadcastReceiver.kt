@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.grigorevmp.habits.R
 import com.grigorevmp.habits.core.alarm.NOTIFICATION_ID
 import com.grigorevmp.habits.core.in_app_bus.Event
 import com.grigorevmp.habits.core.in_app_bus.EventType
@@ -51,7 +52,7 @@ class MarkAsMissedBroadcastReceiver : HiltBroadcastReceiver() {
             }
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Marked as missed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.marked_as_missed), Toast.LENGTH_SHORT).show()
             }
         }
 

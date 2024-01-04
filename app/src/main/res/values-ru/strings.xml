@@ -42,6 +42,8 @@
     <string name="statistic_month">Месяц</string>
     <string name="statistic_year">Год</string>
 
+    <string name="marked_as_done">Выполнено</string>
+    <string name="marked_as_missed">Пропущено</string>
     <!-- Today screen -->
     <string name="today_screen_statistics_title">Статистика</string>
     <string name="today_screen_statistics_week">Неделя №%1$s</string>
@@ -175,4 +177,5 @@
     <string name="new_features">Что нового?</string>
     <string name="changelog_v_1">1.0 beta 6.1\n- Исправлена работа уведомлений\n- Исправлена отмена привычек\n- Добавлена ссылка на tg канал\n- Добавлено отображение списка изменений\n</string>
     <string name="changelog_v_2">1.0.0\n- Добавлены категории привычек\n- Новый интерфейс карты последних привычек</string>
+    <string name="changelog_v_3">1.0.1\n- Изменено цветовое оформление пропущенных привычек\n- Исправления с уведомлениями</string>
 </resources>

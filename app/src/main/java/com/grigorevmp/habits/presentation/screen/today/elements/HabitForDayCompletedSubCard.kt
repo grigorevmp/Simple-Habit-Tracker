@@ -14,8 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +35,8 @@ import com.grigorevmp.habits.data.SerializableTimePickerState
 import com.grigorevmp.habits.data.habit.HabitType
 import com.grigorevmp.habits.presentation.screen.today.data.HabitEntityUI
 import com.grigorevmp.habits.presentation.screen.today.dialogs.SetCountableFoHabit
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -42,17 +46,29 @@ fun HabitForDayCompletedSubCard(
     habit: HabitEntityUI,
     setNewHabitType: (HabitType) -> Unit
 ) {
-    val habitTypeMutable = remember { mutableStateOf(habit.type) }
-
+    var habitTypeMutable by remember { mutableStateOf(habit.type) }
     val countableDialog = remember {
         mutableStateOf(false)
     }
 
     val haptics = LocalHapticFeedback.current
 
+    val formatterHour = DateTimeFormatter.ofPattern("HH")
+    val realHour = LocalDateTime.now().format(formatterHour)
+
+    val formatterMinute = DateTimeFormatter.ofPattern("mm")
+    val realMinute = LocalDateTime.now().format(formatterMinute)
+
+    val containerColor =
+        if ((habit.type != HabitType.Done) && ((habit.time.hour < realHour.toInt()) || (habit.time.hour == realHour.toInt() && habit.time.minute < realMinute.toInt()))) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.primary
+        }
+
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondary
+            containerColor = containerColor
         ),
         modifier = Modifier
             .combinedClickable(
@@ -60,26 +76,26 @@ fun HabitForDayCompletedSubCard(
                     if (habit.countable) {
                         countableDialog.value = true
                     } else {
-                        habitTypeMutable.value =
-                            if (habitTypeMutable.value != HabitType.Unknown) {
+                        habitTypeMutable =
+                            if (habit.type != HabitType.Unknown) {
                                 HabitType.Unknown
                             } else {
                                 HabitType.Done
                             }
-                        updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value)
+                        updateHabitRef(habit.dateId, habit.id, habitTypeMutable)
                     }
                 },
                 onLongClick = {
                     if (habit.countable) {
                         countableDialog.value = true
                     } else {
-                        habitTypeMutable.value = if (habitTypeMutable.value != HabitType.Missed) {
+                        habitTypeMutable = if (habit.type != HabitType.Missed) {
                             HabitType.Missed
                         } else {
                             HabitType.Done
                         }
                         haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                        updateHabitRef(habit.dateId, habit.id, habitTypeMutable.value)
+                        updateHabitRef(habit.dateId, habit.id, habitTypeMutable)
                     }
                 },
             )
@@ -91,7 +107,7 @@ fun HabitForDayCompletedSubCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val iconResource = when (habitTypeMutable.value) {
+            val iconResource = when (habit.type) {
                 HabitType.Done -> {
                     R.drawable.ic_done
                 }
@@ -147,7 +163,7 @@ fun HabitForDayCompletedSubCard(
                 SetCountableFoHabit(
                     habit,
                     { value: Int, isCompleted: Boolean ->
-                        habitTypeMutable.value = if (isCompleted) {
+                        habitTypeMutable = if (isCompleted) {
                             HabitType.Done
                         } else {
                             HabitType.Unknown
@@ -158,7 +174,7 @@ fun HabitForDayCompletedSubCard(
                         updateHabitRefCountable(
                             habit.dateId,
                             habit.id,
-                            habitTypeMutable.value,
+                            habitTypeMutable,
                             value
                         )
                     }
@@ -169,7 +185,7 @@ fun HabitForDayCompletedSubCard(
         }
     }
 
-    setNewHabitType(habitTypeMutable.value)
+    setNewHabitType(habitTypeMutable)
 }
 
 @Composable

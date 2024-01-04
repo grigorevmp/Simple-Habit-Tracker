@@ -46,9 +46,11 @@ fun NotificationManager.sendReminderNotification(
     val doneIntent = Intent(context, MarkAsDoneBroadcastReceiver::class.java).apply {
         putExtra("EXTRA_NOTIF_ID", id)
     }
+    val time = System.currentTimeMillis().toInt()
+
     val donePendingIntent = PendingIntent.getBroadcast(
         context,
-        notificationId + System.currentTimeMillis().toInt(),
+        notificationId + time + 1,
         doneIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
@@ -58,7 +60,7 @@ fun NotificationManager.sendReminderNotification(
     }
     val missedPendingIntent = PendingIntent.getBroadcast(
         context,
-        notificationId + System.currentTimeMillis().toInt(),
+        notificationId + time + 1,
         missedIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
