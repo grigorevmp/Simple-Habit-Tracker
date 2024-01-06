@@ -1,4 +1,4 @@
-<img src='res/habit_tracker.png'>
+<img src='res/habit_tracker.png' alt="Habit tracker banner">
 
 ## Habit tracker 1.0
 
@@ -12,7 +12,7 @@ Simple habit tracker with notification, statistic and categorization
 ### Screenshots
 
 <div style="display:flex;justify-content:space-around;">
-  <img src='res/1.png' width='200'>
-  <img src='res/2.png' width='200'>
-  <img src='res/3.png' width='200'>
+  <img src='res/1.png' width='300' alt="First Habit tracker screenshot">
+  <img src='res/2.png' width='300' alt="Second Habit tracker screenshot">
+  <img src='res/3.png' width='300' alt="Third Habit tracker screenshot">
 </div>
