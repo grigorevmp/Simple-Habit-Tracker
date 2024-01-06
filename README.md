@@ -11,6 +11,8 @@ Simple habit tracker with notification, statistic and categorization
 
 ### Screenshots
 
-<img src='res/1.png' width='200'>
-<img src='res/2.png' width='200'>
-<img src='res/3.png' width='200'>
+<div style="display:flex;justify-content:space-around;">
+  <img src='res/1.png' width='200'>
+  <img src='res/2.png' width='200'>
+  <img src='res/3.png' width='200'>
+</div>
